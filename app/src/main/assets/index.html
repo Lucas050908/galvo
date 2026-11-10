@@ -133,6 +133,50 @@ label{font-size:14px;color:var(--sub)}
 @keyframes fall{to{transform:translateY(110vh) rotate(720deg)}}
 .note{font-size:12px;color:var(--sub);line-height:1.5;padding:16px 20px}
 .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+.lcard{margin:14px 20px 0;background:var(--sf);border:1px solid var(--line);border-radius:22px;padding:20px;display:flex;flex-direction:column;gap:12px;animation:up .25s ease-out}
+.lcard h2{margin:0;font-size:24px}
+.lcard p{margin:0;font-size:17px;line-height:1.5}
+.key{background:rgba(255,122,26,.12);border:1px solid rgba(255,122,26,.45);border-radius:14px;padding:12px 14px;font-weight:700;font-size:15px;line-height:1.4}
+.key small{display:block;color:var(--acc);font-size:11px;letter-spacing:.1em;margin-bottom:2px}
+.illu{background:#13142A;border-radius:14px;padding:8px}
+.illu svg{width:100%;height:auto;display:block;font-family:inherit}
+.dots{display:flex;gap:6px;justify-content:center;margin-top:14px}
+.dots i{width:8px;height:8px;border-radius:4px;background:var(--line);transition:width .2s}
+.dots i.on{width:22px;background:var(--acc)}
+.ctx{margin-top:12px;background:var(--sf2);border:1px solid var(--line);border-radius:16px 16px 16px 4px;padding:10px 14px;font-size:15px;line-height:1.4;color:var(--tx)}
+.ctx b{display:block;font-size:11px;letter-spacing:.1em;color:var(--acc2);margin-bottom:2px}
+.fillq{font-size:20px;font-weight:700;line-height:1.5;margin-top:16px}
+.blank{display:inline-block;min-width:90px;padding:0 10px;border-bottom:3px solid var(--acc2);color:var(--acc2);text-align:center}
+.blank.right{color:var(--ok);border-color:var(--ok)}.blank.wrong{color:var(--bad);border-color:var(--bad)}
+.chips{display:flex;flex-wrap:wrap;gap:10px;margin-top:18px}
+.chips .opt{min-height:48px;padding:8px 16px}
+.mgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:16px}
+.mcol{display:flex;flex-direction:column;gap:10px}
+.mi{min-height:58px;padding:8px 10px;border-radius:14px;border:2px solid var(--line);background:var(--sf);font-size:14px;font-weight:600;text-align:left;line-height:1.25;position:relative}
+.mi.sel{border-color:var(--acc2);box-shadow:0 0 14px rgba(76,201,240,.3)}
+.mi .tag{position:absolute;top:-8px;right:-6px;width:22px;height:22px;border-radius:11px;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;color:#0F1020}
+.mres{display:flex;flex-direction:column;gap:8px;margin-top:16px}
+.mres div{display:flex;gap:8px;align-items:stretch}
+.mres span{flex:1;padding:10px;border-radius:12px;background:var(--sf);border:1px solid var(--line);font-size:14px}
+.mres .ok{border-color:var(--ok);color:var(--ok);background:var(--okbg)}.mres .no{border-color:var(--bad);color:var(--bad);background:var(--badbg)}
+.dyk{margin:14px 20px 0;padding:14px 16px;border-radius:18px;background:linear-gradient(135deg,rgba(76,201,240,.14),rgba(255,122,26,.12));border:1px solid var(--line);text-align:left;width:calc(100% - 40px);display:block}
+.dyk small{color:var(--acc2);font-weight:700;letter-spacing:.1em;font-size:11px}
+.dyk b{display:block;font-size:16px;margin:2px 0}
+.dyk span{font-size:14px;color:var(--sub);line-height:1.4}
+.blz-top{display:flex;align-items:center;gap:12px;padding:18px 20px 0}
+.blz-time{font-size:28px;font-weight:700;color:var(--flame);min-width:56px}
+.blz-score{margin-left:auto;font-size:22px;font-weight:700;color:var(--acc2)}
+.tbar{height:10px;border-radius:5px;background:var(--line);margin:10px 20px 0;overflow:hidden}
+.tbar>i{display:block;height:100%;background:linear-gradient(90deg,var(--flame),var(--acc));transition:width 1s linear}
+.flash-ok{animation:fok .35s}.flash-bad{animation:fbad .35s}
+@keyframes fok{0%{box-shadow:inset 0 0 0 999px rgba(61,220,151,.25)}100%{box-shadow:none}}
+@keyframes fbad{0%{box-shadow:inset 0 0 0 999px rgba(255,107,107,.25)}100%{box-shadow:none}}
+.gsearch{width:100%;height:48px;border-radius:14px;border:1px solid var(--line);background:var(--sf2);color:var(--tx);font-family:inherit;font-size:16px;padding:0 14px}
+.gl{display:flex;flex-direction:column;gap:8px;margin-top:12px}
+.gl div{background:var(--sf);border:1px solid var(--line);border-radius:14px;padding:12px 14px}
+.gl b{display:block;font-size:15px;color:var(--acc)}
+.gl span{font-size:14px;color:var(--sub);line-height:1.45}
+.back{border:0;background:transparent;color:var(--sub);font-size:15px;font-weight:700;padding:18px 20px 0;display:flex;gap:6px;align-items:center;min-height:44px}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
 </head>
@@ -145,7 +189,7 @@ const UNITS = [
 { id:"sik", title:"Sikkerhed først", sub:"Laser, el og valser", color:"#E03131", qs:[
  {id:"sik1",t:"mc",q:"Du skal arbejde på elektronikken inde i en maskine. Hvad gør du først?",a:["Slukker, tager stikket ud og bruger ESD-armbånd","Slukker bare på tænd/sluk-knappen","Arbejder forsigtigt med strømmen på","Beder kunden holde øje"],w:"Tag altid stikket ud, så der ikke er strøm i maskinen, og brug ESD-armbånd, så statisk elektricitet ikke ødelægger printkort."},
  {id:"sik2",t:"tf",q:"Det er i orden at kortslutte lågets sikkerhedsafbryder på en lukket laser for at se strålen under fejlfinding.",v:false,w:"Aldrig. Sikkerhedsafbryderen (interlock) beskytter øjnene. En lukket lasermaskine er kun sikker, når låget er lukket."},
- {id:"sik3",t:"mc",q:"Hvilke laserbriller skal du bruge, når der arbejdes med åben laser?",a:["Briller godkendt til netop den lasers bølgelængde","Solbriller med UV-filter","Almindelige sikkerhedsbriller","Ingen – man kigger bare væk"],w:"Laserbriller er lavet til bestemte bølgelængder. Briller til en blå diode beskytter ikke nødvendigvis mod infrarød laser."},
+ {id:"sik3",t:"mc",q:"Hvilke laserbriller skal du bruge, når der arbejdes med åben laser?",a:["Briller godkendt til netop den lasers bølgelængde","Solbriller med UV-filter","Almindelige sikkerhedsbriller uden laserangivelse","Ingen – man kigger bare væk"],w:"Laserbriller er lavet til bestemte bølgelængder. Briller til en blå diode beskytter ikke nødvendigvis mod infrarød laser."},
  {id:"sik4",t:"tf",q:"Man må godt skære PVC i en laser, bare udsugningen er god.",v:false,w:"PVC afgiver klor og saltsyredampe, som er giftige og tærer maskinens metal og optik – også med god udsugning. Meget 'vinyl' er PVC.",src:"pvc"},
  {id:"sik5",t:"mc",q:"Hvorfor må en laser aldrig køre uden opsyn?",a:["Materialet kan bryde i brand","Den bruger for meget strøm","Skærmen kan overophede","Den mister forbindelsen"],w:"Træ, pap og akryl kan antænde. Hav altid nogen ved maskinen og en brandslukker i nærheden."},
  {id:"sik6",t:"mc",q:"Hvad er den største fare ved en laminator?",a:["Fingre og tøj kan trækkes ind mellem valserne","Giftige dampe","Elektrisk stød fra valserne","Høj støj"],w:"Klemfaren mellem valserne er størst. Brug skærme, fodpedal og nødstop, og undgå løst tøj og smykker."},
@@ -154,7 +198,7 @@ const UNITS = [
 ]},
 { id:"las", title:"Lasergravering", sub:"Galvos hjemmebane", color:"#E85D04", qs:[
  {id:"las1",t:"mc",q:"Hvad betyder det, at en laser er 'galvo'?",a:["Små spejle styrer strålen lynhurtigt hen over emnet","Laserhovedet kører på X- og Y-skinner","Laseren er vandkølet","Den kan kun mærke metal"],w:"I en galvo-laser flytter to små spejle strålen. Det går meget hurtigt, men arbejdsfeltet er mindre end på en maskine med skinner."},
- {id:"las2",t:"mc",q:"En blå diodelaser har svært ved…",a:["Klar akryl og blankt, ubehandlet metal","Træ","Læder","Pap"],w:"Klar akryl optager næsten ikke blåt lys omkring 455 nm, så strålen går lige igennem. Blankt metal kan heller ikke graveres direkte med en diode – belagt eller anodiseret metal kan.",src:"diode"},
+ {id:"las2",t:"mc",q:"En blå diodelaser har svært ved…",a:["Klar akryl og blankt, ubehandlet metal","Træ","Læder","Pap"],w:"Klar akryl optager næsten ikke blåt lys omkring 455 nm, så strålen går lige igennem. Blankt metal kan normalt heller ikke graveres direkte med en blå diode – belagt eller anodiseret metal kan.",src:"diode"},
  {id:"las3",t:"mc",q:"Hvilken laser egner sig bedst til at mærke metal?",a:["Infrarød / fiberlaser (ca. 1064 nm)","Blå diodelaser","UV-printer","Ingen laser kan mærke metal"],w:"Metal optager infrarødt lys omkring 1064 nm langt bedre end blåt lys."},
  {id:"las4",t:"mc",q:"Graveringen er bred, svag og uskarp. Hvad tjekker du først?",a:["Fokus og arbejdshøjde","Farveprofilen","Knivvinklen","Wifi-forbindelsen"],w:"Ude af fokus bliver strålen bredere og svagere. Mål højden igen eller kør autofokus."},
  {id:"las5",t:"tf",q:"En beskidt linse eller beskyttelsesglas kan give svagere og ujævn gravering.",v:true,w:"Røg og støv på optikken tager energi fra strålen. Rens med producentens anbefalede linseservietter."},
@@ -176,12 +220,12 @@ const UNITS = [
 ]},
 { id:"lux", title:"Latex & UV", sub:"Hærdning og hvidt blæk", color:"#7048E8", qs:[
  {id:"lux1",t:"mc",q:"Latex-blæk er…",a:["Vandbaseret og hærdes med varme","Opløsningsmiddelbaseret","Hærdet med UV-lys","Et pulver"],w:"Latex-blæk er vandbaseret. Varme og luftstrøm i printeren fordamper vandet og hærder blækket.",src:"hp"},
- {id:"lux2",t:"mc",q:"Latex-printet føles fedtet og ridser let. Hvad justerer du?",a:["Hæver hærdningstemperaturen","Sænker hærdningstemperaturen","Skifter kniv","Ændrer luftfugtigheden"],w:"Ikke færdighærdet latex føles fedtet. Mere varme eller flere gennemløb hjælper."},
+ {id:"lux2",t:"mc",q:"Latex-printet føles fedtet og ridser let. Hvad justerer du?",a:["Hæver hærdningstemperaturen","Sænker hærdningstemperaturen","Skifter kniv","Ændrer luftfugtigheden"],w:"Et fedtet latex-print er typisk ikke hærdet nok. Hæv hærdningstemperaturen eller brug flere gennemløb – inden for mediets grænser."},
  {id:"lux3",t:"mc",q:"Mediet krøller i hærdezonen på en latexprinter. Årsag?",a:["Temperaturen er for høj til mediet","Temperaturen er for lav","Printhovedet er beskidt","Wiperen er slidt"],w:"Varmefølsomme medier kan deformeres. Brug en medieindstilling med lavere temperatur."},
  {id:"lux4",t:"mc",q:"UV-printet er klistret efter print. Mest sandsynlige årsag?",a:["UV-lampen hærder ikke nok","Forkert knivtryk","For lav luftfugtighed","Forkert filformat"],w:"En ældet lampe, for lav lampeeffekt eller for høj hastighed giver blæk, der ikke er hærdet helt."},
  {id:"lux5",t:"mc",q:"Hvidt UV-blæk printer dårligt efter en weekend. Hvorfor?",a:["Det tunge hvide pigment bundfælder sig","Det hvide blæk tørrer ud på 1 dag","Printhovedet bliver koldt","Wifi var slukket"],w:"Hvidt pigment er tungt og bundfælder sig. Derfor skal det cirkuleres eller rystes, som producenten anviser – ellers kan der komme ujævn dækning og tilstoppede dyser.",src:"uvwhite"},
  {id:"lux6",t:"mc",q:"Blækket 'spruttes' ud på akrylplader på en UV-printer. Hvad kan hjælpe?",a:["Fjern statisk elektricitet, fx med ionisering","Højere UV-effekt","Mere blæk","Lavere printhøjde end anbefalet"],w:"Statisk elektricitet trækker blækdråberne skævt. Antistatisk behandling eller ionisering hjælper."},
- {id:"lux7",t:"tf",q:"Latex-print er normalt tørre, når de kommer ud af printeren, og kan efterbehandles med det samme.",v:true,w:"Når blækket er hærdet korrekt i printeren, kommer latex-print tørre ud og kan lamineres med det samme – uden afgasning som ved eco-solvent.",src:"hp"}
+ {id:"lux7",t:"tf",q:"Latex-print er normalt tørre, når de kommer ud af printeren, og kan efterbehandles med det samme.",v:true,w:"Når blækket er hærdet korrekt i printeren, kommer latex-print tørre ud og kan lamineres med det samme – uden afgasning som ved eco-solvent.",src:"hplam"}
 ]},
 { id:"ska", title:"Skæreplottere", sub:"Kniv, tryk og konturer", color:"#0CA678", qs:[
  {id:"ska1",t:"mc",q:"Folien bliver skåret helt igennem bagpapiret. Hvad gør du?",a:["Sænker trykket/knivudstikket og laver et testsnit","Øger trykket","Skifter til 30° kniv","Kører hurtigere"],w:"Kniven skal kun skære gennem folien. Find den rette indstilling med et testsnit."},
@@ -194,7 +238,7 @@ const UNITS = [
  {id:"ska8",t:"tf",q:"Et testsnit før et stort job sparer både tid og folie.",v:true,w:"Et lille testsnit viser hurtigt, om tryk, hastighed og offset passer."}
 ]},
 { id:"lam", title:"Laminatorer", sub:"Bobler, folder og spænding", color:"#F08C00", qs:[
- {id:"lam1",t:"mc",q:"Der er små sølvagtige luftbobler (silvering) under kold laminat. Hvad hjælper?",a:["Mere valsetryk, lavere hastighed og evt. lidt varme (heat assist)","Højere hastighed","Mindre tryk","Skifte kniv"],w:"Silvering er fine luftbobler. For lidt tryk, kolde valser og for høj fart er typiske årsager. Ved eco-solvent kan manglende afgasning også give silvering.",src:"arlon"},
+ {id:"lam1",t:"mc",q:"Der er små sølvagtige luftbobler (silvering) under kold laminat. Hvad hjælper?",a:["Mere valsetryk, lavere hastighed og evt. lidt varme (heat assist)","Højere hastighed","Mindre tryk","Skifte kniv"],w:"Silvering er fine luftbobler. For lidt tryk, kolde valser og for høj fart er typiske årsager. Men brug ikke varme på eco-solvent-print – de lamineres koldt. Her kan manglende afgasning også give silvering.",src:"arlon"},
  {id:"lam2",t:"mc",q:"Der kommer folder i laminatet. Hvad justerer du?",a:["Bremsen/spændingen på afrulleakslen","Temperaturen på printeren","Knivvinklen","Farveprofilen"],w:"For løs bremse på afrulleren giver folder. Justér bremsen, til materialet kommer fladt ud, men uden at strække laminatet.",src:"3m"},
  {id:"lam3",t:"mc",q:"Printet krummer efter laminering. Mest sandsynlige årsag?",a:["Forskellig spænding på top- og bundmateriale","For lidt blæk","Forkert knivoffset","For kold printer"],w:"Når top og bund strækkes forskelligt, trækker de sig forskelligt sammen bagefter."},
  {id:"lam4",t:"mc",q:"Der er støvkorn under laminatet. Hvad gør du?",a:["Renser valserne og tørrer printet af med en antistatisk klud","Øger hastigheden","Hæver temperaturen meget","Bruger tykkere laminat"],w:"Rene valser og et støvfrit print er vejen frem. Statisk elektricitet trækker støv til."},
@@ -224,6 +268,181 @@ const SOURCES = {
  "3m":{n:"3M – Production lamination bulletin",u:"https://multimedia.3m.com/mws/media/2419560O/instruction-bulletin-production-lamination-ra-pdf.pdf"}
 };
 
+// ===== Ekstra kilder =====
+Object.assign(SOURCES, {
+ classes:{n:"Pryor – Laser safety classifications",u:"https://www.pryortechnology.com/?p=22334"},
+ od:{n:"US Army Public Health – Laser eye protection",u:"https://ph.health.mil/topics/workplacehealth/lor/Pages/Laser-Eye-Protection.aspx"},
+ esd:{n:"MTE Solutions – Understanding ESD damage",u:"https://mtesolutionsinc.com/blogs/default-blog/understanding-esd-damage-what-really-happens-how-to-prevent-it"},
+ fire:{n:"MIT EHS – Laser cutter safety",u:"https://ehs.mit.edu/?p=385"},
+ wavel:{n:"Trotec – Diode vs CO₂ vs fiber",u:"https://www.troteclaser.com/en/resources/blog/diode-laser-vs-co2-laser-vs-fiber-laser-the-comparison-guide"},
+ xtoolx1:{n:"xTool – Laser sources compared",u:"https://support.xtool.com/article/3652"},
+ laserphot:{n:"Laser Photonics – What laser cutting's good for",u:"https://laserphotonics.com/blog/what-laser-cuttings-good-for/"},
+ galvo:{n:"Aerotech – What is a laser scan head",u:"https://go.aerotech.com/in-motion/what-is-a-laser-scan-head"},
+ airassist:{n:"Boss Laser – CO₂ air assist",u:"https://team.bosslaser.com/?p=307"},
+ lexjet:{n:"LexJet – Solvent printer maintenance",u:"https://blog.lexjet.com/tag/heat/"},
+ capping:{n:"In-plant Impressions – Inkjet maintenance",u:"https://inplantimpressions.com/article/dont-neglect-inkjet-printer-maintenance"},
+ fespacap:{n:"FESPA – Glossary: capping",u:"https://www.fespa.com/en/glossary/capping"},
+ heaters:{n:"Roland SOLJET – pre-/print heater og dryer",u:"https://screenprintingmag.com/?p=2375"},
+ icc:{n:"Sign Warehouse – ICC profiles",u:"https://signwarehouse.com/blogs/content/icc-profiles-the-secret-ingredient-to-printing-success"},
+ rolandrip:{n:"Roland DG – RIP overskriver printerens værdi",u:"https://downloadcenter.rolanddg.com/contents/manuals/VG2-640_USE_EN/mwj1596440238930.html"},
+ hpthermal:{n:"FESPA – Printhead technologies",u:"https://www.fespa.com/en/news-media/printhead-technologies-explored"},
+ hpwater:{n:"HP – Latex Technology (UK)",u:"https://www.hp.com/uk-en/printers/large-format/latex-ink-media.html"},
+ offset:{n:"USCutter – Blade offset",u:"https://support.uscutter.com/support/solutions/articles/153000143426-blade-offset"},
+ rolandtest:{n:"Roland XC-540 – Evaluating a cutting test",u:"https://www.manualslib.com/manual/1057930/Roland-Xc-540.html?page=100"},
+ pinch:{n:"Roland DG – Pinch rollers on grit rollers",u:"https://downloadcenter.rolanddg.com/contents/manuals/LG-640_USE_EN/hfl1629331886135.html"},
+ signmedia:{n:"Sign Media – Preventing silvering",u:"https://signmedia.ca/preventing-silvering-of-overlaminates/print"},
+ silver72:{n:"Print Finishing – Why silvering?",u:"https://printfinishing.com/pages/whysilvering"},
+ swlam:{n:"Sign Warehouse – Lamination of digital prints",u:"https://signwarehouse.com/blogs/content/lamination-of-digital-prints-why-when-how"},
+ gbc:{n:"GBC Talon – brake tension",u:"https://www.manualslib.com/manual/1102561/Gbc-Talon-44.html?page=54"},
+ hplam:{n:"HP – Prints ready to laminate instantly",u:"https://www.hp.com/us-en/printers/large-format-printers/blog/5-efficiency-improvements.html"},
+ mimaki:{n:"Mimaki JV3 Tips & Tricks",u:"https://studylib.es/doc/9531566/81715087-mimaki-jv3-tips-tricks"}
+});
+
+// ===== Nye spørgsmål (typer: fill = udfyld hullet, match = sæt sammen i par) =====
+const EXTRA_QS = {
+ sik:[
+  {id:"sik9",t:"fill",s:"Et lukket lasersystem kan godt være et klasse ___-produkt, selvom laseren indeni er klasse 4.",a:["1","4","3R","2M"],w:"Klassen gælder hele produktet. Når laseren er lukket inde med sikkerhedsafbrydere, så ingen farlig stråling slipper ud ved normal brug, kan produktet være klasse 1. Åbnes låget eller omgås afbryderen, er du udsat for klasse 4.",src:"classes"},
+  {id:"sik10",t:"mc",q:"Hvad betyder 'OD' på et par laserbriller?",a:["Hvor meget laserlys ved en bestemt bølgelængde glasset dæmper","Hvor mørke glassene ser ud","Hvor stødsikre brillerne er","Hvor længe brillerne holder"],w:"OD (optisk densitet) er logaritmisk: OD 4 lukker 0,01 % igennem, OD 6 kun 0,0001 %. Værdien gælder kun ved de bølgelængder, der står på brillen.",src:"od"},
+  {id:"sik11",t:"tf",q:"Hvis du ikke kan mærke et statisk stød, kan elektronikken heller ikke tage skade.",v:false,w:"Mennesker mærker først en afladning omkring 3.000 volt, men følsomme komponenter kan skades ved helt ned til ca. 100 volt. Derfor ESD-armbånd.",src:"esd"},
+  {id:"sik12",t:"match",q:"Sæt sikkerhedsudstyret sammen med den fare, det beskytter mod:",p:[["Laserbriller","Laserlys i øjnene"],["ESD-armbånd","Statisk elektricitet"],["Nødstop og fodpedal","Klemfare i valser"],["Brandslukker","Brand i materialet"]],w:"Hvert stykke udstyr har sin opgave – og det skal virke, før maskinen bruges."},
+  {id:"sik13",t:"tf",q:"Der skal altid være en brandslukker tæt ved en laserskærer.",v:true,w:"Laserskæring kan antænde materialet. Producenter anbefaler fx CO₂-, Halotron- eller pulverslukker – se maskinens manual.",src:"fire"}
+ ],
+ las:[
+  {id:"las10",t:"fill",s:"En CO₂-laser arbejder ved ca. ___, mens en fiberlaser arbejder ved ca. 1064 nm.",a:["10,6 µm","455 nm","355 nm","1,5 mm"],w:"CO₂: 10,6 µm (langt infrarødt), fiber: 1064 nm (nær-infrarødt), blå diode: ca. 450 nm. Bølgelængden afgør, hvilke materialer laseren kan bearbejde.",src:"wavel"},
+  {id:"las11",t:"mc",q:"Hvorfor kan en CO₂-laser ikke bearbejde blankt metal direkte?",a:["Blankt metal reflekterer det meste af 10,6 µm-lyset","Metal er for koldt","CO₂-laseren er for svag til alt","Metal er gennemsigtigt"],w:"Bart metal reflekterer det meste af CO₂-laserens lys. Til metal bruger man en fiberlaser.",src:"xtoolx1"},
+  {id:"las12",t:"mc",q:"Hvad gør f-theta-linsen i en galvo-laser?",a:["Holder strålen i fokus over hele arbejdsfeltet","Køler laserkilden","Gør strålen synlig","Bestemmer bølgelængden"],w:"Spejlene vipper strålen, og f-theta-linsen sørger for, at fokus ligger på en flad flade over hele feltet.",src:"galvo"},
+  {id:"las13",t:"match",q:"Sæt lasertypen sammen med det, den er bedst til:",p:[["CO₂ (10,6 µm)","Skæring i træ og akryl"],["Fiber (1064 nm)","Mærkning af metal"],["Blå diode (ca. 450 nm)","Gravering i træ"],["MOPA-fiber","Farvemærkning på rustfrit stål"]],w:"MOPA er en fiberlaser, hvor pulslængden kan justeres – det giver bl.a. farver på rustfrit stål.",src:"xtoolx1"},
+  {id:"las14",t:"tf",q:"En fiberlaser er god til at gravere i klart glas og klar akryl.",v:false,w:"Materialer, der er klare for synligt lys, er også gennemsigtige for fiberlaserens lys. Strålen går igennem uden at blive optaget.",src:"laserphot"},
+  {id:"las15",t:"mc",ctx:"Kunden ringer: \"Der går hele tiden små flammer i træet, når jeg skærer.\"",q:"Hvad tjekker du først?",a:["Om air assist er tændt og virker","Skruer effekten helt op","Slukker for udsugningen","Skifter til klar akryl"],w:"Air assist blæser flammer og røg væk fra snittet, giver mindre forkulning og beskytter linsen.",src:"airassist"}
+ ],
+ sto:[
+  {id:"sto10",t:"fill",s:"Når printeren ikke printer, forsegler ___ printhovedet, så dyserne ikke tørrer ud.",a:["capping-stationen","wiperen","klemrullerne","RIP-softwaren"],w:"Capping-stationen lukker tæt om dyserne. Er den beskidt eller deform, kan luft komme til, og dyserne tørrer ud.",src:"capping"},
+  {id:"sto11",t:"tf",q:"Solvent- og eco-solvent-printere bruger piezo-printhoveder.",v:true,w:"Opløsningsmiddelbaseret blæk kræver piezo-hoveder. Termiske hoveder bruges mest til vandbaseret blæk – fx HP's latex.",src:"lexjet"},
+  {id:"sto12",t:"mc",q:"Hvad bruges forvarmer, printvarme og tørrer til på en eco-solvent printer?",a:["Klargøre mediet, fiksere blækket og tørre printet","Kun at holde printhovedet varmt","De bruges kun ved latex","De køler mediet ned"],w:"Forvarmeren gør mediet modtageligt, printvarmen hjælper blækket med at sætte sig, og tørreren gør printet tørt og ridsefast, før det rulles op.",src:"heaters"},
+  {id:"sto13",t:"match",q:"Sæt symptomet sammen med den mest sandsynlige årsag:",p:[["Huller i dysetjekket","Tilstoppede dyser – rens"],["Striber med fast afstand, perfekt dysetjek","Fremføringen – kalibrér"],["Dobbelte, utydelige kanter","Tovejs-justeringen"],["Hovedet rammer et bølget medie","Spænding, varme eller hovedhøjde"]],w:"Bølget medie kan give 'head strikes' – det skyldes fx ujævn spænding, varme eller gammelt medie.",src:"mimaki"},
+  {id:"sto14",t:"tf",q:"Mange producenter anbefaler at rense wiperen dagligt med en fnugfri pind eller klud.",v:true,w:"En beskidt wiper kan tørre snavs ind i dyserne under rens. Følg altid den konkrete maskines vedligeholdelsesplan.",src:"lexjet"},
+  {id:"sto15",t:"mc",q:"Hvad er en ICC-profil?",a:["En beskrivelse af hvordan netop den printer, det blæk og det medie gengiver farver","En firmwareopdatering","En type printhoved","En kalibrering af kniven"],w:"ICC-profilen bruges i RIP-softwaren. Skifter du medie, blæk eller printer, kan der være brug for en ny profil.",src:"icc"}
+ ],
+ lux:[
+  {id:"lux8",t:"tf",q:"HP's latex-printere bruger termiske printhoveder.",v:true,w:"HP har udviklet latex-blækket til sine termiske printhoveder, som opvarmer blækket og skyder dråben ud med en dampboble.",src:"hpthermal"},
+  {id:"lux9",t:"fill",s:"HP Latex-blæk består af op til ___ vand.",a:["65 %","5 %","100 %","0 %"],w:"Latex-blæk er vandbaseret. Varme og luftstrøm fordamper vandet, og latex-partiklerne danner en beskyttende film.",src:"hpwater"},
+  {id:"lux10",t:"mc",q:"Hvorfor skal UV-printhoveder 'cappes', når de står stille?",a:["Det beskytter mod løst UV-lys, der kan hærde blækket","For at holde dem varme","For at spare strøm","Det har ingen betydning"],w:"Capping forhindrer udtørring – og ved UV-blæk beskytter det også mod UV-lys, der ellers kan hærde blækket i hovedet.",src:"fespacap"},
+  {id:"lux11",t:"match",q:"Sæt blæktypen sammen med hvordan den tørrer eller hærder:",p:[["Eco-solvent","Opløsningsmidlet fordamper (afgasning)"],["Latex","Varme fordamper vandet og hærder blækket"],["UV","UV-lys hærder blækket"],["Hvidt UV-blæk","Skal cirkuleres, ellers bundfælder pigmentet"]],w:"Kender du blæktypen, ved du også, hvad der typisk går galt."}
+ ],
+ ska:[
+  {id:"ska9",t:"fill",s:"Afstanden fra knivspidsen til midten af knivskaftet hedder ___.",a:["knivoffset","knivtryk","overcut","hastighed"],w:"Kniven slæbes efter skaftets midte. Kender maskinen offset, kører den lidt forbi hjørnet, så spidsen rammer det rigtige punkt.",src:"offset"},
+  {id:"ska10",t:"mc",q:"Testsnittets firkant har runde hjørner. Hvad justerer du?",a:["Øger knivoffset","Sænker knivoffset","Øger hastigheden","Skifter folie"],w:"Ifølge Roland: runde hjørner → øg offset. Hjørner med små 'horn' → sænk offset.",src:"rolandtest"},
+  {id:"ska11",t:"mc",q:"Hvordan ser et korrekt testsnit ud?",a:["Formerne kan pilles af hver for sig, og kniven efterlader svage spor i bagpapiret","Bagpapiret er skåret helt igennem","Begge former følger med, når du piller den ene","Der er slet ingen spor i bagpapiret"],w:"Svage spor i bagpapiret viser, at kniven går præcis gennem folien – hverken for lidt eller for meget.",src:"rolandtest"},
+  {id:"ska12",t:"match",q:"Sæt resultatet af testsnittet sammen med justeringen:",p:[["Begge former følger med","Øg knivtrykket"],["Bagpapiret skæres igennem","Sænk knivtrykket"],["Formen er forvrænget","Sænk hastigheden"],["Hjørnerne har 'horn'","Sænk knivoffset"]],w:"Sådan læser Roland et testsnit. Juster én ting ad gangen og lav et nyt testsnit.",src:"rolandtest"},
+  {id:"ska13",t:"tf",q:"Klemrullerne skal stå over slibevalserne (grit rollers), ellers kan mediet køre skævt.",v:true,w:"Klemrullerne presser mediet ned mod de ru slibevalser, som trækker det frem og tilbage.",src:"pinch"}
+ ],
+ lam:[
+  {id:"lam7",t:"tf",q:"Let silvering under kold laminat kan forsvinde af sig selv inden for 24-72 timer.",v:true,w:"Den indfangede luft forsvinder, når klæberen flyder ud. Men skyldes det uhærdet blæk, forsvinder det ikke.",src:"silver72"},
+  {id:"lam8",t:"mc",q:"Hvorfor bruger man normalt kold laminering til eco-solvent print?",a:["Varme kan genaktivere blækket og give fejl i laminatet","Kold laminat er altid billigere","Eco-solvent tåler ikke tryk","Varm laminering kræver UV-lys"],w:"Når eco-solvent er hærdet, kan ny varme genaktivere blækket, så det binder sig til laminatets klæber og giver fejl i printet.",src:"swlam"},
+  {id:"lam9",t:"fill",s:"Brug ___ bremsespænding, der stadig giver et fladt resultat.",a:["den mindst mulige","den størst mulige","altid maksimal","altid nul"],w:"For lidt bremse giver folder, for meget strækker laminatet. Find den mindste spænding, der giver fladt output.",src:"gbc"},
+  {id:"lam10",t:"match",q:"Sæt laminatfejlen sammen med løsningen:",p:[["Silvering","Mere tryk og lavere fart"],["Folder","Justér bremsen på afrulleren"],["Støv under laminatet","Rens valser og print"],["Bobler på frisk eco-solvent","Lad printet afgasse først"]],w:"De fleste laminatfejl handler om spænding, tryk, varme eller hastighed.",src:"signmedia"}
+ ],
+ kun:[
+  {id:"kun8",t:"mc",ctx:"Kunden ringer: \"Printeren har stået slukket i 3 uger, og nu mangler der dyser.\"",q:"Hvad er den rigtige rækkefølge at starte med?",a:["Dysetjek og rens – tjek derefter caps og wiper, før du overvejer nyt printhoved","Skift printhovedet med det samme","Skift alle blækpatroner","Opdatér firmwaren"],w:"Start med det billige og enkle. Et nyt printhoved er det sidste trin, ikke det første."},
+  {id:"kun9",t:"match",q:"Sæt maskinen sammen med en typisk del, der skal tjekkes eller skiftes:",p:[["Inkjetprinter","Wiper og capping-station"],["Skæreplotter","Kniven"],["Laserens udsugning","Filtrene"],["Laserens optik","Linse og beskyttelsesglas"]],w:"Sliddele og rengøring forebygger de fleste udkald."},
+  {id:"kun10",t:"tf",q:"En fremføringsværdi i RIP-softwaren kan overskrive den værdi, der er sat på printeren.",v:true,w:"Ifølge Roland bruges RIP-softwarens værdi, og printerens ignoreres. Tjek begge steder, når fremføringen driller.",src:"rolandrip"},
+  {id:"kun11",t:"fill",s:"Når du har rettet fejlen, skal du ___ sammen med kunden, før du går.",a:["teste maskinen","slukke maskinen","fjerne skærmene","nulstille alle indstillinger"],w:"En fælles test viser kunden, at fejlen er væk – og fanger det, du måske har overset."}
+ ]
+};
+UNITS.forEach(u => { (EXTRA_QS[u.id]||[]).forEach(q => u.qs.push(q)); });
+
+// ===== Viden-kort (læs først) =====
+const LEARN = {
+ sik:[
+  {t:"Laserklasser",b:"Et klasse 1-produkt er sikkert ved normal brug, fordi laseren er lukket inde. Indeni kan der godt sidde en klasse 4-laser – den farligste klasse.",k:"Åbnes låget eller omgås sikkerhedsafbryderen, står du over for klasse 4.",src:"classes"},
+  {t:"Laserbriller",b:"Laserbriller skal passe til laserens bølgelængde. OD-tallet siger, hvor meget de dæmper: OD 4 lukker 0,01 % igennem, OD 6 kun 0,0001 %.",k:"Står bølgelængden ikke på brillen, så regn med, at den ikke beskytter.",src:"od"},
+  {t:"Statisk elektricitet",b:"Du mærker først et stød omkring 3.000 volt. Følsom elektronik kan tage skade ved helt ned til ca. 100 volt – langt under det, du kan mærke.",k:"Brug ESD-armbånd, når du rører ved printkort.",src:"esd"},
+  {t:"Brand",b:"En laser kan antænde træ, papir og akryl. Derfor skal den altid være under opsyn, og der skal være en brandslukker tæt på.",k:"Air assist mindsker flammer – men erstatter aldrig opsyn.",src:"fire"},
+  {t:"Klemfare",b:"Laminatorens valser kan trække fingre, tøj og smykker ind. Skærme, fodpedal og nødstop skal virke, før maskinen bruges.",k:"Test nødstop efter hver service."}
+ ],
+ las:[
+  {t:"Tre lasertyper",b:"CO₂-laseren (10,6 µm) er til træ, akryl og andre ikke-metaller. Fiberlaseren (1064 nm) er til metal. Den blå diode (ca. 450 nm) er god til gravering i træ.",k:"Bølgelængden afgør, hvad materialet optager.",src:"wavel",img:"lasers"},
+  {t:"Hvad laseren ikke kan",b:"Klar akryl lader blåt lys og fiberlys gå igennem – CO₂ kan bearbejde den. Blankt metal reflekterer CO₂-lys og kan normalt ikke graveres direkte med en blå diode. PVC må aldrig i en laser.",k:"Forkert laser til materialet = ingen effekt eller fare.",src:"xtoolx1"},
+  {t:"Galvo eller skinner",b:"En galvo-laser vipper strålen med to små spejle på hurtige motorer, og en f-theta-linse holder fokus. Det er lynhurtigt, men feltet er mindre end på en maskine med skinner.",k:"Galvo = fart og detaljer. Skinner = store emner.",src:"galvo",img:"galvo"},
+  {t:"Fokus",b:"Strålen er smallest og stærkest i fokuspunktet. Står emnet for højt, for lavt eller skævt, bliver linjen bred og svag.",k:"Uskarp gravering? Tjek højden først."},
+  {t:"Air assist og udsugning",b:"Air assist blæser flammer og røg væk fra snittet og beskytter linsen. Udsugningens filtre skal skiftes, ellers sætter røgen sig på optikken.",k:"Ren luft = ren linse = stabil effekt.",src:"airassist"}
+ ],
+ sto:[
+  {t:"Piezo-hovedet",b:"Solvent- og eco-solvent-printere bruger piezo-printhoveder. De holder længe, men skal passes – en tilstoppet dyse kan ses tydeligt på printet.",k:"Godt vedligehold er billigere end et nyt hoved.",src:"lexjet"},
+  {t:"Capping og wiper",b:"Capping-stationen lukker tæt om hovedet, når det står stille, så dyserne ikke tørrer ud. Wiperen tørrer hovedets bund af under rens.",k:"Beskidte caps og wiper giver flere dyseproblemer.",src:"capping",img:"capping"},
+  {t:"Tre varmezoner",b:"Forvarmeren gør mediet klar, printvarmen hjælper blækket med at sætte sig, og tørreren gør printet tørt og ridsefast, før det rulles op.",k:"Forkerte temperaturer giver både striber og smitning.",src:"heaters"},
+  {t:"To slags striber",b:"Mangler der dyser i dysetjekket, er det dyserne – rens. Er dysetjekket perfekt, men striberne har fast afstand, er det fremføringen – kalibrér.",k:"Dysetjek først. Altid.",src:"roland"},
+  {t:"Farver og ICC",b:"En ICC-profil beskriver, hvordan netop den printer, det blæk og det medie gengiver farver. Profilen bruges i RIP-softwaren.",k:"Nyt medie? Så skal profilen passe til det.",src:"icc"}
+ ],
+ lux:[
+  {t:"Latex",b:"HP Latex-blæk er vandbaseret (op til 65 % vand), og HP's latex-printere bruger termiske hoveder. Varme og luft hærder blækket i printeren.",k:"Hærdet korrekt kan HP Latex-print lamineres med det samme.",src:["hpwater","hpthermal","hplam"]},
+  {t:"Hærdning",b:"Er latex-printet fedtet og ridser let, er det typisk ikke hærdet nok – hæv temperaturen eller brug flere gennemløb. Krøller mediet i hærdezonen, er varmen for høj til netop det medie.",k:"Fedtet = typisk for lidt hærdning. Krøllet = for meget varme."},
+  {t:"UV-printeren",b:"UV-blæk hærdes med UV-lys, lige efter det er printet. Uhærdet UV-blæk kan skade huden, så brug handsker. Capping beskytter hovederne mod løst UV-lys.",k:"Klistret print? Tjek UV-lampen.",src:"fespacap"},
+  {t:"Hvidt UV-blæk",b:"Det hvide pigment er tungt og synker til bunds. Derfor skal hvidt blæk cirkuleres eller rystes, som producenten anviser.",k:"Ujævn hvid efter en pause = bundfældning.",src:"uvwhite"}
+ ],
+ ska:[
+  {t:"Slæbekniven",b:"Kniven slæbes efter skaftets midte. Afstanden fra spids til midte hedder offset. Maskinen kører lidt forbi hvert hjørne, så spidsen rammer rigtigt.",k:"Forkert offset = dårlige hjørner.",src:"offset",img:"offset"},
+  {t:"Testsnittet",b:"Formerne skal kunne pilles af hver for sig, og kniven skal efterlade svage spor i bagpapiret. Følger begge med: mere tryk. Skæres bagpapiret: mindre tryk.",k:"Runde hjørner: mere offset. 'Horn': mindre offset.",src:"rolandtest",img:"testcut"},
+  {t:"Knivvinkler",b:"45° er den mest almindelige kniv til almindelig folie. 60° bruges til tykke og hårde materialer som reflekterende folie og sandblæsningsmaske.",k:"Producenter navngiver knive forskelligt – tjek manualen.",src:"blade"},
+  {t:"Fremføring",b:"Klemrullerne presser mediet mod de ru slibevalser, som trækker det frem og tilbage. Står de forkert, kører mediet skævt.",k:"Klemruller over slibevalser – hver gang.",src:"pinch"}
+ ],
+ lam:[
+  {t:"Fire knapper",b:"De fleste laminatfejl handler om fire ting: spænding, tryk, varme og hastighed. Justér én ad gangen.",k:"Små ændringer, nyt test.",src:"signmedia"},
+  {t:"Silvering",b:"Silvering er fine luftbobler, der giver et sølvagtigt skær. Udelukk først støv og snavs. Mere tryk og lavere fart hjælper – og lidt varme, men ikke på eco-solvent. Ved kold, selvklæbende laminat kan let silvering forsvinde af sig selv inden for 24-72 timer.",k:"Skyldes det uhærdet blæk, forsvinder det ikke.",src:["silver72","arlon"]},
+  {t:"Eco-solvent og laminat",b:"Eco-solvent skal afgasse, typisk omkring 24 timer, før laminering. Brug kold laminering – varme kan genaktivere blækket.",k:"Tålmodighed sparer et nyt print.",src:"swlam"},
+  {t:"Folder og bremse",b:"For lidt bremse på afrulleren giver folder. For meget strækker laminatet. Brug den mindste spænding, der giver et fladt resultat.",k:"Fladt output = rigtig spænding.",src:"gbc"}
+ ],
+ kun:[
+  {t:"Den gode fejlfinding",b:"Lyt til kunden, genskab fejlen, find årsagen, ret den, test sammen med kunden – og skriv en servicerapport.",k:"Uden at genskabe fejlen ved du ikke, om du har løst den."},
+  {t:"Start enkelt",b:"Dysetjek før rens. Rens før nyt printhoved. Testsnit før store jobs. Det billige og enkle først.",k:"Dyre dele er sidste udvej."},
+  {t:"Den sure kunde",b:"En kunde med stillestående maskine vil høres. Lyt, anerkend, og forklar planen og tidsrammen.",k:"Lov kun det, du kan holde."},
+  {t:"Inden du går",b:"Alle skærme på, sikkerhed testet, testjob kørt, rapport skrevet. Og fortæl kunden, hvordan fejlen kan undgås.",k:"God service forebygger næste udkald."}
+ ]
+};
+
+// ===== Ordbog =====
+const GLOSSARY = [
+ ["Afgasning","Opløsningsmidler fra eco-solvent og solvent fordamper fra printet. Typisk anbefales ca. 24 timer før laminering."],
+ ["Air assist","Luft der blæses ned i laserens snit. Mindsker flammer og forkulning og beskytter linsen."],
+ ["Banding","Vandrette striber i printet. Skyldes typisk manglende dyser eller forkert fremføring."],
+ ["Capping-station","Gummikapper der lukker tæt om printhovedet, når det står stille, så dyserne ikke tørrer ud."],
+ ["CO₂-laser","Gaslaser ved 10,6 µm. God til træ, akryl, papir og andre ikke-metaller."],
+ ["Dysetjek","Testmønster der viser, om alle dyser i printhovedet skyder."],
+ ["ESD","Elektrostatisk afladning. Kan skade elektronik ved spændinger, du ikke kan mærke."],
+ ["F-theta-linse","Linsen i en galvo-laser, der holder fokus fladt over hele arbejdsfeltet."],
+ ["Fiberlaser","Laser ved ca. 1064 nm. Bruges især til mærkning af metal."],
+ ["Fremføringskalibrering","Justering af hvor langt printeren fører mediet frem. Fjerner striber med fast afstand."],
+ ["Galvo","Laser hvor to spejle på hurtige motorer styrer strålen. Meget hurtig, mindre arbejdsfelt."],
+ ["Heat assist","Lidt varme på laminatorens valse, så klæberen flyder bedre og silvering mindskes. Bruges ikke på eco-solvent-print."],
+ ["ICC-profil","Beskrivelse af hvordan en bestemt printer, blæk og medie gengiver farver. Bruges i RIP'en."],
+ ["Interlock","Sikkerhedsafbryder der slukker laseren, når låget åbnes. Må aldrig omgås."],
+ ["Klemrulle","Rulle der presser mediet mod slibevalserne i en skæreplotter eller printer."],
+ ["Knivoffset","Afstanden fra knivspidsen til midten af knivskaftet."],
+ ["Laserklasse","Klasse 1 er sikkert ved normal brug, klasse 4 er den farligste."],
+ ["Latex-blæk","Vandbaseret blæk der hærdes med varme i printeren. HP's latex-printere bruger termiske printhoveder."],
+ ["Lugning","At fjerne den overskydende folie efter skæring (på engelsk: weeding)."],
+ ["MOPA","Fiberlaser med justerbar pulslængde. Kan bl.a. give farver på rustfrit stål."],
+ ["OD","Optisk densitet. Hvor meget laserbriller dæmper ved en given bølgelængde."],
+ ["Piezo-printhoved","Printhoved hvor en piezokrystal skyder dråben ud. Bruges i solvent-, eco-solvent- og UV-printere."],
+ ["RIP","Software der omsætter filen til printdata og styrer farver, profiler og indstillinger."],
+ ["Silvering","Fine luftbobler under laminat, der giver et sølvagtigt skær."],
+ ["Slibevalse","Ru valse (grit roller) der trækker mediet frem og tilbage."],
+ ["Termisk printhoved","Printhoved der opvarmer blækket, så en dampboble skyder dråben ud. Bruges bl.a. i HP Latex."],
+ ["Testsnit","Lille testskæring der viser, om knivtryk, hastighed og offset passer."],
+ ["Tovejs-justering","Kalibrering så printhovedet rammer ens i begge retninger. Fjerner dobbelte kanter."],
+ ["UV-blæk","Blæk der hærdes med UV-lys i printeren."],
+ ["Wiper","Gummiskraber der tørrer printhovedets bund af under rens."]
+];
+
+// ===== Små illustrationer til viden-kort =====
+const ILLU = {
+ galvo:`<svg viewBox="0 0 300 150" role="img" aria-label="Galvo: laser, to spejle og f-theta-linse"><rect x="10" y="20" width="60" height="26" rx="6" fill="#22244A" stroke="#4CC9F0"/><text x="40" y="38" fill="#F2F0FF" font-size="11" text-anchor="middle">Laser</text><path d="M70 33H130" stroke="#FF7A1A" stroke-width="3"/><rect x="128" y="20" width="6" height="28" fill="#A9A6C8" transform="rotate(45 131 34)"/><path d="M131 34V70" stroke="#FF7A1A" stroke-width="3"/><rect x="128" y="58" width="6" height="28" fill="#A9A6C8" transform="rotate(-45 131 72)"/><path d="M131 72H190" stroke="#FF7A1A" stroke-width="3"/><text x="150" y="16" fill="#A9A6C8" font-size="10">spejl X</text><text x="140" y="100" fill="#A9A6C8" font-size="10">spejl Y</text><ellipse cx="200" cy="72" rx="8" ry="26" fill="#4CC9F0" opacity=".5"/><text x="200" y="112" fill="#A9A6C8" font-size="10" text-anchor="middle">f-theta</text><path d="M208 72L280 40M208 72L280 72M208 72L280 104" stroke="#FF7A1A" stroke-width="2" opacity=".7"/><path d="M285 30V114" stroke="#F2F0FF" stroke-width="3"/><text x="270" y="135" fill="#A9A6C8" font-size="10" text-anchor="middle">emne</text></svg>`,
+ capping:`<svg viewBox="0 0 300 140" role="img" aria-label="Printhoved over capping-station og wiper"><rect x="40" y="20" width="110" height="34" rx="6" fill="#22244A" stroke="#4CC9F0"/><text x="95" y="42" fill="#F2F0FF" font-size="12" text-anchor="middle">Printhoved</text><path d="M50 54h90" stroke="#FF7A1A" stroke-width="3" stroke-dasharray="3 5"/><rect x="45" y="90" width="100" height="22" rx="5" fill="#3DDC97" opacity=".8"/><text x="95" y="105" fill="#06251A" font-size="11" text-anchor="middle" font-weight="700">Capping</text><path d="M95 60v24" stroke="#A9A6C8" stroke-width="2" marker-end="url(#a)"/><rect x="200" y="78" width="8" height="34" rx="2" fill="#FFB347"/><text x="204" y="128" fill="#A9A6C8" font-size="11" text-anchor="middle">Wiper</text><defs><marker id="a" markerWidth="8" markerHeight="8" refX="4" refY="4" orient="auto"><path d="M0 0L8 4L0 8z" fill="#A9A6C8"/></marker></defs></svg>`,
+ offset:`<svg viewBox="0 0 300 150" role="img" aria-label="Knivoffset: afstand fra skaftets midte til knivspidsen"><rect x="110" y="10" width="40" height="80" rx="6" fill="#22244A" stroke="#4CC9F0"/><path d="M130 10V140" stroke="#A9A6C8" stroke-dasharray="4 4"/><path d="M118 90L150 90L142 118Z" fill="#A9A6C8"/><circle cx="142" cy="118" r="4" fill="#FF7A1A"/><path d="M130 132H142" stroke="#FF7A1A" stroke-width="2"/><text x="190" y="136" fill="#FF7A1A" font-size="12">offset</text><text x="60" y="54" fill="#A9A6C8" font-size="11">skaftets</text><text x="60" y="68" fill="#A9A6C8" font-size="11">midte</text><text x="160" y="112" fill="#F2F0FF" font-size="11">spids</text></svg>`,
+ testcut:`<svg viewBox="0 0 300 140" role="img" aria-label="Testsnit: cirkel og firkant"><rect x="70" y="20" width="100" height="100" fill="none" stroke="#4CC9F0" stroke-width="3"/><circle cx="120" cy="70" r="30" fill="none" stroke="#FF7A1A" stroke-width="3"/><text x="200" y="50" fill="#F2F0FF" font-size="11">Pil cirklen af:</text><text x="200" y="66" fill="#A9A6C8" font-size="11">kun cirklen</text><text x="200" y="82" fill="#A9A6C8" font-size="11">skal følge med</text><text x="200" y="104" fill="#3DDC97" font-size="11">Svage spor i</text><text x="200" y="118" fill="#3DDC97" font-size="11">bagpapiret = OK</text></svg>`,
+ lasers:`<svg viewBox="0 0 300 120" role="img" aria-label="Bølgelængder: diode 450 nm, fiber 1064 nm, CO2 10600 nm"><rect x="10" y="50" width="280" height="10" rx="5" fill="#2C2E4D"/><circle cx="30" cy="55" r="12" fill="#4361EE"/><text x="30" y="90" fill="#F2F0FF" font-size="11" text-anchor="middle">Diode</text><text x="30" y="104" fill="#A9A6C8" font-size="10" text-anchor="middle">~450 nm</text><circle cx="90" cy="55" r="12" fill="#D00000"/><text x="90" y="90" fill="#F2F0FF" font-size="11" text-anchor="middle">Fiber</text><text x="90" y="104" fill="#A9A6C8" font-size="10" text-anchor="middle">1064 nm</text><circle cx="270" cy="55" r="12" fill="#FF7A1A"/><text x="270" y="90" fill="#F2F0FF" font-size="11" text-anchor="middle">CO₂</text><text x="270" y="104" fill="#A9A6C8" font-size="10" text-anchor="middle">10.600 nm</text><text x="150" y="30" fill="#A9A6C8" font-size="10" text-anchor="middle">længere bølgelængde →</text></svg>`
+};
+
 const GALVO = {"happy": "<svg viewBox=\"0 0 200 200\" aria-hidden=\"true\"><rect x=\"22\" y=\"176\" width=\"156\" height=\"14\" rx=\"5\" fill=\"#1A1B2E\"/><rect x=\"34\" y=\"168\" width=\"132\" height=\"10\" rx=\"3\" fill=\"#C8B6A6\"/>\n<path d=\"M66 34V20a10 10 0 0 1 10-10h48a10 10 0 0 1 10 10v14\" stroke=\"#1A1B2E\" stroke-width=\"9\" fill=\"none\" stroke-linecap=\"round\"/>\n<rect x=\"34\" y=\"34\" width=\"132\" height=\"110\" rx=\"22\" fill=\"#2B2D42\"/>\n<rect x=\"34\" y=\"34\" width=\"132\" height=\"24\" rx=\"12\" fill=\"#1A1B2E\"/><circle cx=\"100\" cy=\"50\" r=\"7\" fill=\"#111111\" stroke=\"#1A1B2E\" stroke-width=\"3\"/><circle cx=\"102\" cy=\"48\" r=\"2\" fill=\"#FFFFFF\"/>\n<rect x=\"46\" y=\"66\" width=\"108\" height=\"56\" rx=\"18\" fill=\"#E85D04\" opacity=\".95\"/>\n<path d=\"M56 74q14-6 30-4\" stroke=\"#FFFFFF\" stroke-width=\"4\" opacity=\".35\" fill=\"none\" stroke-linecap=\"round\"/>\n<rect x=\"69.0\" y=\"85.5\" width=\"22\" height=\"13\" rx=\"6.5\" fill=\"#FFD6A5\"/><rect x=\"73.0\" y=\"88.5\" width=\"7\" height=\"4\" rx=\"2\" fill=\"#FFFFFF\" opacity=\".7\"/><rect x=\"109.0\" y=\"85.5\" width=\"22\" height=\"13\" rx=\"6.5\" fill=\"#FFD6A5\"/><rect x=\"113.0\" y=\"88.5\" width=\"7\" height=\"4\" rx=\"2\" fill=\"#FFFFFF\" opacity=\".7\"/><path d=\"M92 110Q100 117.2 108 110\" stroke=\"#FFD6A5\" stroke-width=\"4.0\" fill=\"none\" stroke-linecap=\"round\"/>\n<rect x=\"150\" y=\"128\" width=\"10\" height=\"10\" rx=\"3\" fill=\"#FFB703\"/>\n<path d=\"M40 144h120v18H40z\" fill=\"#1A1B2E\" opacity=\".35\"/>\n<rect x=\"88\" y=\"140\" width=\"24\" height=\"10\" rx=\"3\" fill=\"#1A1B2E\"/>\n<g opacity=\"1\"><path d=\"M100.0 148L74.0 182M100.0 148L100.0 182M100.0 148L126.0 182\" stroke=\"#4CC9F0\" stroke-width=\"2.5\" opacity=\".55\"/><path d=\"M100.0 148L110.0 182\" stroke=\"#4CC9F0\" stroke-width=\"4\" stroke-linecap=\"round\"/><circle cx=\"110\" cy=\"182\" r=\"5\" fill=\"#FFF3B0\"/></g></svg>", "worried": "<svg viewBox=\"0 0 200 200\" aria-hidden=\"true\"><path d=\"M172 40q8 12 0 18q-8-6 0-18z\" fill=\"#4DABF7\"/><rect x=\"22\" y=\"176\" width=\"156\" height=\"14\" rx=\"5\" fill=\"#1A1B2E\"/><rect x=\"34\" y=\"168\" width=\"132\" height=\"10\" rx=\"3\" fill=\"#C8B6A6\"/>\n<path d=\"M66 34V20a10 10 0 0 1 10-10h48a10 10 0 0 1 10 10v14\" stroke=\"#1A1B2E\" stroke-width=\"9\" fill=\"none\" stroke-linecap=\"round\"/>\n<rect x=\"34\" y=\"34\" width=\"132\" height=\"110\" rx=\"22\" fill=\"#2B2D42\"/>\n<rect x=\"34\" y=\"34\" width=\"132\" height=\"24\" rx=\"12\" fill=\"#1A1B2E\"/><circle cx=\"100\" cy=\"50\" r=\"7\" fill=\"#111111\" stroke=\"#1A1B2E\" stroke-width=\"3\"/><circle cx=\"102\" cy=\"48\" r=\"2\" fill=\"#FFFFFF\"/>\n<rect x=\"46\" y=\"66\" width=\"108\" height=\"56\" rx=\"18\" fill=\"#E85D04\" opacity=\".95\"/>\n<path d=\"M56 74q14-6 30-4\" stroke=\"#FFFFFF\" stroke-width=\"4\" opacity=\".35\" fill=\"none\" stroke-linecap=\"round\"/>\n<rect x=\"69.0\" y=\"85.5\" width=\"22\" height=\"13\" rx=\"6.5\" fill=\"#FFD6A5\"/><rect x=\"73.0\" y=\"88.5\" width=\"7\" height=\"4\" rx=\"2\" fill=\"#FFFFFF\" opacity=\".7\"/><rect x=\"109.0\" y=\"85.5\" width=\"22\" height=\"13\" rx=\"6.5\" fill=\"#FFD6A5\"/><rect x=\"113.0\" y=\"88.5\" width=\"7\" height=\"4\" rx=\"2\" fill=\"#FFFFFF\" opacity=\".7\"/><path d=\"M67.0 77.5l22 -6M133.0 77.5l-22 -6\" stroke=\"#FFD6A5\" stroke-width=\"5\" stroke-linecap=\"round\"/><path d=\"M92 113.2q4.0 -3.6 8 0t8 0\" stroke=\"#FFD6A5\" stroke-width=\"3.5\" fill=\"none\" stroke-linecap=\"round\"/>\n<rect x=\"150\" y=\"128\" width=\"10\" height=\"10\" rx=\"3\" fill=\"#FFB703\"/>\n<path d=\"M40 144h120v18H40z\" fill=\"#1A1B2E\" opacity=\".35\"/>\n<rect x=\"88\" y=\"140\" width=\"24\" height=\"10\" rx=\"3\" fill=\"#1A1B2E\"/>\n<g opacity=\".3\"><path d=\"M100.0 148L74.0 182M100.0 148L100.0 182M100.0 148L126.0 182\" stroke=\"#4CC9F0\" stroke-width=\"2.5\" opacity=\".55\"/><path d=\"M100.0 148L110.0 182\" stroke=\"#4CC9F0\" stroke-width=\"4\" stroke-linecap=\"round\"/><circle cx=\"110\" cy=\"182\" r=\"5\" fill=\"#FFF3B0\"/></g></svg>", "party": "<svg viewBox=\"0 0 200 200\" aria-hidden=\"true\"><rect x=\"20\" y=\"30\" width=\"9\" height=\"15\" rx=\"2\" fill=\"#00AEEF\" transform=\"rotate(20 20 30)\"/><rect x=\"180\" y=\"25\" width=\"9\" height=\"15\" rx=\"2\" fill=\"#EC008C\" transform=\"rotate(-30 180 25)\"/><rect x=\"30\" y=\"120\" width=\"9\" height=\"15\" rx=\"2\" fill=\"#FFD400\" transform=\"rotate(45 30 120)\"/><rect x=\"178\" y=\"110\" width=\"9\" height=\"15\" rx=\"2\" fill=\"#40C057\" transform=\"rotate(10 178 110)\"/><rect x=\"60\" y=\"12\" width=\"9\" height=\"15\" rx=\"2\" fill=\"#FF922B\" transform=\"rotate(-15 60 12)\"/><rect x=\"150\" y=\"8\" width=\"9\" height=\"15\" rx=\"2\" fill=\"#00AEEF\" transform=\"rotate(35 150 8)\"/><rect x=\"12\" y=\"75\" width=\"9\" height=\"15\" rx=\"2\" fill=\"#EC008C\" transform=\"rotate(60 12 75)\"/><rect x=\"190\" y=\"70\" width=\"9\" height=\"15\" rx=\"2\" fill=\"#FFD400\" transform=\"rotate(-50 190 70)\"/><rect x=\"22\" y=\"176\" width=\"156\" height=\"14\" rx=\"5\" fill=\"#1A1B2E\"/><rect x=\"34\" y=\"168\" width=\"132\" height=\"10\" rx=\"3\" fill=\"#C8B6A6\"/>\n<path d=\"M66 22V20a10 10 0 0 1 10-10h48a10 10 0 0 1 10 10v26\" stroke=\"#1A1B2E\" stroke-width=\"9\" fill=\"none\" stroke-linecap=\"round\"/>\n<rect x=\"34\" y=\"34\" width=\"132\" height=\"110\" rx=\"22\" fill=\"#2B2D42\"/>\n<rect x=\"34\" y=\"34\" width=\"132\" height=\"24\" rx=\"12\" fill=\"#1A1B2E\"/><circle cx=\"100\" cy=\"50\" r=\"7\" fill=\"#111111\" stroke=\"#1A1B2E\" stroke-width=\"3\"/><circle cx=\"102\" cy=\"48\" r=\"2\" fill=\"#FFFFFF\"/>\n<rect x=\"46\" y=\"66\" width=\"108\" height=\"56\" rx=\"18\" fill=\"#E85D04\" opacity=\".95\"/>\n<path d=\"M56 74q14-6 30-4\" stroke=\"#FFFFFF\" stroke-width=\"4\" opacity=\".35\" fill=\"none\" stroke-linecap=\"round\"/>\n<path d=\"M69.0 95q11.0 -14 22 0\" stroke=\"#FFD6A5\" stroke-width=\"6\" fill=\"none\" stroke-linecap=\"round\"/><path d=\"M109.0 95q11.0 -14 22 0\" stroke=\"#FFD6A5\" stroke-width=\"6\" fill=\"none\" stroke-linecap=\"round\"/><path d=\"M92 110Q100 122.8 108 110Z\" fill=\"#FFD6A5\"/><ellipse cx=\"100\" cy=\"116.0\" rx=\"3.6\" ry=\"2.0\" fill=\"#FF6B8B\"/>\n<rect x=\"150\" y=\"128\" width=\"10\" height=\"10\" rx=\"3\" fill=\"#FFB703\"/>\n<path d=\"M40 144h120v18H40z\" fill=\"#1A1B2E\" opacity=\".35\"/>\n<rect x=\"88\" y=\"140\" width=\"24\" height=\"10\" rx=\"3\" fill=\"#1A1B2E\"/>\n<g opacity=\"1\"><path d=\"M100.0 148L74.0 182M100.0 148L100.0 182M100.0 148L126.0 182\" stroke=\"#4CC9F0\" stroke-width=\"2.5\" opacity=\".55\"/><path d=\"M100.0 148L110.0 182\" stroke=\"#4CC9F0\" stroke-width=\"4\" stroke-linecap=\"round\"/><circle cx=\"110\" cy=\"182\" r=\"5\" fill=\"#FFF3B0\"/></g></svg>"};
 
 (function(){
@@ -233,7 +452,7 @@ const LS_KEY = 'galvo-progress-v1';
 const LESSONS_PER_UNIT = 3, QS_PER_LESSON = 5, BOSS_QS = 7;
 
 // ---------- state ----------
-function fresh(){ return {v:1,xp:0,streak:0,best:0,lastDay:null,goal:20,xpByDay:{},unit:{},wrong:[],lessons:0,perfect:0,correct:0,answered:0,badges:[],remind:"07:30",updatedAt:0}; }
+function fresh(){ return {v:1,xp:0,streak:0,best:0,lastDay:null,goal:20,xpByDay:{},unit:{},wrong:[],lessons:0,perfect:0,correct:0,answered:0,badges:[],remind:"07:30",learned:{},blitzBest:0,blitzPlays:0,updatedAt:0}; }
 let S = fresh();
 try{ const raw = localStorage.getItem(LS_KEY); if(raw){ S = Object.assign(fresh(), JSON.parse(raw)); } }catch(e){}
 const NATIVE = (typeof window.Android!=='undefined') ? window.Android : null;
@@ -311,9 +530,24 @@ const BADGES = [
  {id:"xp1000",n:"1.000 XP",d:"Optjen 1.000 XP",ic:"bolt",t:()=>S.xp>=1000},
  {id:"u_sik",n:"Sikkerhed først",d:"Klar enhed 1",ic:"crown",t:()=>unitState('sik').boss},
  {id:"u_las",n:"Laser-mester",d:"Klar lasergravering",ic:"crown",t:()=>unitState('las').boss},
+ {id:"read3",n:"Bogorm",d:"Læs viden-kort i 3 enheder",ic:"check",t:()=>Object.keys(S.learned||{}).length>=3},
+ {id:"blitz10",n:"Lynhurtig",d:"10 rigtige i en lyn-runde",ic:"bolt",t:()=>(S.blitzBest||0)>=10},
+ {id:"blitz20",n:"Lynmester",d:"20 rigtige i en lyn-runde",ic:"bolt",t:()=>(S.blitzBest||0)>=20},
  {id:"all",n:"Mestertekniker",d:"Klar alle enheder",ic:"crown",t:()=>UNITS.every(u=>unitState(u.id).boss)}
 ];
 function checkBadges(){ const nw=[]; BADGES.forEach(b=>{ if(!S.badges.includes(b.id) && b.t()){ S.badges.push(b.id); nw.push(b);} }); return nw; }
+
+// ---------- XP & streak ----------
+function awardXP(xp){
+  S.xp+=xp; const t=today(); S.xpByDay[t]=(S.xpByDay[t]||0)+xp;
+  const before=liveStreak();
+  if(S.lastDay!==t){ S.streak = (S.lastDay && daysBetween(S.lastDay,t)===1) ? S.streak+1 : 1; S.lastDay=t; }
+  S.best=Math.max(S.best,S.streak);
+  const keys=Object.keys(S.xpByDay).sort(); while(keys.length>60){ delete S.xpByDay[keys.shift()]; }
+  return {before, goalHit: todayXP()>=S.goal && todayXP()-xp<S.goal};
+}
+function srcLinks(src){ if(!src) return ''; const arr=(Array.isArray(src)?src:[src]).map(k=>SOURCES[k]).filter(Boolean); if(!arr.length) return ''; return (arr.length>1?'Kilder: ':'Kilde: ')+arr.map(x=>`<a href="${x.u}" target="_blank" rel="noopener">${esc(x.n)}</a>`).join(' · '); }
+function learnPool(){ const out=[]; UNITS.forEach((u,i)=>{ if(unlocked(i)) (LEARN[u.id]||[]).forEach((c,j)=>out.push({u:i,j,c})); }); return out; }
 
 // ---------- views ----------
 let view = {name:'home'};
@@ -349,6 +583,10 @@ function home(){
     const us=unitState(u.id), open=unlocked(i);
     const pill = us.boss?'Mestret':open?`${Math.min(us.done,LESSONS_PER_UNIT)}/${LESSONS_PER_UNIT}`:'Låst';
     let steps='';
+    if(open && LEARN[u.id]){
+      const rd=!!(S.learned||{})[u.id]; const cur=!rd && us.done===0;
+      steps+=`<button class="step" data-learn="${i}" aria-label="Viden-kort: ${esc(u.title)}"><div class="dot ${rd?'d':cur?'c':'l'}" style="${rd||cur?'':'background:var(--acc2);box-shadow:none'}"></div><div class="card ${cur?'c':''}"><b>Viden-kort · ${LEARN[u.id].length} kort</b><span>${rd?'Læst – læs igen':'Lær det vigtigste først · +5 XP'}</span></div></button>`;
+    }
     if(open){
       for(let j=0;j<=LESSONS_PER_UNIT;j++){
         const boss = j===LESSONS_PER_UNIT;
@@ -366,11 +604,17 @@ function home(){
   return `${header()}<div class="main">
   <div class="hero">${G(mood,'bob')}<div class="msg"><div class="lvl">NIVEAU ${lv.l} · ${TITLES[Math.min(lv.l-1,TITLES.length-1)].toUpperCase()}</div><div class="say">${esc(msg)}</div>
   <div class="bar" role="progressbar" aria-valuenow="${Math.min(tx,S.goal)}" aria-valuemax="${S.goal}" aria-label="Dagens mål"><i style="width:${Math.min(100,tx/S.goal*100)}%"></i></div><div class="small">${Math.min(tx,S.goal)}/${S.goal} XP i dag</div></div></div>
+  ${dyk()}
   <div class="sec">DIN VEJ</div>${units}
   <div class="note">Galvo giver generel viden om fejlfinding og service. Følg altid producentens manual og sikkerhedsanvisninger for den konkrete maskine.</div>
   </div>${nav()}`;
 }
 
+function dyk(){
+  const pool=learnPool(); if(!pool.length) return '';
+  const d=new Date(); const idx=(d.getFullYear()*372+d.getMonth()*31+d.getDate())%pool.length; const p=pool[idx];
+  return `<button class="dyk" data-learn="${p.u}" data-card="${p.j}"><small>VIDSTE DU?</small><b>${esc(p.c.t)}</b><span>${esc(p.c.k)}</span></button>`;
+}
 function practice(){
   const n=S.wrong.length;
   const unlockedQs = UNITS.filter((u,i)=>unlocked(i)).reduce((a,u)=>a+u.qs.length,0);
@@ -381,7 +625,13 @@ function practice(){
   <div class="sec">TRÆNING</div>
   <div class="list">
    <div class="row"><h4>Øv dine fejl</h4><p>${n?`${n} spørgsmål, du har svaret forkert på. Svar rigtigt, så forsvinder de fra listen.`:'Ingen fejl at øve lige nu. Flot!'}</p><div style="margin-top:12px"><button class="btn" data-mode="review" ${n?'':'disabled'}>Øv ${n||''} fejl</button></div></div>
+   <div class="row"><h4>Lyn-runde på tid</h4><p>Svar på så mange som muligt på 60 sekunder. ${S.blitzBest?`Din rekord: <b style="color:var(--tx)">${S.blitzBest}</b>`:'Sæt din første rekord!'}</p><div style="margin-top:12px"><button class="btn" id="blitz" style="background:var(--flame);box-shadow:0 5px 0 #B87A1F">Start lyn-runde</button></div></div>
    <div class="row"><h4>Hurtig blanding</h4><p>5 tilfældige spørgsmål fra de ${unlockedQs} spørgsmål, du har låst op.</p><div style="margin-top:12px"><button class="btn ghost" data-mode="mix">Start blanding</button></div></div>
+  </div>
+  <div class="sec">VIDEN</div>
+  <div class="list">
+   <div class="row"><h4>Ordbog</h4><p>${GLOSSARY.length} fagord forklaret på dansk – fra afgasning til wiper.</p><div style="margin-top:12px"><button class="btn ghost" data-go="glossary">Åbn ordbogen</button></div></div>
+   ${UNITS.map((u,i)=>unlocked(i)&&LEARN[u.id]?`<div class="row" style="display:flex;justify-content:space-between;align-items:center;gap:10px"><div><h4>${esc(u.title)}</h4><p>${LEARN[u.id].length} viden-kort${(S.learned||{})[u.id]?' · læst':''}</p></div><button class="btn ghost" style="width:auto;padding:0 18px;height:46px" data-learn="${i}">Læs</button></div>`:'').join('')}
   </div>
   <div class="sec">DIN UGE</div>
   <div class="list"><div class="row"><div class="week" role="img" aria-label="XP de sidste 7 dage">${days.map(d=>{const v=S.xpByDay[dayKey(d)]||0;return `<div><span>${v}</span><i style="height:${Math.round(v/max*80)}px"></i>${wk[d.getDay()]}</div>`;}).join('')}</div>
@@ -427,13 +677,15 @@ function startLesson(mode, unitIdx, lessonIdx){
   next(); view={name:'lesson'}; render(); window.scrollTo(0,0);
 }
 function next(){
-  L.cur=L.queue.shift(); L.state='ask'; L.pick=null; L.order=[];
-  if(L.cur && L.cur.t==='mc') L.cur._opts=shuffle(L.cur.a.map((a,i)=>({a,ok:i===0})));
+  L.cur=L.queue.shift(); L.state='ask'; L.pick=null; L.order=[]; L.mp={}; L.msel=null;
+  if(L.cur && (L.cur.t==='mc'||L.cur.t==='fill')) L.cur._opts=shuffle(L.cur.a.map((a,i)=>({a,ok:i===0})));
+  if(L.cur && L.cur.t==='match'){ L.cur._right=shuffle(L.cur.p.map((p,i)=>({r:p[1],i}))); L.msel=0; }
   if(L.cur && L.cur.t==='order') L.cur._pool=shuffle(L.cur.s.map((s,i)=>({s,i})));
 }
 function isRight(){
   const q=L.cur;
-  if(q.t==='mc') return q._opts[L.pick].ok;
+  if(q.t==='mc'||q.t==='fill') return q._opts[L.pick].ok;
+  if(q.t==='match') return q.p.every((p,i)=>L.mp[i]!==undefined && q._right[L.mp[i]].i===i);
   if(q.t==='tf') return L.pick===q.v;
   return L.order.every((idx,pos)=>idx===pos) && L.order.length===q.s.length;
 }
@@ -449,7 +701,8 @@ function check(){
 }
 function cont(){ if(L.queue.length){ next(); render(); } else finish(); }
 function correctText(q){
-  if(q.t==='mc') return q.a[0];
+  if(q.t==='mc'||q.t==='fill') return q.a[0];
+  if(q.t==='match') return q.p.map(p=>`${p[0]} → ${p[1]}`).join(' · ');
   if(q.t==='tf') return q.v?'Sandt':'Falsk';
   return q.s.map((s,i)=>`${i+1}. ${s}`).join(' → ');
 }
@@ -459,7 +712,22 @@ function lessonView(){
   const tag = {unit:`${UNITS[L.unitIdx]?.title||''} · KUNDEUDKALD`,boss:'BOSS-UDKALD',review:'ØV DINE FEJL',mix:'HURTIG BLANDING',single:'DAGENS SPØRGSMÅL'}[L.mode];
   let body='';
   const locked = L.state!=='ask';
-  if(q.t==='mc'){
+  const PC=['#4CC9F0','#FFB347','#B794F6','#3DDC97'];
+  if(q.t==='fill'){
+    const parts=q.s.split('___'); const sel=L.pick!==null?q._opts[L.pick].a:'';
+    const bc = locked?(q._opts[L.pick].ok?'right':'wrong'):'';
+    body=`<div class="fillq">${esc(parts[0])}<span class="blank ${bc}">${sel?esc(sel):'&nbsp;'}</span>${esc(parts[1]||'')}</div>
+    <div class="chips" role="radiogroup">${q._opts.map((o,i)=>{let c='';if(locked){ if(o.ok) c='right'; else if(i===L.pick) c='wrong'; } else if(i===L.pick) c='sel';
+      return `<button class="opt ${c}" data-pick="${i}" role="radio" aria-checked="${i===L.pick}" ${locked?'disabled':''}>${esc(o.a)}</button>`;}).join('')}</div>`;
+  } else if(q.t==='match'){
+    if(!locked){
+      const usedR={}; Object.entries(L.mp).forEach(([li,rj])=>usedR[rj]=+li);
+      body=`<div class="small" style="margin-top:10px">Tryk på et punkt til venstre og derefter på det, der hører til.</div><div class="mgrid"><div class="mcol">${q.p.map((p,i)=>{const has=L.mp[i]!==undefined;return `<button class="mi ${L.msel===i?'sel':''}" data-ml="${i}" style="${has?`border-color:${PC[i%4]}`:''}">${esc(p[0])}${has?`<span class="tag" style="background:${PC[i%4]}">${i+1}</span>`:''}</button>`;}).join('')}</div>
+      <div class="mcol">${q._right.map((r,j)=>{const li=usedR[j];return `<button class="mi" data-mr="${j}" style="${li!==undefined?`border-color:${PC[li%4]}`:''}">${esc(r.r)}${li!==undefined?`<span class="tag" style="background:${PC[li%4]}">${li+1}</span>`:''}</button>`;}).join('')}</div></div>`;
+    } else {
+      body=`<div class="mres">${q.p.map((p,i)=>{const r=q._right[L.mp[i]]; const ok=r&&r.i===i; return `<div><span>${esc(p[0])}</span><span class="${ok?'ok':'no'}">${esc(r?r.r:'–')}</span></div>`;}).join('')}</div>`;
+    }
+  } else if(q.t==='mc'){
     body=`<div class="opts" role="radiogroup">${q._opts.map((o,i)=>{let c='';if(locked){ if(o.ok) c='right'; else if(i===L.pick) c='wrong'; } else if(i===L.pick) c='sel';
       return `<button class="opt ${c}" data-pick="${i}" role="radio" aria-checked="${i===L.pick}" ${locked?'disabled':''}><span class="k">${'ABCD'[i]}</span>${esc(o.a)}</button>`;}).join('')}</div>`;
   } else if(q.t==='tf'){
@@ -470,34 +738,30 @@ function lessonView(){
     body=`<div class="ord-ans" aria-label="Din rækkefølge">${ans||'<div class="ph">Tryk på trinene i den rigtige rækkefølge</div>'}</div>
     <div class="ord-pool">${q._pool.map(p=>`<button class="chip ${L.order.includes(p.i)?'used':''}" data-order="${p.i}" ${L.order.includes(p.i)||locked?'disabled':''}>${esc(p.s)}</button>`).join('')}</div>`;
   }
-  const ready = q.t==='order' ? L.order.length===q.s.length : L.pick!==null;
+  const ready = q.t==='order' ? L.order.length===q.s.length : q.t==='match' ? Object.keys(L.mp).length===q.p.length : L.pick!==null;
   let foot;
   if(L.state==='ask') foot=`<div class="foot"><button class="btn" id="check" ${ready?'':'disabled'}>Tjek svar</button></div>`;
   else {
-    const ok=L.state==='right'; const s=q.src&&SOURCES[q.src];
+    const ok=L.state==='right'; const s=srcLinks(q.src);
     const praise=['Skarpt!','Præcis!','Lige i fokus!','Godt fanget!','Sådan!'][Math.floor(Math.random()*5)];
     foot=`<div class="sheet ${ok?'ok':'bad'}" role="status"><h4>${ok?IC.check('#3DDC97'):IC.cross('#FF6B6B')}${ok?praise+(L.combo>=3?` Combo x${L.combo}`:''):'Ikke helt'}</h4>
-    ${ok?'':`<p><b>Rigtigt svar:</b> ${esc(correctText(q))}</p>`}<p>${esc(q.w)}</p>${s?`<div class="src">Kilde: <a href="${s.u}" target="_blank" rel="noopener">${esc(s.n)}</a></div>`:''}
+    ${ok?'':`<p><b>Rigtigt svar:</b> ${esc(correctText(q))}</p>`}<p>${esc(q.w)}</p>${s?`<div class="src">${s}</div>`:''}
     ${!ok&&L.retry.has(q.id)&&L.queue.includes(q)?'<div class="src">Spørgsmålet kommer igen sidst i lektionen.</div>':''}
     <button class="btn ${ok?'ok':'bad'}" id="cont">Fortsæt</button></div>`;
   }
   return `<div class="lt"><button class="x" id="quit" aria-label="Afslut lektion">×</button><div class="prog" role="progressbar" aria-valuenow="${pct}" aria-valuemax="100"><i style="width:${pct}%"></i></div><div class="combo">${L.combo>=2?IC.bolt('#FFB347')+'x'+L.combo:''}</div></div>
-  <div class="qwrap"><div class="qhead">${G(mood, L.state==='wrong'?'shake':L.state==='right'?'pop':'')}<div><div class="qtag">${esc(tag.toUpperCase())}</div><div class="qtext">${esc(q.q)}</div></div></div>${body}</div>${foot}`;
+  <div class="qwrap"><div class="qhead">${G(mood, L.state==='wrong'?'shake':L.state==='right'?'pop':'')}<div><div class="qtag">${esc(tag.toUpperCase())}</div><div class="qtext">${esc(q.t==='fill'?'Udfyld hullet':q.q)}</div></div></div>${q.ctx?`<div class="ctx"><b>KUNDEN RINGER</b>${esc(q.ctx)}</div>`:''}${body}</div>${foot}`;
 }
 function finish(){
   const firsts=Object.values(L.firstTry); const right=firsts.filter(Boolean).length; const acc=firsts.length?Math.round(right/firsts.length*100):0;
   const perfect = acc===100;
   let xp = L.earned + (L.mode==='boss'?20:10) + (perfect?5:0);
-  S.xp+=xp; const t=today(); S.xpByDay[t]=(S.xpByDay[t]||0)+xp;
-  const before=liveStreak();
-  if(S.lastDay!==t){ S.streak = (S.lastDay && daysBetween(S.lastDay,t)===1) ? S.streak+1 : 1; S.lastDay=t; }
-  S.best=Math.max(S.best,S.streak); S.lessons++; if(perfect) S.perfect++;
+  const aw=awardXP(xp); const before=aw.before;
+  S.lessons++; if(perfect) S.perfect++;
   if(L.mode==='unit'){ const us=unitState(UNITS[L.unitIdx].id); if(L.lessonIdx===us.done) us.done=Math.min(LESSONS_PER_UNIT, us.done+1); }
   if(L.mode==='boss'){ unitState(UNITS[L.unitIdx].id).boss = true; }
-  // trim old days
-  const keys=Object.keys(S.xpByDay).sort(); while(keys.length>60){ delete S.xpByDay[keys.shift()]; }
   const nb=checkBadges(); save();
-  view={name:'result',xp,acc,streak:S.streak,streakUp:S.streak>before,nb,goalHit:todayXP()>=S.goal&&todayXP()-xp<S.goal};
+  view={name:'result',xp,acc,streak:S.streak,streakUp:S.streak>before,nb,goalHit:aw.goalHit};
   render(); confetti(); window.scrollTo(0,0);
 }
 function result(){
@@ -507,6 +771,80 @@ function result(){
   <div class="rstats"><div class="rs" style="border-color:var(--acc)"><small>XP</small><b style="color:var(--acc)">+${v.xp}</b></div><div class="rs" style="border-color:var(--ok)"><small>RIGTIGE</small><b style="color:var(--ok)">${v.acc}%</b></div><div class="rs" style="border-color:var(--flame)"><small>STREAK</small><b style="color:var(--flame)">${v.streak}</b></div></div>
   ${v.nb.map(b=>`<div class="badge-new"><div class="ic" style="width:44px;height:44px;border-radius:12px;background:rgba(255,122,26,.18);display:flex;align-items:center;justify-content:center">${IC[b.ic]('#FF7A1A')}</div><div><b>Nyt badge: ${esc(b.n)}</b><div style="font-size:13px;color:var(--sub)">${esc(b.d)}</div></div></div>`).join('')}
   </div><div class="foot"><button class="btn" data-go="home">Fortsæt</button></div>`;
+}
+
+// ---------- learn cards ----------
+function learnView(){
+  const u=UNITS[view.u]; const cards=LEARN[u.id]; const i=view.i; const c=cards[i]; const last=i===cards.length-1; const s=srcLinks(c.src);
+  return `<div class="lt"><button class="x" data-go="home" aria-label="Luk">×</button><div class="prog"><i style="width:${Math.round((i+1)/cards.length*100)}%"></i></div><div class="combo" style="color:var(--sub);font-size:13px">${i+1}/${cards.length}</div></div>
+  <div class="qwrap" style="padding-top:12px;flex:0 0 auto"><div class="qhead">${G(i===0?'happy':last?'party':'happy','pop')}<div><div class="qtag">VIDEN-KORT · ${esc(u.title.toUpperCase())}</div><div class="qtext" style="font-size:16px;color:var(--sub);font-weight:600">${['Lad os starte med det vigtigste.','Godt – videre!','Det her kommer igen i quizzen.','Næsten færdig!','Sidste kort – så er du klar.'][Math.min(i,4)]}</div></div></div></div>
+  <div class="lcard" style="margin-top:0"><h2>${esc(c.t)}</h2>${c.img&&ILLU[c.img]?`<div class="illu">${ILLU[c.img]}</div>`:''}<p>${esc(c.b)}</p><div class="key"><small>HUSK</small>${esc(c.k)}</div>${s?`<div class="src" style="font-size:12px;color:var(--sub)">${s}</div>`:''}</div>
+  <div class="dots" aria-hidden="true">${cards.map((_,k)=>`<i class="${k===i?'on':''}"></i>`).join('')}</div>
+  <div class="foot" style="display:flex;gap:10px;margin-top:auto">${i>0?`<button class="btn ghost" data-lnav="-1" style="flex:1">Tilbage</button>`:''}<button class="btn" data-lnav="1" style="flex:2">${last?((S.learned||{})[u.id]?'Færdig':'Færdig · +5 XP'):'Næste'}</button></div>`;
+}
+function learnNav(d){
+  const cards=LEARN[UNITS[view.u].id];
+  if(d<0){ view.i=Math.max(0,view.i-1); render(); return; }
+  if(view.i<cards.length-1){ view.i++; render(); window.scrollTo(0,0); return; }
+  const id=UNITS[view.u].id; S.learned=S.learned||{};
+  if(!S.learned[id]){ S.learned[id]=true; const aw=awardXP(5); checkBadges(); save(); confetti(); toast(aw.goalHit?'+5 XP · Dagens mål er nået!':'+5 XP · Klar til lektionen!'); }
+  go('home');
+}
+
+// ---------- glossary ----------
+function glossaryView(){
+  return `<button class="back" data-go="practice">‹ Tilbage</button><div class="sec" style="padding-top:8px">ORDBOG · ${GLOSSARY.length} ORD</div>
+  <div style="padding:0 20px"><label class="sr" for="gq">Søg i ordbogen</label><input id="gq" class="gsearch" type="search" placeholder="Søg fx 'offset' eller 'silvering'" autocomplete="off"><div class="gl" id="gl">${glossList('')}</div></div><div style="height:100px"></div>${nav()}`;
+}
+function glossList(q){
+  q=(q||'').toLowerCase().trim();
+  const items=GLOSSARY.filter(([w,d])=>!q||w.toLowerCase().includes(q)||d.toLowerCase().includes(q));
+  return items.length?items.map(([w,d])=>`<div><b>${esc(w)}</b><span>${esc(d)}</span></div>`).join(''):'<div><span>Ingen ord fundet.</span></div>';
+}
+
+// ---------- blitz ----------
+let B=null, bTimer=null;
+window.__g={get S(){return S},get L(){return L},get B(){return B},startLesson:(...x)=>startLesson(...x),render:()=>render()};
+const BLITZ_SECS=60;
+function blitzPool(){ const out=[]; UNITS.forEach((u,i)=>{ if(unlocked(i)) u.qs.forEach(q=>{ if(q.t==='mc'||q.t==='tf'||q.t==='fill') out.push(allQ[q.id]); }); }); return shuffle(out); }
+function startBlitz(){
+  B={pool:blitzPool(),idx:0,score:0,combo:0,missed:[],end:Date.now()+BLITZ_SECS*1000,lock:false};
+  blitzNext(); view={name:'blitz'}; render();
+  clearInterval(bTimer); bTimer=setInterval(()=>{ const left=Math.max(0,Math.ceil((B.end-Date.now())/1000)); const el=document.getElementById('bt'); const bar=document.getElementById('tb');
+    if(el) el.textContent=left+'s'; if(bar) bar.style.width=(left/BLITZ_SECS*100)+'%'; if(left<=0) endBlitz(); },250);
+}
+function blitzNext(){ if(B.idx>=B.pool.length){ B.pool=shuffle(B.pool); B.idx=0; } B.q=B.pool[B.idx++]; if(B.q.t!=='tf') B.q._opts=shuffle(B.q.a.map((a,i)=>({a,ok:i===0}))); }
+function blitzView(){
+  const q=B.q; const left=Math.max(0,Math.ceil((B.end-Date.now())/1000));
+  const text = q.t==='fill' ? q.s.replace('___','_____') : q.q;
+  const opts = q.t==='tf' ? `<div class="tf">${[true,false].map(v=>`<button class="opt" data-bz="${v}">${v?'Sandt':'Falsk'}</button>`).join('')}</div>`
+    : `<div class="opts">${q._opts.map((o,i)=>`<button class="opt" data-bz="${i}">${esc(o.a)}</button>`).join('')}</div>`;
+  return `<div class="blz-top"><button class="x" id="bquit" aria-label="Stop lyn-runde">×</button><div class="blz-time" id="bt">${left}s</div><div class="blz-score" aria-live="polite">${IC.bolt('#4CC9F0')} ${B.score}${B.combo>=3?` <span style="color:var(--flame);font-size:15px">x${B.combo}</span>`:''}</div></div>
+  <div class="tbar"><i id="tb" style="width:${left/BLITZ_SECS*100}%"></i></div>
+  <div class="qwrap" id="bq"><div class="qtag">LYN-RUNDE</div><div class="qtext">${esc(text)}</div>${opts}</div>`;
+}
+function blitzAnswer(val){
+  if(B.lock) return; const q=B.q;
+  const ok = q.t==='tf' ? (val==='true')===q.v : q._opts[+val].ok;
+  if(ok){ B.score++; B.combo++; } else { B.combo=0; B.missed.push(q); }
+  B.lock=true; const w=document.getElementById('bq'); if(w) w.classList.add(ok?'flash-ok':'flash-bad');
+  setTimeout(()=>{ B.lock=false; if(view.name!=='blitz') return; blitzNext(); render(); }, ok?250:600);
+}
+function endBlitz(){
+  clearInterval(bTimer); bTimer=null; if(!B||view.name!=='blitz') return;
+  const xp=Math.min(B.score,20); const rec = B.score>(S.blitzBest||0);
+  S.blitzBest=Math.max(S.blitzBest||0,B.score); S.blitzPlays=(S.blitzPlays||0)+1;
+  let aw={before:liveStreak(),goalHit:false}; if(xp>0) aw=awardXP(xp);
+  const nb=checkBadges(); save();
+  view={name:'blitzres',xp,rec,nb,goalHit:aw.goalHit}; render(); if(B.score>0) confetti();
+}
+function blitzRes(){
+  const v=view; const seen=new Set(); const miss=B.missed.filter(q=>!seen.has(q.id)&&seen.add(q.id));
+  return `<div class="res" style="padding-top:30px"><div class="glow"></div>${G(B.score>0?'party':'worried','pop')}<h2>${v.rec?'Ny rekord!':'Tiden er gået!'}</h2><div style="color:var(--sub);font-weight:600">${B.score} rigtige på ${BLITZ_SECS} sekunder${v.goalHit?' · Dagens mål er nået!':''}</div>
+  <div class="rstats"><div class="rs" style="border-color:var(--acc2)"><small>RIGTIGE</small><b style="color:var(--acc2)">${B.score}</b></div><div class="rs" style="border-color:var(--acc)"><small>XP</small><b style="color:var(--acc)">+${v.xp}</b></div><div class="rs" style="border-color:var(--flame)"><small>REKORD</small><b style="color:var(--flame)">${S.blitzBest}</b></div></div>
+  ${v.nb.map(b=>`<div class="badge-new"><div class="ic" style="width:44px;height:44px;border-radius:12px;background:rgba(255,122,26,.18);display:flex;align-items:center;justify-content:center">${IC[b.ic]('#FF7A1A')}</div><div><b>Nyt badge: ${esc(b.n)}</b><div style="font-size:13px;color:var(--sub)">${esc(b.d)}</div></div></div>`).join('')}
+  ${miss.length?`<div style="width:100%;text-align:left;margin-top:16px"><div class="sec" style="padding:0 0 8px">DET SKAL DU HUSKE</div>${miss.map(q=>`<div class="row" style="margin-bottom:8px"><h4 style="font-size:15px">${esc(q.t==='fill'?q.s.replace('___','_____'):q.q)}</h4><p><b style="color:var(--ok)">${esc(correctText(q))}</b> – ${esc(q.w)}</p></div>`).join('')}</div>`:''}
+  </div><div class="foot" style="display:flex;gap:10px"><button class="btn ghost" data-go="practice" style="flex:1">Færdig</button><button class="btn" id="blitz" style="flex:1">Igen!</button></div>`;
 }
 
 function modal(title, text, okLabel, onOk){
@@ -536,11 +874,18 @@ function gcalUrl(time){
 // ---------- render & events ----------
 function render(){
   const v=view.name;
-  $app.innerHTML = v==='home'?home():v==='practice'?practice():v==='badges'?badges():v==='profile'?profile():v==='lesson'?lessonView():result();
+  $app.innerHTML = v==='home'?home():v==='practice'?practice():v==='badges'?badges():v==='profile'?profile():v==='lesson'?lessonView():v==='learn'?learnView():v==='glossary'?glossaryView():v==='blitz'?blitzView():v==='blitzres'?blitzRes():result();
 }
 $app.addEventListener('click',e=>{
   const t=e.target.closest('button'); if(!t||t.disabled) return;
-  if(t.dataset.go){ go(t.dataset.go); return; }
+  if(t.dataset.go){ if(view.name==='blitz'){ clearInterval(bTimer); } go(t.dataset.go); return; }
+  if(t.dataset.learn!==undefined){ view={name:'learn',u:+t.dataset.learn,i:+(t.dataset.card||0)}; render(); window.scrollTo(0,0); return; }
+  if(t.dataset.lnav!==undefined){ learnNav(+t.dataset.lnav); return; }
+  if(t.id==='blitz'){ startBlitz(); return; }
+  if(t.id==='bquit'){ endBlitz(); return; }
+  if(t.dataset.bz!==undefined){ blitzAnswer(t.dataset.bz); return; }
+  if(t.dataset.ml!==undefined){ L.msel=+t.dataset.ml; render(); return; }
+  if(t.dataset.mr!==undefined){ if(L.msel===null){ toast('Vælg først et punkt til venstre'); return; } const j=+t.dataset.mr; Object.keys(L.mp).forEach(k=>{ if(L.mp[k]===j) delete L.mp[k]; }); L.mp[L.msel]=j; const nxt=L.cur.p.findIndex((_,i)=>L.mp[i]===undefined); L.msel = nxt>=0?nxt:null; render(); return; }
   if(t.dataset.start!==undefined){ startLesson(t.dataset.boss==='1'?'boss':'unit', +t.dataset.start, +t.dataset.j); return; }
   if(t.dataset.mode){ startLesson(t.dataset.mode); return; }
   if(t.dataset.goal){ S.goal=+t.dataset.goal; save(); render(); toast('Dagligt mål: '+S.goal+' XP'); return; }
@@ -554,13 +899,14 @@ $app.addEventListener('click',e=>{
   if(t.id==='nrem'){ const on=t.dataset.on!=='1'; const tm=(document.getElementById('nrt')||{}).value||'07:30'; try{ NATIVE.setReminder(tm,on); }catch(e){} render(); toast(on?'Påmindelse slået til kl. '+tm:'Påmindelse slået fra'); return; }
   if(t.id==='reset'){ modal('Nulstil alt?','Alle XP, streak, badges og fremskridt slettes. Det kan ikke fortrydes.','Nulstil',()=>{ S=fresh(); save(); go('home'); toast('Fremskridt nulstillet'); }); return; }
 });
+$app.addEventListener('input',e=>{ if(e.target.id==='gq'){ const g=document.getElementById('gl'); if(g) g.innerHTML=glossList(e.target.value); } });
 $app.addEventListener('change',e=>{ if(e.target.id==='rt'){ S.remind=e.target.value||'07:30'; save(); render(); }
   if(e.target.id==='nrt'&&NATIVE){ const r=nativeRem(); try{ NATIVE.setReminder(e.target.value||'07:30', r.on); }catch(x){} render(); } });
 render();
-if(NATIVE){ try{ NATIVE.setQuestions(JSON.stringify(Object.values(allQ).map(q=>({id:q.id,q:q.q,u:(UNITS.find(u=>u.id===q.unit)||{}).title||''})))); NATIVE.saveState(JSON.stringify(S)); }catch(e){} }
+if(NATIVE){ try{ NATIVE.setQuestions(JSON.stringify(Object.values(allQ).map(q=>({id:q.id,q:(q.t==='fill'?q.s.replace('___','_____'):q.q),u:(UNITS.find(u=>u.id===q.unit)||{}).title||''})))); NATIVE.saveState(JSON.stringify(S)); }catch(e){} }
 window.galvoQuestion = id => { if(allQ[id]) startLesson('single', id); };
-window.galvoRefresh = () => { if(view.name!=='lesson') render(); };
-window.galvoBack = () => { if(view.name==='lesson'){ document.getElementById('quit')?.click(); return true; } if(view.name!=='home'){ go('home'); return true; } return false; };
+window.galvoRefresh = () => { if(view.name!=='lesson'&&view.name!=='blitz') render(); };
+window.galvoBack = () => { if(view.name==='lesson'){ document.getElementById('quit')?.click(); return true; } if(view.name==='blitz'){ endBlitz(); return true; } if(view.name!=='home'){ go('home'); return true; } return false; };
 })();
 </script>
 </body>
