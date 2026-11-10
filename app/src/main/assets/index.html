@@ -177,6 +177,19 @@ label{font-size:14px;color:var(--sub)}
 .gl b{display:block;font-size:15px;color:var(--acc)}
 .gl span{font-size:14px;color:var(--sub);line-height:1.45}
 .back{border:0;background:transparent;color:var(--sub);font-size:15px;font-weight:700;padding:18px 20px 0;display:flex;gap:6px;align-items:center;min-height:44px}
+.quests{margin:14px 20px 0;padding:14px 16px;border-radius:18px;background:var(--sf);border:1px solid var(--line)}
+.quests h4{margin:0 0 10px;font-size:13px;letter-spacing:.1em;color:var(--sub);display:flex;justify-content:space-between}
+.qrow{display:flex;gap:12px;align-items:center;padding:6px 0}
+.qic{width:34px;height:34px;border-radius:10px;background:var(--sf2);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.qrow.done .qic{background:rgba(61,220,151,.18)}
+.qbody{flex:1;min-width:0}
+.qbody b{font-size:14px;display:block}
+.qbar{height:6px;border-radius:3px;background:var(--line);margin-top:5px;overflow:hidden}
+.qbar i{display:block;height:100%;background:var(--acc2);border-radius:3px}
+.qrow.done .qbar i{background:var(--ok)}
+.qxp{font-size:12px;font-weight:700;color:var(--flame)}
+.srs{margin:14px 20px 0;padding:14px 16px;border-radius:18px;border:1px solid var(--acc2);background:rgba(76,201,240,.08);display:flex;gap:12px;align-items:center}
+.srs .t{flex:1}.srs b{display:block;font-size:16px}.srs span{font-size:13px;color:var(--sub)}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
 </head>
@@ -443,6 +456,56 @@ const ILLU = {
  lasers:`<svg viewBox="0 0 300 120" role="img" aria-label="Bølgelængder: diode 450 nm, fiber 1064 nm, CO2 10600 nm"><rect x="10" y="50" width="280" height="10" rx="5" fill="#2C2E4D"/><circle cx="30" cy="55" r="12" fill="#4361EE"/><text x="30" y="90" fill="#F2F0FF" font-size="11" text-anchor="middle">Diode</text><text x="30" y="104" fill="#A9A6C8" font-size="10" text-anchor="middle">~450 nm</text><circle cx="90" cy="55" r="12" fill="#D00000"/><text x="90" y="90" fill="#F2F0FF" font-size="11" text-anchor="middle">Fiber</text><text x="90" y="104" fill="#A9A6C8" font-size="10" text-anchor="middle">1064 nm</text><circle cx="270" cy="55" r="12" fill="#FF7A1A"/><text x="270" y="90" fill="#F2F0FF" font-size="11" text-anchor="middle">CO₂</text><text x="270" y="104" fill="#A9A6C8" font-size="10" text-anchor="middle">10.600 nm</text><text x="150" y="30" fill="#A9A6C8" font-size="10" text-anchor="middle">længere bølgelængde →</text></svg>`
 };
 
+// ===== Version 3: flere kildebelagte spørgsmål =====
+Object.assign(SOURCES, {
+ thunder:{n:"Thunder Laser – Class 1 og servicetilstand",u:"https://www.thunderlaserusa.com/knowledge/class-ii-and-class-i-thunder-lasers"},
+ epsonfeed:{n:"Epson – Paper Feed Adjustment",u:"https://files.support.epson.com/docid/cpd6/cpd61762/source/pro_graphics/source/media_loading/concepts/paper_feed_adjustment_scp6570d_sct7770dl.html"},
+ roland2:{n:"Roland DG – Feed correction (årsager til striber)",u:"https://downloadcenter.rolanddg.com/contents/manuals/XG-640_USE_EN/ddl1733360707434.html"},
+ gpwhite:{n:"Graphics Pro – White ink in UV-LED printing",u:"https://graphics-pro.com/?p=82987"},
+ rolanduncut:{n:"Roland DG – Cutting test (uskårne områder)",u:"https://downloadcenter.rolanddg.com/contents/manuals/UG642_USE_EN/rmz1662451822668.html"},
+ rolandxc36:{n:"Roland XC-540 – Placering af klemruller",u:"https://www.manualslib.com/manual/985324/Roland-Xc-540.html?page=36"},
+ swpinch:{n:"Sign Warehouse – Pre-feeding and pinch rollers",u:"https://signwarehouse.com/blogs/content/pre-feeding-vinyl"}
+});
+const V3_QS = {
+ sik:[
+  {id:"sik14",t:"tf",q:"Køres et klasse 1-lasersystem i servicetilstand med lågen åben, er du udsat for den indbyggede laser – fx klasse 4.",v:true,w:"Klasse 1 gælder kun, når laseren er lukket inde. I servicetilstand er der adgang til den indbyggede laser. Så gælder alle krav til klasse 4 – også laserbriller.",src:"thunder"},
+  {id:"sik15",t:"mc",q:"Hvor meget laserlys slipper igennem en brille med OD 5 ved den angivne bølgelængde?",a:["0,001 %","5 %","0,5 %","1 %"],w:"Hvert OD-trin dæmper 10 gange mere: OD 1 = 10 %, OD 3 = 0,1 %, OD 5 = 0,001 %.",src:"od"},
+  {id:"sik16",t:"tf",q:"Mærker du et statisk stød, har afladningen typisk været på ca. 3.000 volt eller mere.",v:true,w:"Mennesker mærker først afladninger omkring 3.000 volt. Alt under det kan skade elektronik, uden at du opdager det.",src:"esd"}
+ ],
+ las:[
+  {id:"las16",t:"mc",q:"Hvorfor er en galvo-laser så hurtig?",a:["Kun to små, lette spejle bevæger sig – ikke hele laserhovedet","Den bruger mere effekt","Den har ingen linse","Emnet kører hurtigt frem og tilbage"],w:"Galvanometermotorerne vipper små spejle, der styrer strålen næsten øjeblikkeligt rundt i arbejdsfeltet.",src:"galvo"},
+  {id:"las17",t:"tf",q:"Kobber og messing kan være svære at bearbejde med en fiberlaser, fordi de reflekterer meget infrarødt lys.",v:true,w:"Kobber, messing, sølv og guld reflekterer meget infrarødt lys. Derfor bruges der til tider en grøn laser (532 nm) til dem.",src:"laserphot"},
+  {id:"las18",t:"tf",q:"Trykluft til air assist fra en værkstedskompressor uden vand- og olieudskiller kan ødelægge linsen.",v:true,w:"Kompressorluft indeholder vand og olie. Lægger det sig på linsen, optager den strålen, bliver varm og kan revne.",src:"airassist"},
+  {id:"las19",t:"fill",s:"En UV-laser til gravering arbejder typisk ved ___.",a:["355 nm","10,6 µm","1064 nm","450 nm"],w:"UV-lasere ligger ved ca. 355 nm og giver en meget lille varmepåvirket zone.",src:"xtoolx1"}
+ ],
+ sto:[
+  {id:"sto16",t:"tf",q:"Fremføringen bør kalibreres med samme medie og indstillinger, som du printer med – fx med oprulleren tilsluttet.",v:true,w:"Ifølge Epson skal justeringen laves under samme forhold som printningen. Skifter du bredde, spænding eller sug, skal den laves igen.",src:"epsonfeed"},
+  {id:"sto17",t:"mc",q:"Hvad bør du gøre, før du justerer fremføringen?",a:["Printe et dysetjek og rense, hvis der mangler dyser","Skifte blækpatronerne","Opdatere firmwaren","Sænke printvarmen til 0"],w:"Manglende dyser kan ligne fremføringsstriber. Derfor dysetjek først – det anbefaler Epson også.",src:"epsonfeed"},
+  {id:"sto18",t:"mc",q:"Hvad kan ifølge Roland ændre, hvor langt mediet fremføres?",a:["Mediets tykkelse og frontvarmerens temperatur","Farven i filen","Hvilken RIP-version du har","Rummets belysning"],w:"Små ændringer i fremføringen afhænger af mediets tykkelse og varmerens temperatur. Derfor skal fremføringen passe til netop det medie.",src:"roland2"}
+ ],
+ lux:[
+  {id:"lux12",t:"mc",q:"Hvad kan der ske, hvis UV-blæk ikke omrystes eller cirkuleres?",a:["Ujævne farver, tilstopning og dårlig hærdning","Blækket bliver hurtigere tørt","Printet bliver mere ridsefast","Ingenting"],w:"Bundfældet pigment giver forkert blanding: ujævne farver, klumper der kan tilstoppe og uens hærdning.",src:"uvwhite"},
+  {id:"lux13",t:"tf",q:"Mange UV-printere har et automatisk system, der cirkulerer det hvide blæk med faste mellemrum.",v:true,w:"Automatisk cirkulation holder pigmentet svævende, så det hvide er klar til print – også efter pauser.",src:"gpwhite"},
+  {id:"lux14",t:"mc",q:"Hvad sker der i tørrefasen i en HP Latex-printer?",a:["Varme og luftstrøm fordamper det meste af vandet","UV-lys hærder blækket","Opløsningsmidler fordamper i 24 timer","Kniven skærer printet ud"],w:"Først fordamper vandet, så danner latex-partiklerne en beskyttende film i hærdefasen.",src:"hp"}
+ ],
+ ska:[
+  {id:"ska14",t:"mc",q:"Testsnittet har uskårne områder. Hvad justerer du ifølge Roland?",a:["Sænker hastigheden","Øger hastigheden","Sænker offset","Skifter folie"],w:"Ifølge Roland: uskårne områder → lavere skærehastighed.",src:"rolanduncut"},
+  {id:"ska15",t:"tf",q:"Klemrullerne skal sidde helt ude på kanten af mediet.",v:false,w:"Roland anbefaler ikke at placere dem for tæt på kanten – ca. 10 mm inde – og altid over slibevalserne.",src:"rolandxc36"},
+  {id:"ska16",t:"tf",q:"Til tykke materialer som sandblæsningsmaske og prismatisk refleksfolie anbefales ofte flere klemruller.",v:true,w:"Tykke, tætte film kræver mere greb. Almindelig folie klarer sig typisk med færre.",src:"swpinch"}
+ ],
+ lam:[
+  {id:"lam11",t:"tf",q:"Som tommelfingerregel bruger man mindre tryk til tykke laminatfilm end til tynde.",v:true,w:"Tykke film kræver mindre tryk. Juster altid i små trin og test.",src:"signmedia"},
+  {id:"lam12",t:"mc",q:"Hvad kan for meget varme på en rulle laminat give?",a:["Krympning, afgasning fra blækket og nedbrudt klæber","Bedre klæbeevne uden ulemper","Hurtigere tørring af latex","Ingen ændring"],w:"For meget varme kan få nogle film til at krympe, få blækket til at afgasse og nedbryde klæberen.",src:"signmedia"},
+  {id:"lam13",t:"tf",q:"Hvis laminatoren kører hurtigere, skal spændingen typisk også øges for at holde laminatet fladt.",v:true,w:"Hastighed og spænding hænger sammen: mere fart kræver typisk mere spænding.",src:"signmedia"}
+ ],
+ kun:[
+  {id:"kun12",t:"tf",q:"Det kan blive dyrt at spare på en ny capping-station.",v:true,w:"En slidt eller deform cap lukker ikke tæt, så dyserne tørrer ud. Det kan koste et printhoved for at spare en billig del.",src:"capping"},
+  {id:"kun13",t:"mc",q:"Kunden har skiftet til en ny medieleverandør, og farverne er forkerte. Hvad er det første, du tjekker?",a:["At der bruges en ICC-profil, der passer til det nye medie","At printhovedet er nyt","At kniven er skarp","At laminatoren er varm"],w:"ICC-profilen er lavet til en bestemt kombination af printer, blæk og medie. Ændres en af dem, kan profilen skulle opdateres.",src:"icc"},
+  {id:"kun14",t:"tf",q:"En printer med perfekt mekanik kan stadig give forkerte farver, hvis der er valgt en forkert ICC-profil.",v:true,w:"Profilen styrer farveomregningen. Forkert profil = forkerte farver, også på en perfekt maskine.",src:"icc"}
+ ]
+};
+UNITS.forEach(u => { (V3_QS[u.id]||[]).forEach(q => u.qs.push(q)); });
+
 const GALVO = {"happy": "<svg viewBox=\"0 0 200 200\" aria-hidden=\"true\"><rect x=\"22\" y=\"176\" width=\"156\" height=\"14\" rx=\"5\" fill=\"#1A1B2E\"/><rect x=\"34\" y=\"168\" width=\"132\" height=\"10\" rx=\"3\" fill=\"#C8B6A6\"/>\n<path d=\"M66 34V20a10 10 0 0 1 10-10h48a10 10 0 0 1 10 10v14\" stroke=\"#1A1B2E\" stroke-width=\"9\" fill=\"none\" stroke-linecap=\"round\"/>\n<rect x=\"34\" y=\"34\" width=\"132\" height=\"110\" rx=\"22\" fill=\"#2B2D42\"/>\n<rect x=\"34\" y=\"34\" width=\"132\" height=\"24\" rx=\"12\" fill=\"#1A1B2E\"/><circle cx=\"100\" cy=\"50\" r=\"7\" fill=\"#111111\" stroke=\"#1A1B2E\" stroke-width=\"3\"/><circle cx=\"102\" cy=\"48\" r=\"2\" fill=\"#FFFFFF\"/>\n<rect x=\"46\" y=\"66\" width=\"108\" height=\"56\" rx=\"18\" fill=\"#E85D04\" opacity=\".95\"/>\n<path d=\"M56 74q14-6 30-4\" stroke=\"#FFFFFF\" stroke-width=\"4\" opacity=\".35\" fill=\"none\" stroke-linecap=\"round\"/>\n<rect x=\"69.0\" y=\"85.5\" width=\"22\" height=\"13\" rx=\"6.5\" fill=\"#FFD6A5\"/><rect x=\"73.0\" y=\"88.5\" width=\"7\" height=\"4\" rx=\"2\" fill=\"#FFFFFF\" opacity=\".7\"/><rect x=\"109.0\" y=\"85.5\" width=\"22\" height=\"13\" rx=\"6.5\" fill=\"#FFD6A5\"/><rect x=\"113.0\" y=\"88.5\" width=\"7\" height=\"4\" rx=\"2\" fill=\"#FFFFFF\" opacity=\".7\"/><path d=\"M92 110Q100 117.2 108 110\" stroke=\"#FFD6A5\" stroke-width=\"4.0\" fill=\"none\" stroke-linecap=\"round\"/>\n<rect x=\"150\" y=\"128\" width=\"10\" height=\"10\" rx=\"3\" fill=\"#FFB703\"/>\n<path d=\"M40 144h120v18H40z\" fill=\"#1A1B2E\" opacity=\".35\"/>\n<rect x=\"88\" y=\"140\" width=\"24\" height=\"10\" rx=\"3\" fill=\"#1A1B2E\"/>\n<g opacity=\"1\"><path d=\"M100.0 148L74.0 182M100.0 148L100.0 182M100.0 148L126.0 182\" stroke=\"#4CC9F0\" stroke-width=\"2.5\" opacity=\".55\"/><path d=\"M100.0 148L110.0 182\" stroke=\"#4CC9F0\" stroke-width=\"4\" stroke-linecap=\"round\"/><circle cx=\"110\" cy=\"182\" r=\"5\" fill=\"#FFF3B0\"/></g></svg>", "worried": "<svg viewBox=\"0 0 200 200\" aria-hidden=\"true\"><path d=\"M172 40q8 12 0 18q-8-6 0-18z\" fill=\"#4DABF7\"/><rect x=\"22\" y=\"176\" width=\"156\" height=\"14\" rx=\"5\" fill=\"#1A1B2E\"/><rect x=\"34\" y=\"168\" width=\"132\" height=\"10\" rx=\"3\" fill=\"#C8B6A6\"/>\n<path d=\"M66 34V20a10 10 0 0 1 10-10h48a10 10 0 0 1 10 10v14\" stroke=\"#1A1B2E\" stroke-width=\"9\" fill=\"none\" stroke-linecap=\"round\"/>\n<rect x=\"34\" y=\"34\" width=\"132\" height=\"110\" rx=\"22\" fill=\"#2B2D42\"/>\n<rect x=\"34\" y=\"34\" width=\"132\" height=\"24\" rx=\"12\" fill=\"#1A1B2E\"/><circle cx=\"100\" cy=\"50\" r=\"7\" fill=\"#111111\" stroke=\"#1A1B2E\" stroke-width=\"3\"/><circle cx=\"102\" cy=\"48\" r=\"2\" fill=\"#FFFFFF\"/>\n<rect x=\"46\" y=\"66\" width=\"108\" height=\"56\" rx=\"18\" fill=\"#E85D04\" opacity=\".95\"/>\n<path d=\"M56 74q14-6 30-4\" stroke=\"#FFFFFF\" stroke-width=\"4\" opacity=\".35\" fill=\"none\" stroke-linecap=\"round\"/>\n<rect x=\"69.0\" y=\"85.5\" width=\"22\" height=\"13\" rx=\"6.5\" fill=\"#FFD6A5\"/><rect x=\"73.0\" y=\"88.5\" width=\"7\" height=\"4\" rx=\"2\" fill=\"#FFFFFF\" opacity=\".7\"/><rect x=\"109.0\" y=\"85.5\" width=\"22\" height=\"13\" rx=\"6.5\" fill=\"#FFD6A5\"/><rect x=\"113.0\" y=\"88.5\" width=\"7\" height=\"4\" rx=\"2\" fill=\"#FFFFFF\" opacity=\".7\"/><path d=\"M67.0 77.5l22 -6M133.0 77.5l-22 -6\" stroke=\"#FFD6A5\" stroke-width=\"5\" stroke-linecap=\"round\"/><path d=\"M92 113.2q4.0 -3.6 8 0t8 0\" stroke=\"#FFD6A5\" stroke-width=\"3.5\" fill=\"none\" stroke-linecap=\"round\"/>\n<rect x=\"150\" y=\"128\" width=\"10\" height=\"10\" rx=\"3\" fill=\"#FFB703\"/>\n<path d=\"M40 144h120v18H40z\" fill=\"#1A1B2E\" opacity=\".35\"/>\n<rect x=\"88\" y=\"140\" width=\"24\" height=\"10\" rx=\"3\" fill=\"#1A1B2E\"/>\n<g opacity=\".3\"><path d=\"M100.0 148L74.0 182M100.0 148L100.0 182M100.0 148L126.0 182\" stroke=\"#4CC9F0\" stroke-width=\"2.5\" opacity=\".55\"/><path d=\"M100.0 148L110.0 182\" stroke=\"#4CC9F0\" stroke-width=\"4\" stroke-linecap=\"round\"/><circle cx=\"110\" cy=\"182\" r=\"5\" fill=\"#FFF3B0\"/></g></svg>", "party": "<svg viewBox=\"0 0 200 200\" aria-hidden=\"true\"><rect x=\"20\" y=\"30\" width=\"9\" height=\"15\" rx=\"2\" fill=\"#00AEEF\" transform=\"rotate(20 20 30)\"/><rect x=\"180\" y=\"25\" width=\"9\" height=\"15\" rx=\"2\" fill=\"#EC008C\" transform=\"rotate(-30 180 25)\"/><rect x=\"30\" y=\"120\" width=\"9\" height=\"15\" rx=\"2\" fill=\"#FFD400\" transform=\"rotate(45 30 120)\"/><rect x=\"178\" y=\"110\" width=\"9\" height=\"15\" rx=\"2\" fill=\"#40C057\" transform=\"rotate(10 178 110)\"/><rect x=\"60\" y=\"12\" width=\"9\" height=\"15\" rx=\"2\" fill=\"#FF922B\" transform=\"rotate(-15 60 12)\"/><rect x=\"150\" y=\"8\" width=\"9\" height=\"15\" rx=\"2\" fill=\"#00AEEF\" transform=\"rotate(35 150 8)\"/><rect x=\"12\" y=\"75\" width=\"9\" height=\"15\" rx=\"2\" fill=\"#EC008C\" transform=\"rotate(60 12 75)\"/><rect x=\"190\" y=\"70\" width=\"9\" height=\"15\" rx=\"2\" fill=\"#FFD400\" transform=\"rotate(-50 190 70)\"/><rect x=\"22\" y=\"176\" width=\"156\" height=\"14\" rx=\"5\" fill=\"#1A1B2E\"/><rect x=\"34\" y=\"168\" width=\"132\" height=\"10\" rx=\"3\" fill=\"#C8B6A6\"/>\n<path d=\"M66 22V20a10 10 0 0 1 10-10h48a10 10 0 0 1 10 10v26\" stroke=\"#1A1B2E\" stroke-width=\"9\" fill=\"none\" stroke-linecap=\"round\"/>\n<rect x=\"34\" y=\"34\" width=\"132\" height=\"110\" rx=\"22\" fill=\"#2B2D42\"/>\n<rect x=\"34\" y=\"34\" width=\"132\" height=\"24\" rx=\"12\" fill=\"#1A1B2E\"/><circle cx=\"100\" cy=\"50\" r=\"7\" fill=\"#111111\" stroke=\"#1A1B2E\" stroke-width=\"3\"/><circle cx=\"102\" cy=\"48\" r=\"2\" fill=\"#FFFFFF\"/>\n<rect x=\"46\" y=\"66\" width=\"108\" height=\"56\" rx=\"18\" fill=\"#E85D04\" opacity=\".95\"/>\n<path d=\"M56 74q14-6 30-4\" stroke=\"#FFFFFF\" stroke-width=\"4\" opacity=\".35\" fill=\"none\" stroke-linecap=\"round\"/>\n<path d=\"M69.0 95q11.0 -14 22 0\" stroke=\"#FFD6A5\" stroke-width=\"6\" fill=\"none\" stroke-linecap=\"round\"/><path d=\"M109.0 95q11.0 -14 22 0\" stroke=\"#FFD6A5\" stroke-width=\"6\" fill=\"none\" stroke-linecap=\"round\"/><path d=\"M92 110Q100 122.8 108 110Z\" fill=\"#FFD6A5\"/><ellipse cx=\"100\" cy=\"116.0\" rx=\"3.6\" ry=\"2.0\" fill=\"#FF6B8B\"/>\n<rect x=\"150\" y=\"128\" width=\"10\" height=\"10\" rx=\"3\" fill=\"#FFB703\"/>\n<path d=\"M40 144h120v18H40z\" fill=\"#1A1B2E\" opacity=\".35\"/>\n<rect x=\"88\" y=\"140\" width=\"24\" height=\"10\" rx=\"3\" fill=\"#1A1B2E\"/>\n<g opacity=\"1\"><path d=\"M100.0 148L74.0 182M100.0 148L100.0 182M100.0 148L126.0 182\" stroke=\"#4CC9F0\" stroke-width=\"2.5\" opacity=\".55\"/><path d=\"M100.0 148L110.0 182\" stroke=\"#4CC9F0\" stroke-width=\"4\" stroke-linecap=\"round\"/><circle cx=\"110\" cy=\"182\" r=\"5\" fill=\"#FFF3B0\"/></g></svg>"};
 
 (function(){
@@ -452,7 +515,7 @@ const LS_KEY = 'galvo-progress-v1';
 const LESSONS_PER_UNIT = 3, QS_PER_LESSON = 5, BOSS_QS = 7;
 
 // ---------- state ----------
-function fresh(){ return {v:1,xp:0,streak:0,best:0,lastDay:null,goal:20,xpByDay:{},unit:{},wrong:[],lessons:0,perfect:0,correct:0,answered:0,badges:[],remind:"07:30",learned:{},blitzBest:0,blitzPlays:0,updatedAt:0}; }
+function fresh(){ return {v:1,xp:0,streak:0,best:0,lastDay:null,goal:20,xpByDay:{},unit:{},wrong:[],lessons:0,perfect:0,correct:0,answered:0,badges:[],remind:"07:30",learned:{},blitzBest:0,blitzPlays:0,srs:{},day:null,updatedAt:0}; }
 let S = fresh();
 try{ const raw = localStorage.getItem(LS_KEY); if(raw){ S = Object.assign(fresh(), JSON.parse(raw)); } }catch(e){}
 const NATIVE = (typeof window.Android!=='undefined') ? window.Android : null;
@@ -533,12 +596,14 @@ const BADGES = [
  {id:"read3",n:"Bogorm",d:"Læs viden-kort i 3 enheder",ic:"check",t:()=>Object.keys(S.learned||{}).length>=3},
  {id:"blitz10",n:"Lynhurtig",d:"10 rigtige i en lyn-runde",ic:"bolt",t:()=>(S.blitzBest||0)>=10},
  {id:"blitz20",n:"Lynmester",d:"20 rigtige i en lyn-runde",ic:"bolt",t:()=>(S.blitzBest||0)>=20},
+ {id:"quest",n:"Quest-jæger",d:"Klar alle 3 daglige quests",ic:"crown",t:()=>S.day&&S.day.claimed&&S.day.claimed.length>=3},
  {id:"all",n:"Mestertekniker",d:"Klar alle enheder",ic:"crown",t:()=>UNITS.every(u=>unitState(u.id).boss)}
 ];
 function checkBadges(){ const nw=[]; BADGES.forEach(b=>{ if(!S.badges.includes(b.id) && b.t()){ S.badges.push(b.id); nw.push(b);} }); return nw; }
 
 // ---------- XP & streak ----------
 function awardXP(xp){
+  dayBump('xp',xp);
   S.xp+=xp; const t=today(); S.xpByDay[t]=(S.xpByDay[t]||0)+xp;
   const before=liveStreak();
   if(S.lastDay!==t){ S.streak = (S.lastDay && daysBetween(S.lastDay,t)===1) ? S.streak+1 : 1; S.lastDay=t; }
@@ -547,6 +612,55 @@ function awardXP(xp){
   return {before, goalHit: todayXP()>=S.goal && todayXP()-xp<S.goal};
 }
 function srcLinks(src){ if(!src) return ''; const arr=(Array.isArray(src)?src:[src]).map(k=>SOURCES[k]).filter(Boolean); if(!arr.length) return ''; return (arr.length>1?'Kilder: ':'Kilde: ')+arr.map(x=>`<a href="${x.u}" target="_blank" rel="noopener">${esc(x.n)}</a>`).join(' · '); }
+// ---------- spaced repetition ----------
+const SRS_DAYS=[1,3,7,14,30];
+function addDays(key,n){ const p=key.split('-').map(Number); const d=new Date(p[0],p[1]-1,p[2]); d.setDate(d.getDate()+n); return dayKey(d); }
+function srsUpdate(id, ok){
+  S.srs=S.srs||{}; const e=S.srs[id]||{b:-1};
+  const b = ok ? Math.min(e.b+1, SRS_DAYS.length-1) : 0;
+  S.srs[id]={b, due:addDays(today(), SRS_DAYS[b])};
+}
+function srsDue(){ const t=today(); return Object.entries(S.srs||{}).filter(([id,e])=>allQ[id] && e.due<=t).map(([id])=>id); }
+
+// ---------- daily quests ----------
+const QUESTS=[
+ {id:'les2',n:'Fuldfør 2 lektioner',k:'lessons',goal:2,ic:'bolt'},
+ {id:'cor10',n:'Svar rigtigt på 10 spørgsmål',k:'correct',goal:10,ic:'check'},
+ {id:'card3',n:'Læs 3 viden-kort',k:'cards',goal:3,ic:'check'},
+ {id:'blitz1',n:'Tag en lyn-runde',k:'blitz',goal:1,ic:'bolt'},
+ {id:'combo4',n:'Få 4 rigtige i træk',k:'maxCombo',goal:4,ic:'flame'},
+ {id:'perf1',n:'Lav en perfekt lektion',k:'perfect',goal:1,ic:'crown'},
+ {id:'srs3',n:'Repetér 3 spørgsmål',k:'srsDone',goal:3,ic:'check'},
+ {id:'xp30',n:'Optjen 30 XP',k:'xp',goal:30,ic:'bolt'}
+];
+const QUEST_XP=10;
+function dayState(){
+  const t=today();
+  if(!S.day||S.day.date!==t){
+    const seed=t.split('-').reduce((a,b)=>a*31+(+b),7); const pool=QUESTS.slice(); const pick=[];
+    let x=seed; while(pick.length<3){ x=(x*1103515245+12345)%2147483648; pick.push(pool.splice(x%pool.length,1)[0].id); }
+    S.day={date:t,q:pick,lessons:0,correct:0,cards:0,blitz:0,maxCombo:0,perfect:0,srsDone:0,xp:0,claimed:[]};
+  }
+  return S.day;
+}
+function dayBump(key, n, isMax){
+  const d=dayState();
+  if(isMax) d[key]=Math.max(d[key]||0,n); else d[key]=(d[key]||0)+n;
+  const done=[];
+  d.q.forEach(qid=>{ const q=QUESTS.find(x=>x.id===qid); if(q && !d.claimed.includes(qid) && (d[q.k]||0)>=q.goal){ d.claimed.push(qid); done.push(q); } });
+  if(done.length){ done.forEach(q=>{ S.xp+=QUEST_XP; const t=today(); S.xpByDay[t]=(S.xpByDay[t]||0)+QUEST_XP; d.xp+=QUEST_XP; });
+    setTimeout(()=>{ toast(done.length>1?`${done.length} quests klaret! +${done.length*QUEST_XP} XP`:`Quest klaret: ${done[0].n} · +${QUEST_XP} XP`); },400); }
+}
+function questsCard(){
+  const d=dayState(); const all=d.claimed.length===d.q.length;
+  return `<div class="quests"><h4><span>DAGENS QUESTS</span><span style="color:${all?'var(--ok)':'var(--sub)'}">${d.claimed.length}/${d.q.length}</span></h4>${d.q.map(qid=>{const q=QUESTS.find(x=>x.id===qid); if(!q) return ''; const v=Math.min(d[q.k]||0,q.goal); const ok=d.claimed.includes(qid);
+    return `<div class="qrow ${ok?'done':''}"><div class="qic">${ok?IC.check('#3DDC97'):IC[q.ic]('#A9A6C8')}</div><div class="qbody"><b>${esc(q.n)}</b><div class="qbar"><i style="width:${v/q.goal*100}%"></i></div></div><div class="qxp">${ok?'Klaret':`${v}/${q.goal} · +${QUEST_XP}`}</div></div>`;}).join('')}</div>`;
+}
+function srsCard(){
+  const n=srsDue().length; if(!n) return '';
+  return `<div class="srs"><div class="t"><b>Dagens repetition</b><span>${n} spørgsmål er klar til gentagelse – så husker du dem længe.</span></div><button class="btn" data-mode="srs" style="width:auto;padding:0 18px;height:46px">Start</button></div>`;
+}
+
 function learnPool(){ const out=[]; UNITS.forEach((u,i)=>{ if(unlocked(i)) (LEARN[u.id]||[]).forEach((c,j)=>out.push({u:i,j,c})); }); return out; }
 
 // ---------- views ----------
@@ -604,7 +718,7 @@ function home(){
   return `${header()}<div class="main">
   <div class="hero">${G(mood,'bob')}<div class="msg"><div class="lvl">NIVEAU ${lv.l} · ${TITLES[Math.min(lv.l-1,TITLES.length-1)].toUpperCase()}</div><div class="say">${esc(msg)}</div>
   <div class="bar" role="progressbar" aria-valuenow="${Math.min(tx,S.goal)}" aria-valuemax="${S.goal}" aria-label="Dagens mål"><i style="width:${Math.min(100,tx/S.goal*100)}%"></i></div><div class="small">${Math.min(tx,S.goal)}/${S.goal} XP i dag</div></div></div>
-  ${dyk()}
+  ${srsCard()}${questsCard()}${dyk()}
   <div class="sec">DIN VEJ</div>${units}
   <div class="note">Galvo giver generel viden om fejlfinding og service. Følg altid producentens manual og sikkerhedsanvisninger for den konkrete maskine.</div>
   </div>${nav()}`;
@@ -625,6 +739,7 @@ function practice(){
   <div class="sec">TRÆNING</div>
   <div class="list">
    <div class="row"><h4>Øv dine fejl</h4><p>${n?`${n} spørgsmål, du har svaret forkert på. Svar rigtigt, så forsvinder de fra listen.`:'Ingen fejl at øve lige nu. Flot!'}</p><div style="margin-top:12px"><button class="btn" data-mode="review" ${n?'':'disabled'}>Øv ${n||''} fejl</button></div></div>
+   <div class="row"><h4>Repetition</h4><p>${srsDue().length?`${srsDue().length} spørgsmål er klar til gentagelse i dag.`:'Ingen repetition i dag. Spørgsmål, du har svaret på, kommer igen efter 1, 3, 7, 14 og 30 dage.'}</p><div style="margin-top:12px"><button class="btn ghost" data-mode="srs" ${srsDue().length?'':'disabled'}>Start repetition</button></div></div>
    <div class="row"><h4>Lyn-runde på tid</h4><p>Svar på så mange som muligt på 60 sekunder. ${S.blitzBest?`Din rekord: <b style="color:var(--tx)">${S.blitzBest}</b>`:'Sæt din første rekord!'}</p><div style="margin-top:12px"><button class="btn" id="blitz" style="background:var(--flame);box-shadow:0 5px 0 #B87A1F">Start lyn-runde</button></div></div>
    <div class="row"><h4>Hurtig blanding</h4><p>5 tilfældige spørgsmål fra de ${unlockedQs} spørgsmål, du har låst op.</p><div style="margin-top:12px"><button class="btn ghost" data-mode="mix">Start blanding</button></div></div>
   </div>
@@ -670,6 +785,7 @@ function startLesson(mode, unitIdx, lessonIdx){
   let qs;
   if(mode==='unit'||mode==='boss'){ qs = shuffle(UNITS[unitIdx].qs).slice(0, mode==='boss'?BOSS_QS:QS_PER_LESSON).map(q=>allQ[q.id]); }
   else if(mode==='single'){ qs = allQ[unitIdx] ? [allQ[unitIdx]] : []; }
+  else if(mode==='srs'){ qs = shuffle(srsDue().map(id=>allQ[id])).slice(0,7); }
   else if(mode==='review'){ qs = shuffle(S.wrong.map(id=>allQ[id]).filter(Boolean)).slice(0,QS_PER_LESSON); }
   else { const pool=[]; UNITS.forEach((u,i)=>{ if(unlocked(i)) u.qs.forEach(q=>pool.push(allQ[q.id])); }); qs=shuffle(pool).slice(0,QS_PER_LESSON); }
   if(!qs.length) return;
@@ -693,8 +809,8 @@ function check(){
   const q=L.cur, ok=isRight();
   L.state= ok?'right':'wrong';
   const first = !(q.id in L.firstTry);
-  if(first){ L.firstTry[q.id]=ok; S.answered++; if(ok) S.correct++; }
-  if(ok){ L.done++; L.combo++; L.bestCombo=Math.max(L.bestCombo,L.combo); S.wrong=S.wrong.filter(x=>x!==q.id); if(first) L.earned+=2; }
+  if(first){ L.firstTry[q.id]=ok; S.answered++; if(ok) S.correct++; srsUpdate(q.id, ok); if(ok) dayBump('correct',1); if(L.mode==='srs') dayBump('srsDone',1); }
+  if(ok){ L.done++; L.combo++; L.bestCombo=Math.max(L.bestCombo,L.combo); dayBump('maxCombo',L.combo,true); S.wrong=S.wrong.filter(x=>x!==q.id); if(first) L.earned+=2; }
   else { L.combo=0; if(!S.wrong.includes(q.id)) S.wrong.push(q.id); if(!L.retry.has(q.id)){ L.retry.add(q.id); L.queue.push(q); } else { L.done++; } }
   say(ok?'Rigtigt':'Forkert');
   save(); render();
@@ -709,7 +825,7 @@ function correctText(q){
 function lessonView(){
   const q=L.cur; const pct=Math.round(L.done/L.total*100);
   const mood = L.state==='wrong'?'worried':'happy';
-  const tag = {unit:`${UNITS[L.unitIdx]?.title||''} · KUNDEUDKALD`,boss:'BOSS-UDKALD',review:'ØV DINE FEJL',mix:'HURTIG BLANDING',single:'DAGENS SPØRGSMÅL'}[L.mode];
+  const tag = {unit:`${UNITS[L.unitIdx]?.title||''} · KUNDEUDKALD`,boss:'BOSS-UDKALD',review:'ØV DINE FEJL',mix:'HURTIG BLANDING',single:'DAGENS SPØRGSMÅL',srs:'DAGENS REPETITION'}[L.mode];
   let body='';
   const locked = L.state!=='ask';
   const PC=['#4CC9F0','#FFB347','#B794F6','#3DDC97'];
@@ -757,7 +873,7 @@ function finish(){
   const perfect = acc===100;
   let xp = L.earned + (L.mode==='boss'?20:10) + (perfect?5:0);
   const aw=awardXP(xp); const before=aw.before;
-  S.lessons++; if(perfect) S.perfect++;
+  S.lessons++; if(perfect) S.perfect++; dayBump('lessons',1); if(perfect) dayBump('perfect',1);
   if(L.mode==='unit'){ const us=unitState(UNITS[L.unitIdx].id); if(L.lessonIdx===us.done) us.done=Math.min(LESSONS_PER_UNIT, us.done+1); }
   if(L.mode==='boss'){ unitState(UNITS[L.unitIdx].id).boss = true; }
   const nb=checkBadges(); save();
@@ -785,7 +901,8 @@ function learnView(){
 function learnNav(d){
   const cards=LEARN[UNITS[view.u].id];
   if(d<0){ view.i=Math.max(0,view.i-1); render(); return; }
-  if(view.i<cards.length-1){ view.i++; render(); window.scrollTo(0,0); return; }
+  if(view.i<cards.length-1){ dayBump('cards',1); save(); view.i++; render(); window.scrollTo(0,0); return; }
+  dayBump('cards',1);
   const id=UNITS[view.u].id; S.learned=S.learned||{};
   if(!S.learned[id]){ S.learned[id]=true; const aw=awardXP(5); checkBadges(); save(); confetti(); toast(aw.goalHit?'+5 XP · Dagens mål er nået!':'+5 XP · Klar til lektionen!'); }
   go('home');
@@ -804,7 +921,7 @@ function glossList(q){
 
 // ---------- blitz ----------
 let B=null, bTimer=null;
-window.__g={get S(){return S},get L(){return L},get B(){return B},startLesson:(...x)=>startLesson(...x),render:()=>render()};
+window.__g={dayState:()=>dayState(),srsDue:()=>srsDue(),get S(){return S},get L(){return L},get B(){return B},startLesson:(...x)=>startLesson(...x),render:()=>render()};
 const BLITZ_SECS=60;
 function blitzPool(){ const out=[]; UNITS.forEach((u,i)=>{ if(unlocked(i)) u.qs.forEach(q=>{ if(q.t==='mc'||q.t==='tf'||q.t==='fill') out.push(allQ[q.id]); }); }); return shuffle(out); }
 function startBlitz(){
@@ -826,14 +943,14 @@ function blitzView(){
 function blitzAnswer(val){
   if(B.lock) return; const q=B.q;
   const ok = q.t==='tf' ? (val==='true')===q.v : q._opts[+val].ok;
-  if(ok){ B.score++; B.combo++; } else { B.combo=0; B.missed.push(q); }
+  if(ok){ B.score++; B.combo++; dayBump('correct',1); dayBump('maxCombo',B.combo,true); } else { B.combo=0; B.missed.push(q); }
   B.lock=true; const w=document.getElementById('bq'); if(w) w.classList.add(ok?'flash-ok':'flash-bad');
   setTimeout(()=>{ B.lock=false; if(view.name!=='blitz') return; blitzNext(); render(); }, ok?250:600);
 }
 function endBlitz(){
   clearInterval(bTimer); bTimer=null; if(!B||view.name!=='blitz') return;
   const xp=Math.min(B.score,20); const rec = B.score>(S.blitzBest||0);
-  S.blitzBest=Math.max(S.blitzBest||0,B.score); S.blitzPlays=(S.blitzPlays||0)+1;
+  S.blitzBest=Math.max(S.blitzBest||0,B.score); S.blitzPlays=(S.blitzPlays||0)+1; dayBump('blitz',1);
   let aw={before:liveStreak(),goalHit:false}; if(xp>0) aw=awardXP(xp);
   const nb=checkBadges(); save();
   view={name:'blitzres',xp,rec,nb,goalHit:aw.goalHit}; render(); if(B.score>0) confetti();
