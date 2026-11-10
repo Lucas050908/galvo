@@ -1,0 +1,10 @@
+<resources>
+    <color name="bg">#0F1020</color>
+    <color name="sf">#1A1C33</color>
+    <color name="sf2">#22244A</color>
+    <color name="tx">#F2F0FF</color>
+    <color name="sub">#A9A6C8</color>
+    <color name="acc">#FF7A1A</color>
+    <color name="acc2">#4CC9F0</color>
+    <color name="flame">#FFB347</color>
+</resources>

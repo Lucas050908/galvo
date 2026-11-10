@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">Galvo</string>
+    <string name="w_streak">Galvo · Streak og mål</string>
+    <string name="w_question">Galvo · Dagens spørgsmål</string>
+    <string name="w_mini">Galvo · Mini</string>
+    <string name="w_streak_desc">Din streak, dagens mål og en genvej til næste lektion</string>
+    <string name="w_question_desc">Et nyt spørgsmål hver dag – tryk for at svare</string>
+    <string name="w_mini_desc">Galvo og din streak</string>
+</resources>
