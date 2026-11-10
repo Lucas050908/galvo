@@ -2,6 +2,8 @@ name: Byg Galvo APK
 on:
   push:
   workflow_dispatch:
+permissions:
+  contents: write
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -15,8 +17,19 @@ jobs:
         with:
           gradle-version: "8.9"
       - name: Byg APK
-        run: gradle assembleDebug --no-daemon --stacktrace
+        run: |
+          gradle assembleDebug --no-daemon --stacktrace
+          cp app/build/outputs/apk/debug/app-debug.apk Galvo.apk
       - uses: actions/upload-artifact@v4
         with:
           name: galvo-apk
-          path: app/build/outputs/apk/debug/app-debug.apk
+          path: Galvo.apk
+      - name: Udgiv som download
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: v1.0.${{ github.run_number }}
+          name: Galvo ${{ github.run_number }}
+          make_latest: true
+          files: Galvo.apk
+          body: |
+            Hent **Galvo.apk** herunder på din Android-telefon og installér den.
