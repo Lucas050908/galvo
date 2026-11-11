@@ -7,7 +7,7 @@ import android.content.Context
 import android.content.Intent
 import android.widget.RemoteViews
 
-private fun openAppIntent(ctx: Context, requestCode: Int, questionId: String? = null): PendingIntent {
+internal fun openAppIntent(ctx: Context, requestCode: Int, questionId: String? = null): PendingIntent {
     val i = Intent(ctx, MainActivity::class.java).apply {
         flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_SINGLE_TOP
         if (questionId != null) putExtra(MainActivity.EXTRA_QUESTION, questionId)

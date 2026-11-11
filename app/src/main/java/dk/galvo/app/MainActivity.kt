@@ -94,6 +94,9 @@ class MainActivity : Activity() {
         fun getState(): String = GalvoStore.state(this@MainActivity)
 
         @JavascriptInterface
+        fun setCases(json: String) = GalvoStore.saveCases(this@MainActivity, json)
+
+        @JavascriptInterface
         fun setQuestions(json: String) = GalvoStore.saveQuestions(this@MainActivity, json)
 
         @JavascriptInterface

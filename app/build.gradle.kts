@@ -9,8 +9,8 @@ android {
         applicationId = "dk.galvo.app"
         minSdk = 26
         targetSdk = 34
-        versionCode = 12
-        versionName = "6.0"
+        versionCode = 13
+        versionName = "6.1"
     }
     buildTypes {
         release { isMinifyEnabled = false }

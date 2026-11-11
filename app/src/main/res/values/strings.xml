@@ -6,4 +6,12 @@
     <string name="w_streak_desc">Din streak, dagens mål og en genvej til næste lektion</string>
     <string name="w_question_desc">Et nyt spørgsmål hver dag – tryk for at svare</string>
     <string name="w_mini_desc">Galvo og din streak</string>
+    <string name="w_goal">Galvo · Dagens mål</string>
+    <string name="w_goal_desc">Ring om Galvo, der fylder op, når du nærmer dig dagens mål</string>
+    <string name="w_week">Galvo · Din uge</string>
+    <string name="w_week_desc">XP for hver dag i ugen og din streak</string>
+    <string name="w_stats">Galvo · Status</string>
+    <string name="w_stats_desc">Streak, ædelsten, hjerter og niveau – tryk for butikken</string>
+    <string name="w_case">Galvo · Dagens sag</string>
+    <string name="w_case_desc">En ny fejlfindingssag hver dag – tryk for at starte</string>
 </resources>

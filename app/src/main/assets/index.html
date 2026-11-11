@@ -1898,8 +1898,8 @@ $app.addEventListener('input',e=>{ if(e.target.id==='gq'){ const g=document.getE
 $app.addEventListener('change',e=>{ if(e.target.id==='rt'){ S.remind=e.target.value||'07:30'; save(); render(); }
   if(e.target.id==='nrt'&&NATIVE){ const r=nativeRem(); try{ NATIVE.setReminder(e.target.value||'07:30', r.on); }catch(x){} render(); } });
 render();
-if(NATIVE){ try{ NATIVE.setQuestions(JSON.stringify(Object.values(allQ).map(q=>({id:q.id,q:(q.t==='fill'?q.s.replace('___','_____'):q.q),u:(UNITS.find(u=>u.id===q.unit)||{}).title||''})))); NATIVE.saveState(JSON.stringify(S)); }catch(e){} }
-window.galvoQuestion = id => { if(allQ[id]) startLesson('single', id); };
+if(NATIVE){ try{ NATIVE.setQuestions(JSON.stringify(Object.values(allQ).map(q=>({id:q.id,q:(q.t==='fill'?q.s.replace('___','_____'):q.q),u:(UNITS.find(u=>u.id===q.unit)||{}).title||''})))); NATIVE.saveState(JSON.stringify(S)); }catch(e){} try{ NATIVE.setCases(JSON.stringify(CASES2.map(c=>({id:c.id,t:c.t,m:c.m,n:c.steps.length})))); }catch(e){} }
+window.galvoQuestion = id => { if(id.indexOf('case_')===0){ const i=+id.slice(5); if(CASES2[i]) startCase(i); return; } if(id.indexOf('go_')===0){ const v=id.slice(3); if(['shop','practice','badges','home'].includes(v)) go(v); return; } if(allQ[id]) startLesson('single', id); };
 window.galvoRefresh = () => { if(view.name!=='lesson'&&view.name!=='blitz') render(); };
 window.galvoBack = () => { if(view.name==='lesson'){ document.getElementById('quit')?.click(); return true; } if(view.name==='blitz'){ endBlitz(); return true; } if(view.name!=='home'){ go('home'); return true; } return false; };
 })();

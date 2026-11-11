@@ -45,6 +45,34 @@
             <meta-data android:name="android.appwidget.provider" android:resource="@xml/widget_mini_info" />
         </receiver>
 
+        <receiver android:name=".GoalRingWidget" android:exported="false" android:label="@string/w_goal">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+            <meta-data android:name="android.appwidget.provider" android:resource="@xml/widget_goal_info" />
+        </receiver>
+
+        <receiver android:name=".WeekWidget" android:exported="false" android:label="@string/w_week">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+            <meta-data android:name="android.appwidget.provider" android:resource="@xml/widget_week_info" />
+        </receiver>
+
+        <receiver android:name=".StatsWidget" android:exported="false" android:label="@string/w_stats">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+            <meta-data android:name="android.appwidget.provider" android:resource="@xml/widget_stats_info" />
+        </receiver>
+
+        <receiver android:name=".CaseWidget" android:exported="false" android:label="@string/w_case">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+            <meta-data android:name="android.appwidget.provider" android:resource="@xml/widget_case_info" />
+        </receiver>
+
         <receiver android:name=".ReminderReceiver" android:exported="false" />
 
         <receiver android:name=".BootReceiver" android:exported="true">

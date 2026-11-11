@@ -27,6 +27,58 @@ object GalvoStore {
         refreshWidgets(ctx)
     }
 
+    fun saveCases(ctx: Context, json: String) {
+        prefs(ctx).edit().putString("cases", json).apply()
+        refreshWidgets(ctx)
+    }
+
+    data class Extras(
+        val gems: Int, val hearts: Int, val level: Int, val freeze: Int,
+        val week: List<Pair<String, Int>>, val weekTotal: Int, val activeDays: Int
+    )
+
+    fun extras(ctx: Context): Extras {
+        val raw = state(ctx)
+        val dayNames = listOf("man", "tir", "ons", "tor", "fre", "lør", "søn")
+        val today = LocalDate.now()
+        return try {
+            val s = if (raw.isBlank()) JSONObject() else JSONObject(raw)
+            val xp = s.optInt("xp", 0)
+            val level = kotlin.math.floor(kotlin.math.sqrt(xp / 25.0)).toInt() + 1
+            var hearts = if (s.has("hearts")) s.optInt("hearts", 5) else 5
+            val hTs = s.optLong("hTs", System.currentTimeMillis())
+            if (hearts < 5) hearts = (hearts + ((System.currentTimeMillis() - hTs) / (30 * 60 * 1000L)).toInt()).coerceAtMost(5)
+            val byDay = s.optJSONObject("xpByDay")
+            val week = (6 downTo 0).map { i ->
+                val d = today.minusDays(i.toLong())
+                dayNames[d.dayOfWeek.value - 1] to (byDay?.optInt(d.toString(), 0) ?: 0)
+            }
+            Extras(s.optInt("gems", 0), hearts.coerceAtLeast(0), level, s.optInt("freeze", 0),
+                week, week.sumOf { it.second }, week.count { it.second > 0 })
+        } catch (e: Exception) {
+            Extras(0, 5, 1, 0, (6 downTo 0).map { dayNames[today.minusDays(it.toLong()).dayOfWeek.value - 1] to 0 }, 0, 0)
+        }
+    }
+
+    /** Same daily case as the app: index = floor(local midnight epoch ms / 86400000) % count. */
+    data class DailyCase(val index: Int, val title: String, val machine: String, val steps: Int, val stars: Int)
+
+    fun dailyCase(ctx: Context): DailyCase? {
+        val raw = prefs(ctx).getString("cases", "") ?: ""
+        if (raw.isBlank()) return null
+        return try {
+            val arr = JSONArray(raw)
+            if (arr.length() == 0) return null
+            val midnight = LocalDate.now().atStartOfDay(java.time.ZoneId.systemDefault()).toInstant().toEpochMilli()
+            val n = Math.floorDiv(midnight, 86400000L)
+            val idx = Math.floorMod(n, arr.length().toLong()).toInt()
+            val c = arr.getJSONObject(idx)
+            val st = state(ctx)
+            val stars = try { JSONObject(st).optJSONObject("cases")?.optInt(c.getString("id"), 0) ?: 0 } catch (e: Exception) { 0 }
+            DailyCase(idx, c.optString("t"), c.optString("m"), c.optInt("n", 3), stars)
+        } catch (e: Exception) { null }
+    }
+
     fun reminderTime(ctx: Context): String = prefs(ctx).getString("remindTime", "07:30") ?: "07:30"
     fun reminderOn(ctx: Context): Boolean = prefs(ctx).getBoolean("remindOn", false)
     fun setReminder(ctx: Context, time: String, on: Boolean) {
@@ -97,7 +149,7 @@ object GalvoStore {
 
     fun refreshWidgets(ctx: Context) {
         val mgr = AppWidgetManager.getInstance(ctx)
-        listOf(StreakWidget::class.java, QuestionWidget::class.java, MiniWidget::class.java).forEach { cls ->
+        listOf(StreakWidget::class.java, QuestionWidget::class.java, MiniWidget::class.java, GoalRingWidget::class.java, WeekWidget::class.java, StatsWidget::class.java, CaseWidget::class.java).forEach { cls ->
             val ids = mgr.getAppWidgetIds(ComponentName(ctx, cls))
             if (ids.isNotEmpty()) {
                 val i = Intent(ctx, cls).apply {
