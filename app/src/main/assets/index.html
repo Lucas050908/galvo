@@ -20,6 +20,7 @@ a{color:var(--acc2)}
 .stat{display:flex;gap:4px;align-items:center}
 .hero{margin:8px 20px 0;position:relative;min-height:168px;border-radius:22px;background:radial-gradient(circle at 25% 60%,rgba(255,122,26,.35),transparent 60%),var(--sf);border:1px solid var(--line);overflow:hidden;display:flex;align-items:center;gap:6px;padding:10px 14px 10px 4px}
 .hero .g{width:140px;flex-shrink:0}
+#galvo .g{width:140px}
 .hero .msg{flex:1}
 .lvl{font-size:12px;color:var(--sub);letter-spacing:.08em;font-weight:600}
 .say{font-size:18px;font-weight:700;line-height:1.3;margin-top:4px}
@@ -190,6 +191,22 @@ label{font-size:14px;color:var(--sub)}
 .qxp{font-size:12px;font-weight:700;color:var(--flame)}
 .srs{margin:14px 20px 0;padding:14px 16px;border-radius:18px;border:1px solid var(--acc2);background:rgba(76,201,240,.08);display:flex;gap:12px;align-items:center}
 .srs .t{flex:1}.srs b{display:block;font-size:16px}.srs span{font-size:13px;color:var(--sub)}
+.alive{animation:wig 7s ease-in-out infinite;transform-origin:50% 90%;cursor:pointer}
+@keyframes wig{0%,86%,100%{transform:rotate(0)}89%{transform:rotate(-6deg)}92%{transform:rotate(5deg)}95%{transform:rotate(-3deg)}}
+.jump{animation:jump .6s ease-out}
+@keyframes jump{0%{transform:translateY(0)}30%{transform:translateY(-22px) rotate(-6deg)}60%{transform:translateY(0) rotate(4deg)}100%{transform:none}}
+.lvlup{margin-top:14px;width:100%;padding:14px;border-radius:18px;background:linear-gradient(135deg,rgba(255,122,26,.25),rgba(76,201,240,.18));border:1px solid var(--acc);animation:pop .6s ease-out}
+.lvlup small{display:block;color:var(--acc);font-weight:700;letter-spacing:.12em;font-size:12px}
+.lvlup b{font-size:22px}
+.cert{background:linear-gradient(160deg,#FFF7EC,#FDE7CC);color:#2B1A0A;border-radius:18px;padding:18px;border:3px double #C77A2A;position:relative;overflow:hidden}
+.cert small{display:block;letter-spacing:.14em;font-size:11px;font-weight:700;color:#9A4E00}
+.cert h4{margin:4px 0 6px;font-size:20px}
+.cert p{margin:0;font-size:13px;line-height:1.45;color:#5B3A1E;padding-right:64px}
+.cert .seal{position:absolute;right:12px;bottom:10px;width:54px;height:54px;border-radius:50%;background:#E85D04;color:#fff;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;text-align:center;line-height:1.05;box-shadow:0 0 0 4px #FFB347}
+.toggle{display:flex;justify-content:space-between;align-items:center;gap:12px}
+.sw{width:56px;height:32px;border-radius:16px;border:0;background:var(--line);position:relative;flex-shrink:0}
+.sw::after{content:'';position:absolute;top:4px;left:4px;width:24px;height:24px;border-radius:12px;background:#fff;transition:left .2s}
+.sw[aria-checked=true]{background:var(--acc)}.sw[aria-checked=true]::after{left:28px}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
 </head>
@@ -609,9 +626,24 @@ function awardXP(xp){
   if(S.lastDay!==t){ S.streak = (S.lastDay && daysBetween(S.lastDay,t)===1) ? S.streak+1 : 1; S.lastDay=t; }
   S.best=Math.max(S.best,S.streak);
   const keys=Object.keys(S.xpByDay).sort(); while(keys.length>60){ delete S.xpByDay[keys.shift()]; }
-  return {before, goalHit: todayXP()>=S.goal && todayXP()-xp<S.goal};
+  return {before, goalHit: todayXP()>=S.goal && todayXP()-xp<S.goal, lvlUp: checkLevel()};
 }
 function srcLinks(src){ if(!src) return ''; const arr=(Array.isArray(src)?src:[src]).map(k=>SOURCES[k]).filter(Boolean); if(!arr.length) return ''; return (arr.length>1?'Kilder: ':'Kilde: ')+arr.map(x=>`<a href="${x.u}" target="_blank" rel="noopener">${esc(x.n)}</a>`).join(' · '); }
+// ---------- sound ----------
+let AC=null;
+function sfx(kind){
+  if(S.sound===false) return;
+  try{
+    AC = AC || new (window.AudioContext||window.webkitAudioContext)();
+    if(AC.state==='suspended') AC.resume();
+    const seq = {ok:[[660,.0,.09],[880,.08,.12]], bad:[[220,0,.18],[180,.12,.2]], party:[[523,0,.12],[659,.1,.12],[784,.2,.12],[1047,.3,.25]], tap:[[740,0,.06]], level:[[392,0,.12],[523,.12,.12],[659,.24,.12],[784,.36,.12],[1047,.48,.35]]}[kind]||[];
+    const t0=AC.currentTime;
+    seq.forEach(([f,st,du])=>{ const o=AC.createOscillator(), g=AC.createGain(); o.type=kind==='bad'?'sawtooth':'triangle'; o.frequency.value=f;
+      g.gain.setValueAtTime(0.0001,t0+st); g.gain.exponentialRampToValueAtTime(kind==='bad'?0.06:0.12,t0+st+0.015); g.gain.exponentialRampToValueAtTime(0.0001,t0+st+du);
+      o.connect(g); g.connect(AC.destination); o.start(t0+st); o.stop(t0+st+du+0.02); });
+  }catch(e){}
+}
+
 // ---------- spaced repetition ----------
 const SRS_DAYS=[1,3,7,14,30];
 function addDays(key,n){ const p=key.split('-').map(Number); const d=new Date(p[0],p[1]-1,p[2]); d.setDate(d.getDate()+n); return dayKey(d); }
@@ -661,6 +693,9 @@ function srsCard(){
   return `<div class="srs"><div class="t"><b>Dagens repetition</b><span>${n} spørgsmål er klar til gentagelse – så husker du dem længe.</span></div><button class="btn" data-mode="srs" style="width:auto;padding:0 18px;height:46px">Start</button></div>`;
 }
 
+function lvlUpHtml(u){ return u?`<div class="lvlup"><small>NIVEAU OP!</small><b>Niveau ${u.l} · ${esc(u.title)}</b><div style="font-size:13px;color:var(--sub);margin-top:2px">Du bliver skarpere for hver dag.</div></div>`:''; }
+function certHtml(u){ const st=unitState(u.id); const d=st.bossDate?new Date(st.bossDate).toLocaleDateString('da-DK',{day:'numeric',month:'long',year:'numeric'}):'';
+  return `<div class="cert"><small>MESTERBREV</small><h4>${esc(u.title)}</h4><p>Galvo bekræfter, at du har klaret boss-udkaldet i ${esc(u.title.toLowerCase())}${d?` den ${d}`:''}.</p><div class="seal">GALVO<br>✓</div></div>`; }
 function learnPool(){ const out=[]; UNITS.forEach((u,i)=>{ if(unlocked(i)) (LEARN[u.id]||[]).forEach((c,j)=>out.push({u:i,j,c})); }); return out; }
 
 // ---------- views ----------
@@ -688,7 +723,7 @@ function galvoMood(){
   return ['happy',`${hi} ${S.goal-tx} XP mere, så er dagens mål nået.`];
 }
 function level(){ const l=Math.floor(Math.sqrt(S.xp/25))+1; const lo=25*(l-1)**2, hi=25*l**2; return {l,p:(S.xp-lo)/(hi-lo)}; }
-const TITLES=['Lærling','Lærling','Tekniker I','Tekniker II','Tekniker III','Specialist','Specialist II','Senior-tekniker','Ekspert','Mestertekniker'];
+const TITLES=['Lærling','Lærling II','Tekniker I','Tekniker II','Tekniker III','Specialist','Specialist II','Senior-tekniker','Ekspert','Mestertekniker'];
 
 function home(){
   const [mood,msg]=galvoMood(); const lv=level(); const tx=todayXP();
@@ -716,7 +751,7 @@ function home(){
     units+=`<section class="unit" style="${open?'':'opacity:.55'}"><div class="uh"><div><h3 style="color:${open?'var(--tx)':'var(--sub)'}">${i+1}. ${esc(u.title)}</h3><div class="s">${esc(u.sub)}</div></div><span class="pill" style="${us.boss?'color:var(--acc);':''}">${pill}</span></div>${open?`<div class="steps">${steps}</div>`:''}</section>`;
   });
   return `${header()}<div class="main">
-  <div class="hero">${G(mood,'bob')}<div class="msg"><div class="lvl">NIVEAU ${lv.l} · ${TITLES[Math.min(lv.l-1,TITLES.length-1)].toUpperCase()}</div><div class="say">${esc(msg)}</div>
+  <div class="hero"><button id="galvo" aria-label="Tryk på Galvo" style="border:0;background:transparent;padding:0;width:140px;flex-shrink:0">${G(mood,'bob alive')}</button><div class="msg"><div class="lvl">NIVEAU ${lv.l} · ${TITLES[Math.min(lv.l-1,TITLES.length-1)].toUpperCase()}</div><div class="say">${esc(msg)}</div>
   <div class="bar" role="progressbar" aria-valuenow="${Math.min(tx,S.goal)}" aria-valuemax="${S.goal}" aria-label="Dagens mål"><i style="width:${Math.min(100,tx/S.goal*100)}%"></i></div><div class="small">${Math.min(tx,S.goal)}/${S.goal} XP i dag</div></div></div>
   ${srsCard()}${questsCard()}${dyk()}
   <div class="sec">DIN VEJ</div>${units}
@@ -724,6 +759,8 @@ function home(){
   </div>${nav()}`;
 }
 
+const GALVO_LINES=['Bzzzt! Klar til et kundeudkald?','Wiper ren, caps rene – dyserne glade!','Husk: dysetjek før du renser.','Testsnit før store jobs. Altid.','PVC? Aldrig i min laser!','Fokus er alt – også for mig.','Én lektion om dagen holder fejlene væk.','Laserbriller passer til bølgelængden – ikke til outfittet.','Jeg er stolt af dig!','Tre rigtige i træk? Så tænder jeg for strålen!'];
+let gLine=-1;
 function dyk(){
   const pool=learnPool(); if(!pool.length) return '';
   const d=new Date(); const idx=(d.getFullYear()*372+d.getMonth()*31+d.getDate())%pool.length; const p=pool[idx];
@@ -757,6 +794,8 @@ function practice(){
 function badges(){
   return `${header()}<div class="main"><div class="sec">PRÆSTATIONER · ${S.badges.length}/${BADGES.length}</div>
   <div class="grid">${BADGES.map(b=>{const on=S.badges.includes(b.id);return `<div class="bdg ${on?'on':''}"><div class="ic">${IC[b.ic](on?'#FF7A1A':'#5A5C80')}</div><b>${esc(b.n)}</b><span>${esc(b.d)}</span></div>`;}).join('')}</div>
+  <div class="sec">MESTERBREVE · ${UNITS.filter(u=>unitState(u.id).boss).length}/${UNITS.length}</div>
+  <div class="list">${UNITS.some(u=>unitState(u.id).boss)?UNITS.filter(u=>unitState(u.id).boss).map(certHtml).join(''):'<div class="row"><p>Klar et boss-udkald for at få dit første mesterbrev.</p></div>'}</div>
   <div class="sec">STATISTIK</div>
   <div class="list"><div class="row"><p>Rigtige svar: <b style="color:var(--tx)">${S.correct}</b> af ${S.answered} (${S.answered?Math.round(S.correct/S.answered*100):0}%)<br>Perfekte lektioner: <b style="color:var(--tx)">${S.perfect}</b><br>Enheder mestret: <b style="color:var(--tx)">${UNITS.filter(u=>unitState(u.id).boss).length}/${UNITS.length}</b></p></div></div>
   </div>${nav()}`;
@@ -767,6 +806,8 @@ function profile(){
   const src = Object.values(SOURCES).map(s=>`<li><a href="${s.u}" target="_blank" rel="noopener">${esc(s.n)}</a></li>`).join('');
   return `${header()}<div class="main"><div class="sec">DAGLIGT MÅL</div>
   <div class="list"><div class="row"><div class="seg">${goals.map(([g,l])=>`<button class="${S.goal===g?'on':''}" data-goal="${g}" aria-pressed="${S.goal===g}">${g} XP<br><span style="font-size:11px;color:var(--sub)">${l}</span></button>`).join('')}</div></div></div>
+  <div class="sec">LYD</div>
+  <div class="list"><div class="row toggle"><div><h4>Lydeffekter</h4><p>Små lyde ved rigtige og forkerte svar og når du fejrer.</p></div><button class="sw" id="snd" role="switch" aria-checked="${S.sound!==false}" aria-label="Lydeffekter"></button></div></div>
   <div class="sec">DAGLIG PÅMINDELSE</div>
   <div class="list"><div class="row">${NATIVE?nativeReminder():`<p>Læg en daglig påmindelse i din kalender – så giver telefonen dig besked hver dag.</p>
    <div style="display:flex;gap:10px;align-items:center;margin-top:12px"><label for="rt">Tidspunkt</label><input id="rt" type="time" value="${S.remind}"></div>
@@ -812,7 +853,7 @@ function check(){
   if(first){ L.firstTry[q.id]=ok; S.answered++; if(ok) S.correct++; srsUpdate(q.id, ok); if(ok) dayBump('correct',1); if(L.mode==='srs') dayBump('srsDone',1); }
   if(ok){ L.done++; L.combo++; L.bestCombo=Math.max(L.bestCombo,L.combo); dayBump('maxCombo',L.combo,true); S.wrong=S.wrong.filter(x=>x!==q.id); if(first) L.earned+=2; }
   else { L.combo=0; if(!S.wrong.includes(q.id)) S.wrong.push(q.id); if(!L.retry.has(q.id)){ L.retry.add(q.id); L.queue.push(q); } else { L.done++; } }
-  say(ok?'Rigtigt':'Forkert');
+  say(ok?'Rigtigt':'Forkert'); sfx(ok?'ok':'bad');
   save(); render();
 }
 function cont(){ if(L.queue.length){ next(); render(); } else finish(); }
@@ -875,9 +916,11 @@ function finish(){
   const aw=awardXP(xp); const before=aw.before;
   S.lessons++; if(perfect) S.perfect++; dayBump('lessons',1); if(perfect) dayBump('perfect',1);
   if(L.mode==='unit'){ const us=unitState(UNITS[L.unitIdx].id); if(L.lessonIdx===us.done) us.done=Math.min(LESSONS_PER_UNIT, us.done+1); }
-  if(L.mode==='boss'){ unitState(UNITS[L.unitIdx].id).boss = true; }
+  let newCert=null;
+  if(L.mode==='boss'){ const us=unitState(UNITS[L.unitIdx].id); if(!us.boss){ newCert=UNITS[L.unitIdx]; us.bossDate=Date.now(); } us.boss = true; }
   const nb=checkBadges(); save();
-  view={name:'result',xp,acc,streak:S.streak,streakUp:S.streak>before,nb,goalHit:aw.goalHit};
+  view={name:'result',xp,acc,streak:S.streak,streakUp:S.streak>before,nb,goalHit:aw.goalHit,lvl:aw.lvlUp,cert:newCert};
+  setTimeout(()=>sfx(aw.lvlUp?'level':'party'),150);
   render(); confetti(); window.scrollTo(0,0);
 }
 function result(){
@@ -885,6 +928,7 @@ function result(){
   const title = L.mode==='single'?(v.acc===100?'Dagens spørgsmål klaret!':'Godt forsøgt!'):L.mode==='boss'?'Boss besejret!':v.acc===100?'Perfekt lektion!':'Lektion fuldført!';
   return `<div class="res"><div class="glow"></div>${G('party','pop')}<h2>${title}</h2><div style="color:var(--sub);font-weight:600">${v.goalHit?'Dagens mål er nået – Galvo er stolt af dig!':v.streakUp?`Din streak er nu ${v.streak} dage!`:'Galvo er stolt af dig'}</div>
   <div class="rstats"><div class="rs" style="border-color:var(--acc)"><small>XP</small><b style="color:var(--acc)">+${v.xp}</b></div><div class="rs" style="border-color:var(--ok)"><small>RIGTIGE</small><b style="color:var(--ok)">${v.acc}%</b></div><div class="rs" style="border-color:var(--flame)"><small>STREAK</small><b style="color:var(--flame)">${v.streak}</b></div></div>
+  ${lvlUpHtml(v.lvl)}${v.cert?`<div style="width:100%;margin-top:14px;text-align:left">${certHtml(v.cert)}</div>`:''}
   ${v.nb.map(b=>`<div class="badge-new"><div class="ic" style="width:44px;height:44px;border-radius:12px;background:rgba(255,122,26,.18);display:flex;align-items:center;justify-content:center">${IC[b.ic]('#FF7A1A')}</div><div><b>Nyt badge: ${esc(b.n)}</b><div style="font-size:13px;color:var(--sub)">${esc(b.d)}</div></div></div>`).join('')}
   </div><div class="foot"><button class="btn" data-go="home">Fortsæt</button></div>`;
 }
@@ -904,7 +948,7 @@ function learnNav(d){
   if(view.i<cards.length-1){ dayBump('cards',1); save(); view.i++; render(); window.scrollTo(0,0); return; }
   dayBump('cards',1);
   const id=UNITS[view.u].id; S.learned=S.learned||{};
-  if(!S.learned[id]){ S.learned[id]=true; const aw=awardXP(5); checkBadges(); save(); confetti(); toast(aw.goalHit?'+5 XP · Dagens mål er nået!':'+5 XP · Klar til lektionen!'); }
+  if(!S.learned[id]){ S.learned[id]=true; const aw=awardXP(5); checkBadges(); save(); confetti(); sfx(aw.lvlUp?'level':'party'); toast(aw.lvlUp?`Niveau op! Du er nu ${aw.lvlUp.title}`:aw.goalHit?'+5 XP · Dagens mål er nået!':'+5 XP · Klar til lektionen!'); }
   go('home');
 }
 
@@ -920,6 +964,8 @@ function glossList(q){
 }
 
 // ---------- blitz ----------
+function checkLevel(){ const l=level().l; if(l>(S.lvlSeen||1)){ S.lvlSeen=l; return {l, title:TITLES[Math.min(l-1,TITLES.length-1)]}; } return null; }
+if(!S.lvlSeen) S.lvlSeen=level().l;
 let B=null, bTimer=null;
 window.__g={dayState:()=>dayState(),srsDue:()=>srsDue(),get S(){return S},get L(){return L},get B(){return B},startLesson:(...x)=>startLesson(...x),render:()=>render()};
 const BLITZ_SECS=60;
@@ -944,7 +990,7 @@ function blitzAnswer(val){
   if(B.lock) return; const q=B.q;
   const ok = q.t==='tf' ? (val==='true')===q.v : q._opts[+val].ok;
   if(ok){ B.score++; B.combo++; dayBump('correct',1); dayBump('maxCombo',B.combo,true); } else { B.combo=0; B.missed.push(q); }
-  B.lock=true; const w=document.getElementById('bq'); if(w) w.classList.add(ok?'flash-ok':'flash-bad');
+  sfx(ok?'ok':'bad'); B.lock=true; const w=document.getElementById('bq'); if(w) w.classList.add(ok?'flash-ok':'flash-bad');
   setTimeout(()=>{ B.lock=false; if(view.name!=='blitz') return; blitzNext(); render(); }, ok?250:600);
 }
 function endBlitz(){
@@ -953,12 +999,13 @@ function endBlitz(){
   S.blitzBest=Math.max(S.blitzBest||0,B.score); S.blitzPlays=(S.blitzPlays||0)+1; dayBump('blitz',1);
   let aw={before:liveStreak(),goalHit:false}; if(xp>0) aw=awardXP(xp);
   const nb=checkBadges(); save();
-  view={name:'blitzres',xp,rec,nb,goalHit:aw.goalHit}; render(); if(B.score>0) confetti();
+  view={name:'blitzres',xp,rec,nb,goalHit:aw.goalHit,lvl:aw.lvlUp}; render(); if(B.score>0){ confetti(); sfx(aw.lvlUp?'level':'party'); }
 }
 function blitzRes(){
   const v=view; const seen=new Set(); const miss=B.missed.filter(q=>!seen.has(q.id)&&seen.add(q.id));
   return `<div class="res" style="padding-top:30px"><div class="glow"></div>${G(B.score>0?'party':'worried','pop')}<h2>${v.rec?'Ny rekord!':'Tiden er gået!'}</h2><div style="color:var(--sub);font-weight:600">${B.score} rigtige på ${BLITZ_SECS} sekunder${v.goalHit?' · Dagens mål er nået!':''}</div>
   <div class="rstats"><div class="rs" style="border-color:var(--acc2)"><small>RIGTIGE</small><b style="color:var(--acc2)">${B.score}</b></div><div class="rs" style="border-color:var(--acc)"><small>XP</small><b style="color:var(--acc)">+${v.xp}</b></div><div class="rs" style="border-color:var(--flame)"><small>REKORD</small><b style="color:var(--flame)">${S.blitzBest}</b></div></div>
+  ${lvlUpHtml(v.lvl)}
   ${v.nb.map(b=>`<div class="badge-new"><div class="ic" style="width:44px;height:44px;border-radius:12px;background:rgba(255,122,26,.18);display:flex;align-items:center;justify-content:center">${IC[b.ic]('#FF7A1A')}</div><div><b>Nyt badge: ${esc(b.n)}</b><div style="font-size:13px;color:var(--sub)">${esc(b.d)}</div></div></div>`).join('')}
   ${miss.length?`<div style="width:100%;text-align:left;margin-top:16px"><div class="sec" style="padding:0 0 8px">DET SKAL DU HUSKE</div>${miss.map(q=>`<div class="row" style="margin-bottom:8px"><h4 style="font-size:15px">${esc(q.t==='fill'?q.s.replace('___','_____'):q.q)}</h4><p><b style="color:var(--ok)">${esc(correctText(q))}</b> – ${esc(q.w)}</p></div>`).join('')}</div>`:''}
   </div><div class="foot" style="display:flex;gap:10px"><button class="btn ghost" data-go="practice" style="flex:1">Færdig</button><button class="btn" id="blitz" style="flex:1">Igen!</button></div>`;
@@ -1010,6 +1057,8 @@ $app.addEventListener('click',e=>{
   if(t.dataset.tf!==undefined){ L.pick=t.dataset.tf==='true'; render(); return; }
   if(t.dataset.order!==undefined){ L.order.push(+t.dataset.order); render(); return; }
   if(t.dataset.unorder!==undefined){ L.order.splice(+t.dataset.unorder,1); render(); return; }
+  if(t.id==='galvo'){ gLine=(gLine+1+Math.floor(Math.random()*(GALVO_LINES.length-1)))%GALVO_LINES.length; const say_=document.querySelector('.hero .say'); if(say_) say_.textContent=GALVO_LINES[gLine]; const g=t.querySelector('.g'); if(g){ g.classList.remove('jump'); void g.offsetWidth; g.classList.add('jump'); } sfx('tap'); return; }
+  if(t.id==='snd'){ S.sound = S.sound===false; save(); render(); if(S.sound) sfx('ok'); return; }
   if(t.id==='check'){ check(); return; }
   if(t.id==='cont'){ cont(); return; }
   if(t.id==='quit'){ modal('Afslut lektionen?','Du mister fremskridtet i denne lektion. Galvo bliver lidt ked af det.','Afslut',()=>go('home')); return; }
