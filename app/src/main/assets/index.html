@@ -1514,6 +1514,16 @@ function glossList(q){
 // ---------- blitz ----------
 function checkLevel(){ const l=level().l; if(l>(S.lvlSeen||1)){ S.lvlSeen=l; return {l, title:TITLES[Math.min(l-1,TITLES.length-1)]}; } return null; }
 if(!S.lvlSeen) S.lvlSeen=level().l;
+const ONB=[
+ {m:'happy',h:'Hej, jeg er Galvo!',p:'Jeg hjælper dig med at blive skarp på service af printere, lasere, skæreplottere og laminatorer – fem minutter ad gangen.'},
+ {m:'party',h:'Lær, øv, mestr',p:'Læs viden-kortene, tag korte lektioner og klar boss-udkaldet for at få et mesterbrev. Under Øv finder du fejlfindingssager, lyn-runder og eksamen.'},
+ {m:'happy',h:'Hold flammen i live',p:'Nå dit daglige mål for at bygge din streak. Læg Galvo-widgetten på hjemmeskærmen – så minder jeg dig om at øve.'}];
+if(S.onb===undefined) S.onb = (S.xp>0||S.lessons>0) ? 3 : 0;
+if(location.hash==='#test') S.onb=ONB.length;
+function onbView(){ const i=S.onb, o=ONB[i];
+  return `<div class="res" style="padding-top:60px"><div class="glow"></div>${G(o.m,'pop')}<h2>${esc(o.h)}</h2><p style="color:var(--sub);font-size:17px;line-height:1.5;max-width:340px;margin:8px auto 0">${esc(o.p)}</p>
+  <div style="display:flex;gap:8px;justify-content:center;margin-top:22px" aria-hidden="true">${ONB.map((_,j)=>`<i style="width:${j===i?22:8}px;height:8px;border-radius:4px;background:${j===i?'var(--acc)':'var(--line)'};display:block"></i>`).join('')}</div></div>
+  <div class="foot" style="display:flex;gap:10px">${i<ONB.length-1?`<button class="btn ghost" id="onbskip" style="flex:1">Spring over</button>`:''}<button class="btn" id="onbnext" style="flex:2">${i<ONB.length-1?'Næste':'Kom i gang'}</button></div>`; }
 let B=null, bTimer=null;
 window.__g={startCase:i=>startCase(i),get K(){return K},dayState:()=>dayState(),srsDue:()=>srsDue(),get S(){return S},get L(){return L},get B(){return B},startLesson:(...x)=>startLesson(...x),render:()=>render()};
 const BLITZ_SECS=60;
@@ -1585,6 +1595,7 @@ function gcalUrl(time){
 }
 // ---------- render & events ----------
 function render(){
+  if(S.onb<ONB.length){ $app.innerHTML=onbView(); return; }
   const v=view.name;
   $app.innerHTML = v==='home'?home():v==='practice'?practice():v==='badges'?badges():v==='profile'?profile():v==='lesson'?lessonView():v==='learn'?learnView():v==='glossary'?glossaryView():v==='blitz'?blitzView():v==='blitzres'?blitzRes():v==='case'?caseView():v==='caseres'?caseRes():result();
 }
@@ -1593,6 +1604,8 @@ $app.addEventListener('click',e=>{
   if(t.dataset.go){ if(view.name==='blitz'){ clearInterval(bTimer); } go(t.dataset.go); return; }
   if(t.dataset.learn!==undefined){ view={name:'learn',u:+t.dataset.learn,i:+(t.dataset.card||0)}; render(); window.scrollTo(0,0); return; }
   if(t.dataset.lnav!==undefined){ learnNav(+t.dataset.lnav); return; }
+  if(t.id==='onbnext'){ S.onb++; save(); render(); window.scrollTo(0,0); return; }
+  if(t.id==='onbskip'){ S.onb=ONB.length; save(); render(); return; }
   if(t.dataset.case!==undefined){ startCase(+t.dataset.case); return; }
   if(t.dataset.cpick!==undefined){ K.pick=+t.dataset.cpick; render(); return; }
   if(t.id==='ccheck'){ caseCheck(); return; }
