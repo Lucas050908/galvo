@@ -1045,6 +1045,7 @@ const BADGES = [
  {id:"quest",n:"Quest-jæger",d:"Klar alle 3 daglige quests",ic:"crown",t:()=>S.day&&S.day.claimed&&S.day.claimed.length>=3},
  {id:"case1",n:"Detektiv",d:"Løs en fejlfindingssag",ic:"check",t:()=>Object.keys(S.cases||{}).length>=1},
  {id:"case3",n:"Fejlfinder",d:"3 stjerner i 3 sager",ic:"crown",t:()=>Object.values(S.cases||{}).filter(x=>x>=3).length>=3},
+ {id:"exam",n:"Certificeret",d:"Bestå eksamen",ic:"crown",t:()=>(S.exams||[]).some(e=>e.pass)},
  {id:"all",n:"Mestertekniker",d:"Klar alle enheder",ic:"crown",t:()=>UNITS.every(u=>unitState(u.id).boss)}
 ];
 function checkBadges(){ const nw=[]; BADGES.forEach(b=>{ if(!S.badges.includes(b.id) && b.t()){ S.badges.push(b.id); nw.push(b);} }); return nw; }
@@ -1125,6 +1126,9 @@ function srsCard(){
 }
 
 function lvlUpHtml(u){ return u?`<div class="lvlup"><small>NIVEAU OP!</small><b>Niveau ${u.l} · ${esc(u.title)}</b><div style="font-size:13px;color:var(--sub);margin-top:2px">Du bliver skarpere for hver dag.</div></div>`:''; }
+function examHtml(e){ const d=new Date(e.d).toLocaleDateString('da-DK',{day:'numeric',month:'long',year:'numeric'});
+  return e.pass?`<div style="width:100%;margin-top:14px;text-align:left"><div class="cert"><small>GALVO-CERTIFIKAT</small><h4>Service-eksamen bestået</h4><p>${e.acc} % rigtige på ${e.n} spørgsmål fra ${(n=>n===1?'1 enhed':n+' enheder')(UNITS.filter((u,i)=>unlocked(i)).length)} den ${d}.</p><div class="seal">GALVO<br>✓</div></div></div>`
+   :`<div class="row" style="width:100%;margin-top:14px;text-align:left"><p>Du fik ${e.acc} %. Der skal ${EXAM_PASS} % til. Øv dine svage punkter, og prøv igen.</p></div>`; }
 function certHtml(u){ const st=unitState(u.id); const d=st.bossDate?new Date(st.bossDate).toLocaleDateString('da-DK',{day:'numeric',month:'long',year:'numeric'}):'';
   return `<div class="cert"><small>MESTERBREV</small><h4>${esc(u.title)}</h4><p>Galvo bekræfter, at du har klaret boss-udkaldet i ${esc(u.title.toLowerCase())}${d?` den ${d}`:''}.</p><div class="seal">GALVO<br>✓</div></div>`; }
 function learnPool(){ const out=[]; UNITS.forEach((u,i)=>{ if(unlocked(i)) (LEARN[u.id]||[]).forEach((c,j)=>out.push({u:i,j,c})); }); return out; }
@@ -1156,6 +1160,8 @@ function galvoMood(){
 function level(){ const l=Math.floor(Math.sqrt(S.xp/25))+1; const lo=25*(l-1)**2, hi=25*l**2; return {l,p:(S.xp-lo)/(hi-lo)}; }
 const TITLES=['Lærling','Lærling II','Tekniker I','Tekniker II','Tekniker III','Specialist','Specialist II','Senior-tekniker','Ekspert','Mestertekniker'];
 
+function dailyCase(){ const d=new Date(); const n=Math.floor(new Date(d.getFullYear(),d.getMonth(),d.getDate()).getTime()/864e5); const i=n%CASES2.length; const c=CASES2[i]; const st=(S.cases||{})[c.id]||0;
+  return `<button class="dyk" data-case="${i}" style="border-color:var(--acc2)"><small style="color:var(--acc2)">DAGENS SAG · ${esc(c.m.toUpperCase())}</small><b>${esc(c.t)}</b><span>${st?`Dine stjerner: ${'★'.repeat(st)}${'☆'.repeat(3-st)} – kan du få flere?`:`${c.steps.length} trin fra symptom til løsning · op til +25 XP`}</span></button>`; }
 function home(){
   const [mood,msg]=galvoMood(); const lv=level(); const tx=todayXP();
   let units='';
@@ -1184,7 +1190,7 @@ function home(){
   return `${header()}<div class="main">
   <div class="hero"><button id="galvo" aria-label="Tryk på Galvo" style="border:0;background:transparent;padding:0;width:140px;flex-shrink:0">${G(mood,'bob alive')}</button><div class="msg"><div class="lvl">NIVEAU ${lv.l} · ${TITLES[Math.min(lv.l-1,TITLES.length-1)].toUpperCase()}</div><div class="say">${esc(msg)}</div>
   <div class="bar" role="progressbar" aria-valuenow="${Math.min(tx,S.goal)}" aria-valuemax="${S.goal}" aria-label="Dagens mål"><i style="width:${Math.min(100,tx/S.goal*100)}%"></i></div><div class="small">${Math.min(tx,S.goal)}/${S.goal} XP i dag</div></div></div>
-  ${srsCard()}${questsCard()}${dyk()}
+  ${srsCard()}${questsCard()}${dailyCase()}${dyk()}
   <div class="sec">DIN VEJ</div>${units}
   <div class="note">Galvo giver generel viden om fejlfinding og service. Følg altid producentens manual og sikkerhedsanvisninger for den konkrete maskine.</div>
   </div>${nav()}`;
@@ -1221,6 +1227,7 @@ function practice(){
    <div class="row"><h4>Øv dine fejl</h4><p>${n?`${n} spørgsmål, du har svaret forkert på. Svar rigtigt, så forsvinder de fra listen.`:'Ingen fejl at øve lige nu. Flot!'}</p><div style="margin-top:12px"><button class="btn" data-mode="review" ${n?'':'disabled'}>Øv ${n||''} fejl</button></div></div>
    <div class="row"><h4>Dine svage punkter</h4><p>Galvo finder de spørgsmål, du oftest har svaret forkert på, og giver dig dem igen.</p><div style="margin-top:12px"><button class="btn ghost" data-mode="weak" ${Object.keys(S.qst||{}).length?'':'disabled'}>Øv svage punkter</button></div></div>
    <div class="row"><h4>Repetition</h4><p>${srsDue().length?`${srsDue().length} spørgsmål er klar til gentagelse i dag.`:'Ingen repetition i dag. Spørgsmål, du har svaret på, kommer igen efter 1, 3, 7, 14 og 30 dage.'}</p><div style="margin-top:12px"><button class="btn ghost" data-mode="srs" ${srsDue().length?'':'disabled'}>Start repetition</button></div></div>
+   <div class="row"><h4>Eksamen</h4><p>Op til ${EXAM_QS} blandede spørgsmål fra de enheder, du har låst op – uden genforsøg. Bestå med ${EXAM_PASS} % og få et Galvo-certifikat (+20 XP ekstra). ${(()=>{const ex=S.exams||[];if(!ex.length) return '';const b=Math.max(...ex.map(e=>e.acc));return `Bedste resultat: <b style="color:var(--tx)">${b} %</b>${ex.some(e=>e.pass)?' · <span style="color:var(--ok)">bestået</span>':''}`;})()}</p><div style="margin-top:12px"><button class="btn" data-mode="exam">Start eksamen</button></div></div>
    <div class="row"><h4>Lyn-runde på tid</h4><p>Svar på så mange som muligt på 60 sekunder. ${S.blitzBest?`Din rekord: <b style="color:var(--tx)">${S.blitzBest}</b>`:'Sæt din første rekord!'}</p><div style="margin-top:12px"><button class="btn" id="blitz" style="background:var(--flame);box-shadow:0 5px 0 #B87A1F">Start lyn-runde</button></div></div>
    <div class="row"><h4>Hurtig blanding</h4><p>5 tilfældige spørgsmål fra de ${unlockedQs} spørgsmål, du har låst op.</p><div style="margin-top:12px"><button class="btn ghost" data-mode="mix">Start blanding</button></div></div>
   </div>
@@ -1270,11 +1277,13 @@ function profile(){
 
 // ---------- lesson engine ----------
 let L=null;
+const EXAM_QS=20, EXAM_PASS=80;
 function startLesson(mode, unitIdx, lessonIdx){
   let qs;
   if(mode==='unit'||mode==='boss'){ qs = shuffle(UNITS[unitIdx].qs).slice(0, mode==='boss'?BOSS_QS:QS_PER_LESSON).map(q=>allQ[q.id]); }
   else if(mode==='single'){ qs = allQ[unitIdx] ? [allQ[unitIdx]] : []; }
   else if(mode==='srs'){ qs = shuffle(srsDue().map(id=>allQ[id])).slice(0,7); }
+  else if(mode==='exam'){ const pool=[]; UNITS.forEach((u,i)=>{ if(unlocked(i)) u.qs.forEach(q=>pool.push(allQ[q.id])); }); qs=shuffle(pool).slice(0,EXAM_QS); }
   else if(mode==='weak'){ qs = weakPool().slice(0,QS_PER_LESSON); }
   else if(mode==='review'){ qs = shuffle(S.wrong.map(id=>allQ[id]).filter(Boolean)).slice(0,QS_PER_LESSON); }
   else { const pool=[]; UNITS.forEach((u,i)=>{ if(unlocked(i)) u.qs.forEach(q=>pool.push(allQ[q.id])); }); qs=shuffle(pool).slice(0,QS_PER_LESSON); }
@@ -1301,7 +1310,7 @@ function check(){
   const first = !(q.id in L.firstTry);
   if(first){ L.firstTry[q.id]=ok; S.qst=S.qst||{}; const st=S.qst[q.id]||[0,0]; st[ok?0:1]++; S.qst[q.id]=st; S.answered++; if(ok) S.correct++; srsUpdate(q.id, ok); if(ok) dayBump('correct',1); if(L.mode==='srs') dayBump('srsDone',1); }
   if(ok){ L.done++; L.combo++; L.bestCombo=Math.max(L.bestCombo,L.combo); dayBump('maxCombo',L.combo,true); S.wrong=S.wrong.filter(x=>x!==q.id); if(first) L.earned+=2; }
-  else { L.combo=0; if(!S.wrong.includes(q.id)) S.wrong.push(q.id); if(!L.retry.has(q.id)){ L.retry.add(q.id); L.queue.push(q); } else { L.done++; } }
+  else { L.combo=0; if(!S.wrong.includes(q.id)) S.wrong.push(q.id); if(L.mode!=='exam' && !L.retry.has(q.id)){ L.retry.add(q.id); L.queue.push(q); } else { L.done++; } }
   say(ok?'Rigtigt':'Forkert'); sfx(ok?'ok':'bad');
   save(); render();
 }
@@ -1315,7 +1324,7 @@ function correctText(q){
 function lessonView(){
   const q=L.cur; const pct=Math.round(L.done/L.total*100);
   const mood = L.state==='wrong'?'worried':'happy';
-  const tag = {unit:`${UNITS[L.unitIdx]?.title||''} · KUNDEUDKALD`,boss:'BOSS-UDKALD',review:'ØV DINE FEJL',weak:'DINE SVAGE PUNKTER',mix:'HURTIG BLANDING',single:'DAGENS SPØRGSMÅL',srs:'DAGENS REPETITION'}[L.mode];
+  const tag = {unit:`${UNITS[L.unitIdx]?.title||''} · KUNDEUDKALD`,boss:'BOSS-UDKALD',review:'ØV DINE FEJL',weak:'DINE SVAGE PUNKTER',exam:'EKSAMEN',mix:'HURTIG BLANDING',single:'DAGENS SPØRGSMÅL',srs:'DAGENS REPETITION'}[L.mode];
   let body='';
   const locked = L.state!=='ask';
   const PC=['#4CC9F0','#FFB347','#B794F6','#3DDC97'];
@@ -1362,22 +1371,24 @@ function finish(){
   const firsts=Object.values(L.firstTry); const right=firsts.filter(Boolean).length; const acc=firsts.length?Math.round(right/firsts.length*100):0;
   const perfect = acc===100;
   let xp = L.earned + (L.mode==='boss'?20:10) + (perfect?5:0);
+  let exam=null;
+  if(L.mode==='exam'){ exam={d:Date.now(),acc,pass:acc>=EXAM_PASS,n:firsts.length}; S.exams=S.exams||[]; S.exams.push(exam); S.exams=S.exams.slice(-20); if(exam.pass) xp+=20; }
   const aw=awardXP(xp); const before=aw.before;
   S.lessons++; if(perfect) S.perfect++; dayBump('lessons',1); if(perfect) dayBump('perfect',1);
   if(L.mode==='unit'){ const us=unitState(UNITS[L.unitIdx].id); if(L.lessonIdx===us.done) us.done=Math.min(LESSONS_PER_UNIT, us.done+1); }
   let newCert=null;
   if(L.mode==='boss'){ const us=unitState(UNITS[L.unitIdx].id); if(!us.boss){ newCert=UNITS[L.unitIdx]; us.bossDate=Date.now(); } us.boss = true; }
   const nb=checkBadges(); save();
-  view={name:'result',xp,acc,streak:S.streak,streakUp:S.streak>before,nb,goalHit:aw.goalHit,lvl:aw.lvlUp,cert:newCert};
+  view={name:'result',xp,acc,streak:S.streak,streakUp:S.streak>before,nb,goalHit:aw.goalHit,lvl:aw.lvlUp,cert:newCert,exam};
   setTimeout(()=>sfx(aw.lvlUp?'level':'party'),150);
   render(); confetti(); window.scrollTo(0,0);
 }
 function result(){
   const v=view;
-  const title = L.mode==='single'?(v.acc===100?'Dagens spørgsmål klaret!':'Godt forsøgt!'):L.mode==='boss'?'Boss besejret!':v.acc===100?'Perfekt lektion!':'Lektion fuldført!';
+  const title = L.mode==='exam'?(v.exam&&v.exam.pass?'Eksamen bestået!':'Ikke bestået – denne gang'):L.mode==='single'?(v.acc===100?'Dagens spørgsmål klaret!':'Godt forsøgt!'):L.mode==='boss'?'Boss besejret!':v.acc===100?'Perfekt lektion!':'Lektion fuldført!';
   return `<div class="res"><div class="glow"></div>${G('party','pop')}<h2>${title}</h2><div style="color:var(--sub);font-weight:600">${v.goalHit?'Dagens mål er nået – Galvo er stolt af dig!':v.streakUp?`Din streak er nu ${v.streak} dage!`:'Galvo er stolt af dig'}</div>
   <div class="rstats"><div class="rs" style="border-color:var(--acc)"><small>XP</small><b style="color:var(--acc)">+${v.xp}</b></div><div class="rs" style="border-color:var(--ok)"><small>RIGTIGE</small><b style="color:var(--ok)">${v.acc}%</b></div><div class="rs" style="border-color:var(--flame)"><small>STREAK</small><b style="color:var(--flame)">${v.streak}</b></div></div>
-  ${lvlUpHtml(v.lvl)}${v.cert?`<div style="width:100%;margin-top:14px;text-align:left">${certHtml(v.cert)}</div>`:''}
+  ${v.exam?examHtml(v.exam):''}${lvlUpHtml(v.lvl)}${v.cert?`<div style="width:100%;margin-top:14px;text-align:left">${certHtml(v.cert)}</div>`:''}
   ${v.nb.map(b=>`<div class="badge-new"><div class="ic" style="width:44px;height:44px;border-radius:12px;background:rgba(255,122,26,.18);display:flex;align-items:center;justify-content:center">${IC[b.ic]('#FF7A1A')}</div><div><b>Nyt badge: ${esc(b.n)}</b><div style="font-size:13px;color:var(--sub)">${esc(b.d)}</div></div></div>`).join('')}
   </div><div class="foot"><button class="btn" data-go="home">Fortsæt</button></div>`;
 }
