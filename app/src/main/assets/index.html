@@ -972,8 +972,8 @@ CASES2.push(
  ]},
  {id:"c_routine",t:"Ny kunde: daglig pleje",m:"Vedligehold",intro:"\"Vi har lige fået en Epson SureColor S. Hvad skal vi gøre hver dag?\"",steps:[
   {sit:"Kunden spørger, hvor tit wiper og caps skal renses.",q:"Hvad siger Epson for S-serien?",a:["Mindst én gang om dagen","Én gang om måneden","Kun når printet bliver dårligt","Aldrig – den gør det selv"],w:"Epson: ellers kan blækket hærde omkring hoved og caps.",src:["epsonS","epson706"]},
-  {sit:"Kunden skal i gang med den manuelle rens.",q:"Hvad gør de, før de rører delene inde i printeren?",a:["Rører ved en metalgenstand for at aflade statisk elektricitet","Fugter fingrene","Tager handsker af","Tænder for strømmen"],w:"Statisk elektricitet kan skade printeren.",src:"epsoncap"},
-  {sit:"En medarbejder vil skubbe printhovedet til side med hånden for at komme til.",q:"Hvad siger du?",a:["Stop – flyt aldrig printhovedet med hånden","Fint, bare forsigtigt","Kun når printeren er slukket","Brug en skruetrækker"],w:"Epson: flyt aldrig printhovedet med hånden.",src:"epsoncap"},
+  {sit:"Kunden skal i gang med den manuelle rens.",q:"Hvad gør de, før de rører delene inde i printeren?",a:["Rører ved en metalgenstand for at aflade statisk elektricitet","Fugter fingrene","Tager handsker af","Tænder for strømmen"],w:"Epsons anvisning (SureColor P/T): rør ved en metalgenstand før rens for at aflade statisk elektricitet. Tjek også manualen til netop jeres model.",src:"epsoncap"},
+  {sit:"En medarbejder vil skubbe printhovedet til side med hånden for at komme til.",q:"Hvad siger du?",a:["Stop – flyt aldrig printhovedet med hånden","Fint, bare forsigtigt","Kun når printeren er slukket","Brug en skruetrækker"],w:"Epsons anvisning (SureColor P/T): flyt aldrig printhovedet med hånden.",src:"epsoncap"},
   {sit:"Rensningen trækker ud, fordi medarbejderen snakker i telefon.",q:"Hvorfor skal den gøres hurtigt?",a:["Printhovedet kan tørre ud, mens det står uden for capping","Rensevæsken bliver dyr","Printeren slukker","Det er ligegyldigt"],w:"Epson S-serien: afslut inden for 10 minutter. Tidsgrænsen varierer med modellen.",src:"epsonS"}
  ]}
 );
@@ -1058,16 +1058,16 @@ ${[["1","PÅFØRING","#4CC9F0"],["2","TØRRING","#FFB547"],["3","HÆRDNING","#3D
  const add=(id,arr)=>UNITS.find(u=>u.id===id).qs.push(...arr);
  add("lam",[
   {id:"lam16",t:"mc",q:"Hvad er 3M's maksimale lamineringstemperatur for HP Latex-grafik med varme valser?",a:["+40 °C","+120 °C","+80 °C","Der er ingen grænse"],w:"3M angiver også maks. 2 meter i minuttet.",src:"m3latex"},
-  {id:"lam17",t:"mc",q:"Hvad er 3M's maksimale lamineringshastighed for HP Latex-grafik?",a:["2 meter i minuttet","10 meter i minuttet","20 meter i minuttet","Så hurtigt som muligt"],w:"Langsom laminering giver bedre kontakt mellem laminat og print.",src:"m3latex"},
+  {id:"lam17",t:"mc",q:"Hvad er 3M's maksimale lamineringshastighed for HP Latex-grafik?",a:["2 meter i minuttet","10 meter i minuttet","20 meter i minuttet","Så hurtigt som muligt"],w:"3M angiver også maks. +40 °C ved laminering.",src:"m3latex"},
   {id:"lam18",t:"mc",q:"Latex-grafik er lamineret med varme valser. Hvor længe skal den mindst vente, før den monteres (3M)?",a:["8 timer","10 minutter","1 time","1 uge"],w:"Ved stuetemperatur: mindst 24 timer.",src:"m3latex"},
-  {id:"lam19",t:"tf",q:"GBC fraråder metalskuresvampe til at rense laminatorens valser.",v:true,w:"De kan beskadige valserne. Brug heller aldrig skarpe eller spidse genstande.",src:"gbcclean"},
+  {id:"lam19",t:"tf",q:"GBC fraråder metalskuresvampe til at rense laminatorens valser.",v:true,w:"GBC anbefaler en Scotch-Brite-svamp. Brug heller aldrig skarpe eller spidse genstande.",src:"gbcclean"},
   {id:"lam20",t:"tf",q:"Ifølge GBC kan nogle rensevæsker og opløsningsmidler bryde i brand på varme valser.",v:true,w:"Derfor må de ikke bruges på valserne – følg manualens metode.",src:"gbcclean"}
  ]);
  add("lux",[
   {id:"lux17",t:"mc",q:"Hvad er ifølge 3M det vigtigste for god laminatvedhæftning på latex-print?",a:["Blækmængden – brug et mediepreset med højst 100 % blæktæthed","Hvor varmt rummet er","Hvor hurtigt printeren kører","Hvilken farve laminatet har"],w:"For meget blæk kan ændre mediets egenskaber og give dårlig tørring.",src:"m3latex"},
   {id:"lux18",t:"tf",q:"Ifølge 3M hjælper det at rulle latex-print op og lade dem ligge, så blækket hærder.",v:false,w:"3M: i modsætning til solvent hjælper det ikke at lade latex-print ligge. Hærdningen sker i printeren.",src:"m3latex"},
-  {id:"lux19",t:"mc",q:"Hvordan laver du 3M's visuelle test af et latex-print lige efter print?",a:["Tjekker, at overfladen hverken er våd eller klistret","Lugter til printet","Måler printets tykkelse","Holder det op mod lyset"],w:"Klistrede eller matte pletter betyder, at mere tørring og hærdning er nødvendig.",src:"m3latex"},
-  {id:"lux20",t:"mc",q:"Hvad sker der med indholdsstofferne i hvidt blæk, når det står stille (Roland)?",a:["De bundfælder sig","De fordamper","De bliver gennemsigtige","Ingenting"],w:"Ryst patronen, og kør blækcirkulation, hvis det ikke hjælper.",src:"uvwhite"}
+  {id:"lux19",t:"mc",q:"Hvordan laver du 3M's visuelle test af et latex-print lige efter print?",a:["Tjekker, at overfladen hverken er våd eller klistret","Lugter til printet","Måler printets tykkelse","Holder det op mod lyset"],w:"Printet må heller ikke føles olieagtigt. Er det vådt eller klistret, er det ikke tørt nok.",src:"m3latex"},
+  {id:"lux20",t:"mc",q:"Hvad giver ujævne farver med hvidt blæk ifølge Roland?",a:["De bundfælder sig","De fordamper","De bliver gennemsigtige","Ingenting"],w:"Ryst patronen, og kør blækcirkulation, hvis det ikke hjælper.",src:"uvwhite"}
  ]);
  add("kun",[
   {id:"kun17",t:"mc",ctx:"En kunde med xTool vil slå flammealarmen fra, fordi den 'larmer', når de skærer krydsfiner.",q:"Hvad svarer du?",a:["Nej – ved brændbare materialer skal alarmen være slået til. Vælg evt. lav følsomhed","Fint, slå den bare fra","Kun om natten","Kun ved tynd krydsfiner"],w:"xTool: kun ved materialer uden brandrisiko, fx metal, må den slås fra – og så til igen bagefter.",src:["xtoolflame","xtoolflame2"]},
@@ -1082,14 +1082,14 @@ ${[["1","PÅFØRING","#4CC9F0"],["2","TØRRING","#FFB547"],["3","HÆRDNING","#3D
  const add=(id,arr)=>UNITS.find(u=>u.id===id).qs.push(...arr);
  add("sik",[
   {id:"sik19",t:"mc",q:"Hvorfor skal du vente, før du renser omkring printhovedet på en Roland UV-printer (LEC2)?",a:["UV-LED-området er varmt – vent ca. 15 minutter","Blækket skal tørre helt","Printeren låser lågen i en time","Det skal du ikke"],w:"Roland advarer om forbrændingsfare ved UV-LED-lampen.",src:"rolandmc"},
-  {id:"sik20",t:"tf",q:"Rester i laserens krummebakke kan give flammer, så den skal tømmes jævnligt.",v:true,w:"Epilog: hver anden uge rengøres optik og krummebakke for at forhindre opblussen.",src:"epilogpm"},
-  {id:"sik21",t:"mc",q:"Hvad gør du, før du rører ved delene inde i en Epson-printer ved manuel rens?",a:["Rører ved en metalgenstand for at aflade statisk elektricitet","Fugter fingrene","Tager sko af","Tænder printeren"],w:"Statisk elektricitet kan skade printerens elektronik.",src:"epsoncap"},
+  {id:"sik20",t:"tf",q:"Rester i laserens krummebakke kan give flammer, så den skal tømmes jævnligt.",v:true,w:"Epilog: krummebakken tømmes på den hyppigste vedligeholdelsesliste for at forhindre opblussen.",src:"epilogpm"},
+  {id:"sik21",t:"mc",q:"Hvad gør du, før du rører ved delene inde i en Epson-printer ved manuel rens?",a:["Rører ved en metalgenstand for at aflade statisk elektricitet","Fugter fingrene","Tager sko af","Tænder printeren"],w:"Epson: rør ved en metalgenstand før rens for at aflade statisk elektricitet.",src:"epsoncap"},
   {id:"sik22",t:"mc",q:"Hvad skal du gøre med en Roland CX-skæreplotter, før du renser den?",a:["Slukke den","Køre et testsnit","Sætte en ny kniv i","Ingenting"],w:"Rolands manual: sluk først – og rens ikke med opløsningsmidler.",src:"rolandcx"},
   {id:"sik23",t:"tf",q:"xTool: når laseren kører, må du gå fra den, hvis flammealarmen er slået til.",v:false,w:"Gå aldrig fra en laser, der arbejder. Alarmen er en ekstra sikring – ikke en erstatning for opsyn.",src:"xtoolflame"}
  ]);
  add("ska",[
-  {id:"ska19",t:"tf",q:"Rolands GR-manual tillader metalbørste på klemrullerne.",v:false,w:"Brug aldrig metalbørste på klemrullerne – de bliver beskadiget.",src:"rolandgr"},
-  {id:"ska20",t:"mc",q:"Hvornår skal kniven skiftes ifølge Mimaki?",a:["Når æggen har fået skår eller er sløv","Hver dag","Aldrig","Kun ved nye medier"],w:"Sløve eller skårne knive giver flossede og ufuldstændige snit.",src:"mimakicut"},
+  {id:"ska19",t:"tf",q:"Rolands GR-manual tillader metalbørste på klemrullerne.",v:false,w:"Fjern snavs fra klemrullerne med en almindelig børste – aldrig en metalbørste.",src:"rolandgr"},
+  {id:"ska20",t:"mc",q:"Hvornår skal kniven skiftes ifølge Mimaki?",a:["Når æggen har fået skår eller er sløv","Hver dag","Aldrig","Kun ved nye medier"],w:"Mimaki: udskift kniven, når æggen har fået skår eller er sløv.",src:"mimakicut"},
   {id:"ska21",t:"mc",q:"Hvad kan slidte lejer i knivholderen give ifølge Roland?",a:["Unøjagtige snit","Striber i printet","Svag laser","For meget blæk"],w:"Knivholderen er en sliddel ligesom kniven.",src:"rolandkit"},
   {id:"ska22",t:"match",q:"Sæt plotter-symptomet sammen med sliddelen (Roland):",p:[["Kniven hopper, snittet bølger","Skærestrimlen"],["Start og slut mødes ikke","Klemrullerne"],["Unøjagtige snit med ny kniv","Knivholderens lejer"]],w:"Rolands selvvedligeholdelsessæt dækker netop disse dele.",src:"rolandkit"},
   {id:"ska23",t:"mc",q:"Hvad bruger Mimaki til at rense slibevalserne?",a:["En børste – evt. med en lille smule alkohol","Olie","En metalsvamp","Acetone"],w:"Papirstøv i slibevalserne får mediet til at glide.",src:"mimakicut"}
