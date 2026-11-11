@@ -8,7 +8,7 @@
     android:minResizeHeight="110dp"
     android:resizeMode="horizontal|vertical"
     android:updatePeriodMillis="1800000"
-    android:initialLayout="@layout/widget_mini"
-    android:previewLayout="@layout/widget_mini"
+    android:initialLayout="@layout/widget_canvas"
+    android:previewImage="@drawable/preview_mini"
     android:description="@string/w_mini_desc"
     android:widgetCategory="home_screen" />

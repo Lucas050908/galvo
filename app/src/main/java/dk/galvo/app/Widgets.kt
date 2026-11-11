@@ -61,17 +61,22 @@ class QuestionWidget : AppWidgetProvider() {
     }
 }
 
-/** 2x2: Galvo and the streak. */
-class MiniWidget : AppWidgetProvider() {
-    override fun onUpdate(ctx: Context, mgr: AppWidgetManager, ids: IntArray) {
+/** 2x2: big glowing streak flame with today's goal bar. */
+class MiniWidget : CanvasWidget() {
+    override val defW = 130; override val defH = 130
+    override fun click(ctx: Context) = openAppIntent(ctx, 30)
+    override fun draw(ctx: Context, c: android.graphics.Canvas, w: Int, h: Int) {
         val s = GalvoStore.summary(ctx)
-        ids.forEach { id ->
-            val v = RemoteViews(ctx.packageName, R.layout.widget_mini)
-            v.setImageViewResource(R.id.w_galvo, GalvoStore.moodDrawable(s.mood))
-            v.setTextViewText(R.id.w_streak, "${s.streak}")
-            v.setProgressBar(R.id.w_progress, s.goal, s.todayXp.coerceAtMost(s.goal), false)
-            v.setOnClickPendingIntent(R.id.w_root, openAppIntent(ctx, 30))
-            mgr.updateAppWidget(id, v)
-        }
+        val alive = s.streak > 0
+        Art.background(c, w, h, if (alive) Art.FLAME else Art.LINE, 0.5f, 0.4f)
+        val m = minOf(w, h).toFloat(); val cx = w / 2f; val cy = h * 0.42f
+        Art.flame(c, cx, cy, m * 0.3f, if (alive) Art.ORANGE else Art.LINE)
+        Art.flame(c, cx, cy + m * 0.06f, m * 0.19f, if (alive) Art.FLAME else android.graphics.Color.parseColor("#3A3C60"))
+        c.drawText("${s.streak}", cx, cy + m * 0.13f, Art.paint(android.graphics.Color.parseColor("#1A0D00"), m * 0.17f, true).apply { textAlign = android.graphics.Paint.Align.CENTER })
+        c.drawText(if (s.streak == 1) "dag i træk" else "dage i træk", cx, h * 0.76f, Art.paint(Art.SUB, m * 0.085f, true).apply { textAlign = android.graphics.Paint.Align.CENTER })
+        val bx = w * 0.18f; val bw = w * 0.64f; val by = h * 0.84f; val bh = m * 0.05f
+        c.drawRoundRect(android.graphics.RectF(bx, by, bx + bw, by + bh), bh, bh, Art.paint(Art.LINE))
+        val f = (s.todayXp.toFloat() / s.goal).coerceIn(0f, 1f)
+        if (f > 0f) c.drawRoundRect(android.graphics.RectF(bx, by, bx + maxOf(bh, bw * f), by + bh), bh, bh, Art.paint(if (f >= 1f) Art.GREEN else Art.ORANGE))
     }
 }
