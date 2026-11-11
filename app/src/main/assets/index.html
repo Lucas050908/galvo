@@ -233,6 +233,7 @@ label{font-size:14px;color:var(--sub)}
 @keyframes bob{0%,100%{transform:translate(-50%,0)}50%{transform:translate(-50%,-4px)}}
 .pg{position:absolute;width:96px;pointer-events:none}
 .lh{display:inline-flex;gap:3px;align-items:center;color:#FF7DB8;font-weight:800;margin-left:8px}.lh.hit{animation:hit .5s}@keyframes hit{0%{transform:scale(1)}30%{transform:scale(1.5)}100%{transform:scale(1)}}
+.chest{border:0;background:transparent;padding:0;cursor:pointer;position:relative}.chest:disabled{cursor:default}.chest.rdy{animation:wig 1.8s ease-in-out infinite}@keyframes wig{0%,80%,100%{transform:rotate(0)}85%{transform:rotate(-8deg)}90%{transform:rotate(8deg)}95%{transform:rotate(-4deg)}}
 </style>
 </head>
 <body>
@@ -1430,6 +1431,9 @@ const TITLES=['Lærling','Lærling II','Tekniker I','Tekniker II','Tekniker III'
 
 function dailyCase(){ const d=new Date(); const n=Math.floor(new Date(d.getFullYear(),d.getMonth(),d.getDate()).getTime()/864e5); const i=n%CASES2.length; const c=CASES2[i]; const st=(S.cases||{})[c.id]||0;
   return `<button class="dyk" data-case="${i}" style="border-color:var(--acc2)"><small style="color:var(--acc2)">DAGENS SAG · ${esc(c.m.toUpperCase())}</small><b>${esc(c.t)}</b><span>${st?`Dine stjerner: ${'★'.repeat(st)}${'☆'.repeat(3-st)} – kan du få flere?`:`${c.steps.length} trin fra symptom til løsning · op til +25 XP`}</span></button>`; }
+function chestSvg(op,rdy){ const b=rdy?'#FFB347':op?'#5A5C80':'#3A3C60', d=rdy?'#B87A1F':op?'#3A3C60':'#2C2E4D';
+  return `<svg width="64" height="56" viewBox="0 0 64 56" aria-hidden="true">${op?`<path d="M6 14l26-10 26 10-26 8z" fill="${d}"/>`:`<path d="M6 22a26 14 0 0 1 52 0z" fill="${b}"/>`}<rect x="6" y="22" width="52" height="30" rx="5" fill="${b}"/><rect x="6" y="22" width="52" height="7" fill="${d}"/><rect x="27" y="26" width="10" height="12" rx="2" fill="${d}"/></svg>`; }
+function openChest(i){ const u=UNITS[i]; S.chests=S.chests||{}; if(S.chests[u.id]||!unitState(u.id).boss) return; S.chests[u.id]=true; const g=20+Math.floor(Math.random()*4)*10; addGems(g); save(); sfx('party'); confetti(); render(); toast(`Kisten indeholdt ${g} ædelsten! 💎`); }
 function home(){
   const [mood,msg]=galvoMood(); const lv=level(); const tx=todayXP();
   let units='';
@@ -1454,8 +1458,10 @@ function home(){
       const isCur = cur && !curPlaced; if(isCur) curPlaced=true;
       nodes+=`<div style="transform:translateX(${x}px);position:relative">${isCur?`<div class="tip">${boss?'BOSS!':j===0&&!us.done?'START':'FORTSÆT'}</div>`:''}<button class="nd ${avail?(cur?'c':'d'):'l'} ${boss?'boss':''}" data-start="${i}" data-j="${j}" data-boss="${boss?1:0}" ${avail?'':'disabled'} aria-label="${esc(title)}, ${sub}" style="background:${bg};box-shadow:0 7px 0 ${sh}">${cur?`<span class="ring" style="border-color:${col}55"></span>`:''}${icon}</button></div>`;
     }
-    const gx = Math.sin((1.5+i*2)*1.15)>0?-120:120;
-    units+=`<div class="path">${nodes}${open&&!us.boss&&isFinite(gx)?`<div class="pg" style="top:70px;left:calc(50% + ${gx}px - 48px)" aria-hidden="true">${G(us.done?'happy':'party','bob')}</div>`:''}</div>`;
+    { const opened=(S.chests||{})[u.id]; const ready=us.boss&&!opened; const x=Math.round(Math.sin((LESSONS_PER_UNIT+1+i*2)*1.15)*62);
+      nodes+=`<div style="transform:translateX(${x}px);position:relative;margin-top:${ready?24:4}px">${ready?'<div class="tip">ÅBN!</div>':''}<button class="chest ${ready?'rdy':''} ${opened?'op':''}" data-chest="${i}" ${ready?'':'disabled'} aria-label="${opened?'Kiste åbnet':ready?'Åbn kisten':'Kiste – klar boss-udkaldet først'}">${chestSvg(opened,ready)}</button></div>`; }
+    const x1 = Math.sin((1+i*2)*1.15)*62, x2 = Math.sin((2+i*2)*1.15)*62; const gx = (x1+x2)>0?-128:128;
+    units+=`<div class="path">${nodes}${open&&!us.boss&&isFinite(gx)?`<div class="pg" style="top:128px;left:calc(50% + ${gx}px - 48px)" aria-hidden="true">${G(us.done?'happy':'party','bob')}</div>`:''}</div>`;
   });
   return `${header()}<div class="main">
   <div class="hero"><button id="galvo" aria-label="Tryk på Galvo" style="border:0;background:transparent;padding:0;width:140px;flex-shrink:0">${G(mood,'bob alive')}</button><div class="msg"><div class="lvl">NIVEAU ${lv.l} · ${TITLES[Math.min(lv.l-1,TITLES.length-1)].toUpperCase()}</div><div class="say">${esc(msg)}</div>
@@ -1861,6 +1867,7 @@ $app.addEventListener('click',e=>{
   if(t.dataset.share){ const txt=t.dataset.share; if(window.Android&&window.Android.share){ window.Android.share(txt); } else if(navigator.share){ navigator.share({title:'Galvo',text:txt}).catch(()=>{}); } else { (navigator.clipboard?navigator.clipboard.writeText(txt):Promise.reject()).then(()=>toast('Kopieret – sæt det ind, hvor du vil dele det')).catch(()=>toast(txt)); } return; }
   if(t.id==='onbnext'){ S.onb++; save(); render(); window.scrollTo(0,0); return; }
   if(t.id==='onbskip'){ S.onb=ONB.length; save(); render(); return; }
+  if(t.dataset.chest!==undefined){ openChest(+t.dataset.chest); return; }
   if(t.dataset.buy){ buy(t.dataset.buy); return; }
   if(t.dataset.case!==undefined){ startCase(+t.dataset.case); return; }
   if(t.dataset.cpick!==undefined){ K.pick=+t.dataset.cpick; render(); return; }
