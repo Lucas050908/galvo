@@ -208,6 +208,7 @@ label{font-size:14px;color:var(--sub)}
 .sw::after{content:'';position:absolute;top:4px;left:4px;width:24px;height:24px;border-radius:12px;background:#fff;transition:left .2s}
 .sw[aria-checked=true]{background:var(--acc)}.sw[aria-checked=true]::after{left:28px}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+.tp{margin-bottom:12px}.tph{display:flex;justify-content:space-between;gap:10px;font-size:14px}.tph span{font-weight:700;white-space:nowrap}.tpb{height:8px;border-radius:5px;background:rgba(255,255,255,.08);margin:6px 0 3px;overflow:hidden}.tpb i{display:block;height:100%;border-radius:5px}.tp small{color:var(--sub);font-size:12px}
 </style>
 </head>
 <body>
@@ -801,6 +802,24 @@ Object.assign(SOURCES, {
  {id:"ved28",t:"mc",q:"Med hvad kan slibevalserne ifølge Mimaki renses, hvis en børste ikke er nok?",a:["En lille smule alkohol","Olie","Acetone i rigelige mængder","Varmt vand under hanen"],w:"Start med en børste, fx en tandbørste.",src:"mimakicut"}
 );})();
 
+// Nye ordbogsord fra enhed 9-11
+GLOSSARY.push(
+ ["Cast-folie","Folie, der hældes flydende på et transportark og tørres. Afslappet film, der krymper lidt og former sig godt over kurver."],
+ ["Kalandreret folie","Folie, der presses og strækkes ud mellem valser. Billigere, men kan krympe, fordi den har spændinger fra produktionen."],
+ ["Blødgører","Stof, der gør PVC blødt. Monomer (korte kæder) vandrer lettere end polymer (lange kæder)."],
+ ["Migration","Når blødgører vandrer fra et materiale over i et andet, fx ind i klæberen. Kan give folder og 'tunneler'."],
+ ["Applikationstape","Transporttape, der holder skåret grafik samlet under montering. Trækkes af i 180° bagefter."],
+ ["Liner","Bagpapiret på selvklæbende folie. Træk lineren væk fra grafikken – ikke omvendt."],
+ ["Dugpunkt","Temperaturen, hvor fugt i luften bliver til kondens. Underlaget skal være varmere ved montering."],
+ ["Rakel","Plastværktøj til at presse folie fast og luft ud. Rakl fra midten og ud."],
+ ["Dot drop-out","Når prikker mangler i printet. Kan skyldes tilstoppede dyser, men også fx luftstrøm eller vibrationer."],
+ ["Media Gap Adjustment","Roland-justering af, hvor blækdråberne lander. Afhænger af hovedhøjde og mediets tykkelse."],
+ ["Encoder-strimmel","Strimmel, der fortæller maskinen, hvor hovedet er. Beskidt strimmel kan give bølget gravering."],
+ ["Flammesensor","Sensor, der genkender lys med flammers bølgelængde. Sollys og spotlys kan give falsk alarm."],
+ ["Print & cut","At printe og derefter konturskære det samme job. Mediet må ikke ændre størrelse undervejs."]
+);
+GLOSSARY.sort((a,b)=>a[0].localeCompare(b[0],'da'));
+
 const GALVO = {"happy": "<svg viewBox=\"0 0 200 200\" aria-hidden=\"true\"><rect x=\"22\" y=\"176\" width=\"156\" height=\"14\" rx=\"5\" fill=\"#1A1B2E\"/><rect x=\"34\" y=\"168\" width=\"132\" height=\"10\" rx=\"3\" fill=\"#C8B6A6\"/>\n<path d=\"M66 34V20a10 10 0 0 1 10-10h48a10 10 0 0 1 10 10v14\" stroke=\"#1A1B2E\" stroke-width=\"9\" fill=\"none\" stroke-linecap=\"round\"/>\n<rect x=\"34\" y=\"34\" width=\"132\" height=\"110\" rx=\"22\" fill=\"#2B2D42\"/>\n<rect x=\"34\" y=\"34\" width=\"132\" height=\"24\" rx=\"12\" fill=\"#1A1B2E\"/><circle cx=\"100\" cy=\"50\" r=\"7\" fill=\"#111111\" stroke=\"#1A1B2E\" stroke-width=\"3\"/><circle cx=\"102\" cy=\"48\" r=\"2\" fill=\"#FFFFFF\"/>\n<rect x=\"46\" y=\"66\" width=\"108\" height=\"56\" rx=\"18\" fill=\"#E85D04\" opacity=\".95\"/>\n<path d=\"M56 74q14-6 30-4\" stroke=\"#FFFFFF\" stroke-width=\"4\" opacity=\".35\" fill=\"none\" stroke-linecap=\"round\"/>\n<rect x=\"69.0\" y=\"85.5\" width=\"22\" height=\"13\" rx=\"6.5\" fill=\"#FFD6A5\"/><rect x=\"73.0\" y=\"88.5\" width=\"7\" height=\"4\" rx=\"2\" fill=\"#FFFFFF\" opacity=\".7\"/><rect x=\"109.0\" y=\"85.5\" width=\"22\" height=\"13\" rx=\"6.5\" fill=\"#FFD6A5\"/><rect x=\"113.0\" y=\"88.5\" width=\"7\" height=\"4\" rx=\"2\" fill=\"#FFFFFF\" opacity=\".7\"/><path d=\"M92 110Q100 117.2 108 110\" stroke=\"#FFD6A5\" stroke-width=\"4.0\" fill=\"none\" stroke-linecap=\"round\"/>\n<rect x=\"150\" y=\"128\" width=\"10\" height=\"10\" rx=\"3\" fill=\"#FFB703\"/>\n<path d=\"M40 144h120v18H40z\" fill=\"#1A1B2E\" opacity=\".35\"/>\n<rect x=\"88\" y=\"140\" width=\"24\" height=\"10\" rx=\"3\" fill=\"#1A1B2E\"/>\n<g opacity=\"1\"><path d=\"M100.0 148L74.0 182M100.0 148L100.0 182M100.0 148L126.0 182\" stroke=\"#4CC9F0\" stroke-width=\"2.5\" opacity=\".55\"/><path d=\"M100.0 148L110.0 182\" stroke=\"#4CC9F0\" stroke-width=\"4\" stroke-linecap=\"round\"/><circle cx=\"110\" cy=\"182\" r=\"5\" fill=\"#FFF3B0\"/></g></svg>", "worried": "<svg viewBox=\"0 0 200 200\" aria-hidden=\"true\"><path d=\"M172 40q8 12 0 18q-8-6 0-18z\" fill=\"#4DABF7\"/><rect x=\"22\" y=\"176\" width=\"156\" height=\"14\" rx=\"5\" fill=\"#1A1B2E\"/><rect x=\"34\" y=\"168\" width=\"132\" height=\"10\" rx=\"3\" fill=\"#C8B6A6\"/>\n<path d=\"M66 34V20a10 10 0 0 1 10-10h48a10 10 0 0 1 10 10v14\" stroke=\"#1A1B2E\" stroke-width=\"9\" fill=\"none\" stroke-linecap=\"round\"/>\n<rect x=\"34\" y=\"34\" width=\"132\" height=\"110\" rx=\"22\" fill=\"#2B2D42\"/>\n<rect x=\"34\" y=\"34\" width=\"132\" height=\"24\" rx=\"12\" fill=\"#1A1B2E\"/><circle cx=\"100\" cy=\"50\" r=\"7\" fill=\"#111111\" stroke=\"#1A1B2E\" stroke-width=\"3\"/><circle cx=\"102\" cy=\"48\" r=\"2\" fill=\"#FFFFFF\"/>\n<rect x=\"46\" y=\"66\" width=\"108\" height=\"56\" rx=\"18\" fill=\"#E85D04\" opacity=\".95\"/>\n<path d=\"M56 74q14-6 30-4\" stroke=\"#FFFFFF\" stroke-width=\"4\" opacity=\".35\" fill=\"none\" stroke-linecap=\"round\"/>\n<rect x=\"69.0\" y=\"85.5\" width=\"22\" height=\"13\" rx=\"6.5\" fill=\"#FFD6A5\"/><rect x=\"73.0\" y=\"88.5\" width=\"7\" height=\"4\" rx=\"2\" fill=\"#FFFFFF\" opacity=\".7\"/><rect x=\"109.0\" y=\"85.5\" width=\"22\" height=\"13\" rx=\"6.5\" fill=\"#FFD6A5\"/><rect x=\"113.0\" y=\"88.5\" width=\"7\" height=\"4\" rx=\"2\" fill=\"#FFFFFF\" opacity=\".7\"/><path d=\"M67.0 77.5l22 -6M133.0 77.5l-22 -6\" stroke=\"#FFD6A5\" stroke-width=\"5\" stroke-linecap=\"round\"/><path d=\"M92 113.2q4.0 -3.6 8 0t8 0\" stroke=\"#FFD6A5\" stroke-width=\"3.5\" fill=\"none\" stroke-linecap=\"round\"/>\n<rect x=\"150\" y=\"128\" width=\"10\" height=\"10\" rx=\"3\" fill=\"#FFB703\"/>\n<path d=\"M40 144h120v18H40z\" fill=\"#1A1B2E\" opacity=\".35\"/>\n<rect x=\"88\" y=\"140\" width=\"24\" height=\"10\" rx=\"3\" fill=\"#1A1B2E\"/>\n<g opacity=\".3\"><path d=\"M100.0 148L74.0 182M100.0 148L100.0 182M100.0 148L126.0 182\" stroke=\"#4CC9F0\" stroke-width=\"2.5\" opacity=\".55\"/><path d=\"M100.0 148L110.0 182\" stroke=\"#4CC9F0\" stroke-width=\"4\" stroke-linecap=\"round\"/><circle cx=\"110\" cy=\"182\" r=\"5\" fill=\"#FFF3B0\"/></g></svg>", "party": "<svg viewBox=\"0 0 200 200\" aria-hidden=\"true\"><rect x=\"20\" y=\"30\" width=\"9\" height=\"15\" rx=\"2\" fill=\"#00AEEF\" transform=\"rotate(20 20 30)\"/><rect x=\"180\" y=\"25\" width=\"9\" height=\"15\" rx=\"2\" fill=\"#EC008C\" transform=\"rotate(-30 180 25)\"/><rect x=\"30\" y=\"120\" width=\"9\" height=\"15\" rx=\"2\" fill=\"#FFD400\" transform=\"rotate(45 30 120)\"/><rect x=\"178\" y=\"110\" width=\"9\" height=\"15\" rx=\"2\" fill=\"#40C057\" transform=\"rotate(10 178 110)\"/><rect x=\"60\" y=\"12\" width=\"9\" height=\"15\" rx=\"2\" fill=\"#FF922B\" transform=\"rotate(-15 60 12)\"/><rect x=\"150\" y=\"8\" width=\"9\" height=\"15\" rx=\"2\" fill=\"#00AEEF\" transform=\"rotate(35 150 8)\"/><rect x=\"12\" y=\"75\" width=\"9\" height=\"15\" rx=\"2\" fill=\"#EC008C\" transform=\"rotate(60 12 75)\"/><rect x=\"190\" y=\"70\" width=\"9\" height=\"15\" rx=\"2\" fill=\"#FFD400\" transform=\"rotate(-50 190 70)\"/><rect x=\"22\" y=\"176\" width=\"156\" height=\"14\" rx=\"5\" fill=\"#1A1B2E\"/><rect x=\"34\" y=\"168\" width=\"132\" height=\"10\" rx=\"3\" fill=\"#C8B6A6\"/>\n<path d=\"M66 22V20a10 10 0 0 1 10-10h48a10 10 0 0 1 10 10v26\" stroke=\"#1A1B2E\" stroke-width=\"9\" fill=\"none\" stroke-linecap=\"round\"/>\n<rect x=\"34\" y=\"34\" width=\"132\" height=\"110\" rx=\"22\" fill=\"#2B2D42\"/>\n<rect x=\"34\" y=\"34\" width=\"132\" height=\"24\" rx=\"12\" fill=\"#1A1B2E\"/><circle cx=\"100\" cy=\"50\" r=\"7\" fill=\"#111111\" stroke=\"#1A1B2E\" stroke-width=\"3\"/><circle cx=\"102\" cy=\"48\" r=\"2\" fill=\"#FFFFFF\"/>\n<rect x=\"46\" y=\"66\" width=\"108\" height=\"56\" rx=\"18\" fill=\"#E85D04\" opacity=\".95\"/>\n<path d=\"M56 74q14-6 30-4\" stroke=\"#FFFFFF\" stroke-width=\"4\" opacity=\".35\" fill=\"none\" stroke-linecap=\"round\"/>\n<path d=\"M69.0 95q11.0 -14 22 0\" stroke=\"#FFD6A5\" stroke-width=\"6\" fill=\"none\" stroke-linecap=\"round\"/><path d=\"M109.0 95q11.0 -14 22 0\" stroke=\"#FFD6A5\" stroke-width=\"6\" fill=\"none\" stroke-linecap=\"round\"/><path d=\"M92 110Q100 122.8 108 110Z\" fill=\"#FFD6A5\"/><ellipse cx=\"100\" cy=\"116.0\" rx=\"3.6\" ry=\"2.0\" fill=\"#FF6B8B\"/>\n<rect x=\"150\" y=\"128\" width=\"10\" height=\"10\" rx=\"3\" fill=\"#FFB703\"/>\n<path d=\"M40 144h120v18H40z\" fill=\"#1A1B2E\" opacity=\".35\"/>\n<rect x=\"88\" y=\"140\" width=\"24\" height=\"10\" rx=\"3\" fill=\"#1A1B2E\"/>\n<g opacity=\"1\"><path d=\"M100.0 148L74.0 182M100.0 148L100.0 182M100.0 148L126.0 182\" stroke=\"#4CC9F0\" stroke-width=\"2.5\" opacity=\".55\"/><path d=\"M100.0 148L110.0 182\" stroke=\"#4CC9F0\" stroke-width=\"4\" stroke-linecap=\"round\"/><circle cx=\"110\" cy=\"182\" r=\"5\" fill=\"#FFF3B0\"/></g></svg>"};
 
 (function(){
@@ -1044,6 +1063,18 @@ function dyk(){
   const d=new Date(); const idx=(d.getFullYear()*372+d.getMonth()*31+d.getDate())%pool.length; const p=pool[idx];
   return `<button class="dyk" data-learn="${p.u}" data-card="${p.j}"><small>VIDSTE DU?</small><b>${esc(p.c.t)}</b><span>${esc(p.c.k)}</span></button>`;
 }
+function qScore(id){ const st=(S.qst||{})[id]; if(!st) return 0.5; return (st[1]+1)/(st[0]+st[1]+2); }
+function weakPool(){ const pool=[]; UNITS.forEach((u,i)=>{ if(unlocked(i)) u.qs.forEach(q=>pool.push(q.id)); }); return shuffle(pool).map(id=>[id,qScore(id)]).sort((a,b)=>b[1]-a[1]).map(x=>allQ[x[0]]); }
+function unitStats(u){ let seen=0,r=0,t=0; u.qs.forEach(q=>{ const st=(S.qst||{})[q.id]; if(st){ seen++; r+=st[0]; t+=st[0]+st[1]; } }); return {seen,total:u.qs.length,acc:t?Math.round(r/t*100):null}; }
+function topicsHtml(){
+  const rows=UNITS.map((u,i)=>({u,i,st:unitStats(u),open:unlocked(i)})).filter(x=>x.open);
+  const rated=rows.filter(x=>x.st.acc!==null).sort((a,b)=>a.st.acc-b.st.acc);
+  const weakest=rated.length?rated[0]:null;
+  return `<div class="list"><div class="row">${rows.map(x=>{ const a=x.st.acc; const col=a===null?'var(--sub)':a>=80?'var(--ok)':a>=60?'var(--flame)':'var(--bad)';
+    return `<div class="tp"><div class="tph"><b>${esc(x.u.title)}</b><span style="color:${col}">${a===null?'ikke prøvet':a+' %'}</span></div><div class="tpb"><i style="width:${a===null?0:a}%;background:${col}"></i></div><small>${x.st.seen} af ${x.st.total} spørgsmål set</small></div>`; }).join('')}
+   ${weakest&&weakest.st.acc<100?`<p style="margin-top:12px">Dit svageste emne lige nu: <b style="color:var(--tx)">${esc(weakest.u.title)}</b></p>`:''}
+   <div style="margin-top:12px"><button class="btn" data-mode="weak" ${rated.length?'':'disabled'}>Øv dine svage punkter</button></div></div></div>`;
+}
 function practice(){
   const n=S.wrong.length;
   const unlockedQs = UNITS.filter((u,i)=>unlocked(i)).reduce((a,u)=>a+u.qs.length,0);
@@ -1054,6 +1085,7 @@ function practice(){
   <div class="sec">TRÆNING</div>
   <div class="list">
    <div class="row"><h4>Øv dine fejl</h4><p>${n?`${n} spørgsmål, du har svaret forkert på. Svar rigtigt, så forsvinder de fra listen.`:'Ingen fejl at øve lige nu. Flot!'}</p><div style="margin-top:12px"><button class="btn" data-mode="review" ${n?'':'disabled'}>Øv ${n||''} fejl</button></div></div>
+   <div class="row"><h4>Dine svage punkter</h4><p>Galvo finder de spørgsmål, du oftest har svaret forkert på, og giver dig dem igen.</p><div style="margin-top:12px"><button class="btn ghost" data-mode="weak" ${Object.keys(S.qst||{}).length?'':'disabled'}>Øv svage punkter</button></div></div>
    <div class="row"><h4>Repetition</h4><p>${srsDue().length?`${srsDue().length} spørgsmål er klar til gentagelse i dag.`:'Ingen repetition i dag. Spørgsmål, du har svaret på, kommer igen efter 1, 3, 7, 14 og 30 dage.'}</p><div style="margin-top:12px"><button class="btn ghost" data-mode="srs" ${srsDue().length?'':'disabled'}>Start repetition</button></div></div>
    <div class="row"><h4>Lyn-runde på tid</h4><p>Svar på så mange som muligt på 60 sekunder. ${S.blitzBest?`Din rekord: <b style="color:var(--tx)">${S.blitzBest}</b>`:'Sæt din første rekord!'}</p><div style="margin-top:12px"><button class="btn" id="blitz" style="background:var(--flame);box-shadow:0 5px 0 #B87A1F">Start lyn-runde</button></div></div>
    <div class="row"><h4>Hurtig blanding</h4><p>5 tilfældige spørgsmål fra de ${unlockedQs} spørgsmål, du har låst op.</p><div style="margin-top:12px"><button class="btn ghost" data-mode="mix">Start blanding</button></div></div>
@@ -1074,6 +1106,8 @@ function badges(){
   <div class="grid">${BADGES.map(b=>{const on=S.badges.includes(b.id);return `<div class="bdg ${on?'on':''}"><div class="ic">${IC[b.ic](on?'#FF7A1A':'#5A5C80')}</div><b>${esc(b.n)}</b><span>${esc(b.d)}</span></div>`;}).join('')}</div>
   <div class="sec">MESTERBREVE · ${UNITS.filter(u=>unitState(u.id).boss).length}/${UNITS.length}</div>
   <div class="list">${UNITS.some(u=>unitState(u.id).boss)?UNITS.filter(u=>unitState(u.id).boss).map(certHtml).join(''):'<div class="row"><p>Klar et boss-udkald for at få dit første mesterbrev.</p></div>'}</div>
+  <div class="sec">DINE EMNER</div>
+  ${topicsHtml()}
   <div class="sec">STATISTIK</div>
   <div class="list"><div class="row"><p>Rigtige svar: <b style="color:var(--tx)">${S.correct}</b> af ${S.answered} (${S.answered?Math.round(S.correct/S.answered*100):0}%)<br>Perfekte lektioner: <b style="color:var(--tx)">${S.perfect}</b><br>Enheder mestret: <b style="color:var(--tx)">${UNITS.filter(u=>unitState(u.id).boss).length}/${UNITS.length}</b></p></div></div>
   </div>${nav()}`;
@@ -1105,6 +1139,7 @@ function startLesson(mode, unitIdx, lessonIdx){
   if(mode==='unit'||mode==='boss'){ qs = shuffle(UNITS[unitIdx].qs).slice(0, mode==='boss'?BOSS_QS:QS_PER_LESSON).map(q=>allQ[q.id]); }
   else if(mode==='single'){ qs = allQ[unitIdx] ? [allQ[unitIdx]] : []; }
   else if(mode==='srs'){ qs = shuffle(srsDue().map(id=>allQ[id])).slice(0,7); }
+  else if(mode==='weak'){ qs = weakPool().slice(0,QS_PER_LESSON); }
   else if(mode==='review'){ qs = shuffle(S.wrong.map(id=>allQ[id]).filter(Boolean)).slice(0,QS_PER_LESSON); }
   else { const pool=[]; UNITS.forEach((u,i)=>{ if(unlocked(i)) u.qs.forEach(q=>pool.push(allQ[q.id])); }); qs=shuffle(pool).slice(0,QS_PER_LESSON); }
   if(!qs.length) return;
@@ -1128,7 +1163,7 @@ function check(){
   const q=L.cur, ok=isRight();
   L.state= ok?'right':'wrong';
   const first = !(q.id in L.firstTry);
-  if(first){ L.firstTry[q.id]=ok; S.answered++; if(ok) S.correct++; srsUpdate(q.id, ok); if(ok) dayBump('correct',1); if(L.mode==='srs') dayBump('srsDone',1); }
+  if(first){ L.firstTry[q.id]=ok; S.qst=S.qst||{}; const st=S.qst[q.id]||[0,0]; st[ok?0:1]++; S.qst[q.id]=st; S.answered++; if(ok) S.correct++; srsUpdate(q.id, ok); if(ok) dayBump('correct',1); if(L.mode==='srs') dayBump('srsDone',1); }
   if(ok){ L.done++; L.combo++; L.bestCombo=Math.max(L.bestCombo,L.combo); dayBump('maxCombo',L.combo,true); S.wrong=S.wrong.filter(x=>x!==q.id); if(first) L.earned+=2; }
   else { L.combo=0; if(!S.wrong.includes(q.id)) S.wrong.push(q.id); if(!L.retry.has(q.id)){ L.retry.add(q.id); L.queue.push(q); } else { L.done++; } }
   say(ok?'Rigtigt':'Forkert'); sfx(ok?'ok':'bad');
@@ -1144,7 +1179,7 @@ function correctText(q){
 function lessonView(){
   const q=L.cur; const pct=Math.round(L.done/L.total*100);
   const mood = L.state==='wrong'?'worried':'happy';
-  const tag = {unit:`${UNITS[L.unitIdx]?.title||''} · KUNDEUDKALD`,boss:'BOSS-UDKALD',review:'ØV DINE FEJL',mix:'HURTIG BLANDING',single:'DAGENS SPØRGSMÅL',srs:'DAGENS REPETITION'}[L.mode];
+  const tag = {unit:`${UNITS[L.unitIdx]?.title||''} · KUNDEUDKALD`,boss:'BOSS-UDKALD',review:'ØV DINE FEJL',weak:'DINE SVAGE PUNKTER',mix:'HURTIG BLANDING',single:'DAGENS SPØRGSMÅL',srs:'DAGENS REPETITION'}[L.mode];
   let body='';
   const locked = L.state!=='ask';
   const PC=['#4CC9F0','#FFB347','#B794F6','#3DDC97'];
