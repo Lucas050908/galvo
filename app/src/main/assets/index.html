@@ -210,6 +210,29 @@ label{font-size:14px;color:var(--sub)}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 .tp{margin-bottom:12px}.tph{display:flex;justify-content:space-between;gap:10px;font-size:14px}.tph span{font-weight:700;white-space:nowrap}.tpb{height:8px;border-radius:5px;background:rgba(255,255,255,.08);margin:6px 0 3px;overflow:hidden}.tpb i{display:block;height:100%;border-radius:5px}.tp small{color:var(--sub);font-size:12px}
 .sharebtn{margin-top:10px;border:1px solid #C77A2A;background:transparent;color:#7A4A1A;border-radius:10px;padding:6px 14px;font-weight:700;font-size:13px;font-family:inherit;cursor:pointer}
+.sbtn{border:0;background:transparent;font:inherit;padding:0;cursor:pointer}
+.boost{margin:0 20px 6px;background:var(--flame);color:#1A0D00;font-weight:700;font-size:13px;border-radius:12px;padding:6px 12px;display:flex;gap:6px;align-items:center;justify-content:center}
+.rew{margin-top:12px;font-weight:700;color:var(--acc2);display:flex;gap:6px;align-items:center;justify-content:center}
+.shopic{width:46px;height:46px;border-radius:14px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+/* Duolingo-style path */
+.ban{margin:18px 16px 8px;border-radius:18px;padding:14px 16px;display:flex;justify-content:space-between;align-items:center;gap:10px;color:#0F1020;box-shadow:0 5px 0 rgba(0,0,0,.35)}
+.ban small{display:block;font-weight:800;font-size:12px;letter-spacing:.06em;opacity:.75}
+.ban h3{margin:2px 0 0;font-size:19px}
+.ban .gd{border:0;border-radius:12px;width:48px;height:48px;background:rgba(15,16,32,.18);display:flex;align-items:center;justify-content:center;flex-shrink:0;cursor:pointer}
+.ban.lk{background:var(--sf2)!important;color:var(--sub)}
+.path{position:relative;display:flex;flex-direction:column;align-items:center;gap:14px;padding:10px 0 18px}
+.nd{position:relative;width:74px;height:70px;border-radius:50%;border:0;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:transform .1s}
+.nd:active{transform:translateY(4px)}
+.nd.l{background:#2C2E4D;box-shadow:0 7px 0 #1B1C33;cursor:default}
+.nd.boss{width:84px;height:80px}
+.nd .ring{position:absolute;inset:-9px;border-radius:50%;border:5px solid var(--line)}
+.nd.c .ring{animation:pr 1.6s ease-in-out infinite}
+@keyframes pr{0%,100%{transform:scale(1);opacity:1}50%{transform:scale(1.08);opacity:.6}}
+.tip{position:absolute;top:-40px;left:50%;transform:translateX(-50%);background:var(--tx);color:#0F1020;font-weight:800;font-size:13px;padding:6px 12px;border-radius:10px;white-space:nowrap;animation:bob 1.6s ease-in-out infinite}
+.tip:after{content:'';position:absolute;bottom:-6px;left:50%;margin-left:-6px;border:6px solid transparent;border-top-color:var(--tx);border-bottom:0}
+@keyframes bob{0%,100%{transform:translate(-50%,0)}50%{transform:translate(-50%,-4px)}}
+.pg{position:absolute;width:96px;pointer-events:none}
+.lh{display:inline-flex;gap:3px;align-items:center;color:#FF7DB8;font-weight:800;margin-left:8px}.lh.hit{animation:hit .5s}@keyframes hit{0%{transform:scale(1)}30%{transform:scale(1.5)}100%{transform:scale(1)}}
 </style>
 </head>
 <body>
@@ -1192,6 +1215,15 @@ const NATIVE = (typeof window.Android!=='undefined') ? window.Android : null;
 if(NATIVE){ try{ const n=NATIVE.getState(); if(n){ const ns=JSON.parse(n); if((ns.updatedAt||0)>=(S.updatedAt||0)) S=Object.assign(fresh(),ns); } }catch(e){} }
 
 const today = () => dayKey(new Date());
+const HMAX=5, HREGEN=30*60*1000;
+function hearts(){ if(S.hearts===undefined){ S.hearts=HMAX; S.hTs=Date.now(); }
+  if(S.hearts<HMAX){ const n=Math.floor((Date.now()-(S.hTs||Date.now()))/HREGEN); if(n>0){ S.hearts=Math.min(HMAX,S.hearts+n); S.hTs=(S.hTs||Date.now())+n*HREGEN; } } else S.hTs=Date.now();
+  return S.hearts; }
+function nextHeartMin(){ return Math.max(1,Math.ceil(((S.hTs||Date.now())+HREGEN-Date.now())/60000)); }
+function loseHeart(){ hearts(); if(S.hearts>0){ if(S.hearts===HMAX) S.hTs=Date.now(); S.hearts--; } }
+function gainHeart(n){ hearts(); S.hearts=Math.min(HMAX,S.hearts+(n||1)); }
+function addGems(n){ S.gems=(S.gems||0)+n; }
+function boostOn(){ return (S.boostUntil||0)>Date.now(); }
 function dayKey(d){ return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'); }
 function daysBetween(a,b){ const pa=a.split('-').map(Number), pb=b.split('-').map(Number); return Math.round((Date.UTC(pb[0],pb[1]-1,pb[2])-Date.UTC(pa[0],pa[1]-1,pa[2]))/864e5); }
 function liveStreak(){ if(!S.lastDay) return 0; const d=daysBetween(S.lastDay,today()); return d<=1+(S.freeze||0) ? S.streak : 0; }
@@ -1247,6 +1279,10 @@ const IC = {
  check:c=>`<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="${c}" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5 9-10"/></svg>`,
  cross:c=>`<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="${c}" stroke-width="3.2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>`,
  crown:c=>`<svg width="26" height="26" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 8l4 4 5-7 5 7 4-4-2 11H5z" fill="${c}"/></svg>`,
+ gem:c=>`<svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3h12l4 6-10 12L2 9z" fill="${c}"/><path d="M2 9h20M9 3l3 18M15 3l-3 18" stroke="rgba(0,0,0,.18)" stroke-width="1.2" fill="none"/></svg>`,
+ lock:c=>`<svg width="26" height="26" viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2" fill="${c}"/><path d="M8 11V8a4 4 0 0 1 8 0v3" stroke="${c}" stroke-width="2.4" fill="none"/></svg>`,
+ star:c=>`<svg width="30" height="30" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l3 6.5 7 .8-5.2 4.8 1.5 7L12 17.6 5.7 21l1.5-7L2 9.3l7-.8z" fill="${c}"/></svg>`,
+ book:c=>`<svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 4h7a2 2 0 0 1 2 2v14a2 2 0 0 0-2-2H4zM20 4h-5a2 2 0 0 0-2 2v14a2 2 0 0 1 2-2h5z" fill="${c}"/></svg>`,
  heart:c=>`<svg width="18" height="18" viewBox="0 0 24 22" aria-hidden="true"><path d="M12 21S2 14 2 7.5A5 5 0 0 1 12 5a5 5 0 0 1 10 2.5C22 14 12 21 12 21z" fill="${c}"/></svg>`
 };
 
@@ -1276,6 +1312,7 @@ function checkBadges(){ const nw=[]; BADGES.forEach(b=>{ if(!S.badges.includes(b
 
 // ---------- XP & streak ----------
 function awardXP(xp){
+  if(boostOn()) xp*=2;
   dayBump('xp',xp);
   S.xp+=xp; const t=today(); S.xpByDay[t]=(S.xpByDay[t]||0)+xp;
   const before=liveStreak();
@@ -1343,8 +1380,8 @@ function dayBump(key, n, isMax){
   if(isMax) d[key]=Math.max(d[key]||0,n); else d[key]=(d[key]||0)+n;
   const done=[];
   d.q.forEach(qid=>{ const q=QUESTS.find(x=>x.id===qid); if(q && !d.claimed.includes(qid) && (d[q.k]||0)>=q.goal){ d.claimed.push(qid); done.push(q); } });
-  if(done.length){ done.forEach(q=>{ S.xp+=QUEST_XP; const t=today(); S.xpByDay[t]=(S.xpByDay[t]||0)+QUEST_XP; d.xp+=QUEST_XP; });
-    setTimeout(()=>{ toast(done.length>1?`${done.length} quests klaret! +${done.length*QUEST_XP} XP`:`Quest klaret: ${done[0].n} · +${QUEST_XP} XP`); },400); }
+  if(done.length){ done.forEach(q=>{ addGems(10); S.xp+=QUEST_XP; const t=today(); S.xpByDay[t]=(S.xpByDay[t]||0)+QUEST_XP; d.xp+=QUEST_XP; });
+    setTimeout(()=>{ toast(done.length>1?`${done.length} quests klaret! +${done.length*QUEST_XP} XP`:`Quest klaret: ${done[0].n} · +${QUEST_XP} XP · +10 ædelsten`); },400); }
 }
 function questsCard(){
   const d=dayState(); const all=d.claimed.length===d.q.length;
@@ -1372,8 +1409,8 @@ function header(){
   const st = liveStreak();
   return `<div class="top"><div class="logo">galvo<span>.</span></div>
   <div class="stats"><span class="stat" style="color:var(--flame)" aria-label="Streak ${st} dage">${IC.flame(st?'#FFB347':'#5A5C80')}${st}</span>
-  <span class="stat" style="color:var(--acc2)" aria-label="${S.xp} XP">${IC.bolt('#4CC9F0')}${S.xp.toLocaleString('da-DK')}</span>
-  <span class="stat" style="color:#FF7DB8" aria-label="Ubegrænsede hjerter">${IC.heart('#FF7DB8')}∞</span></div></div>`;
+  <button class="stat sbtn" data-go="shop" style="color:var(--acc2)" aria-label="${S.gems||0} ædelsten – åbn butikken">${IC.gem('#4CC9F0')}${(S.gems||0).toLocaleString('da-DK')}</button>
+  <button class="stat sbtn" data-go="shop" style="color:#FF7DB8" aria-label="${hearts()} hjerter">${IC.heart(hearts()?'#FF7DB8':'#5A5C80')}${hearts()}</button></div></div>${boostOn()?`<div class="boost">${IC.bolt('#0F1020')} Dobbelt XP aktiv · ${Math.ceil((S.boostUntil-Date.now())/60000)} min tilbage</div>`:''}`;
 }
 function nav(){
   const items=[['home','Lær','<path d="M3 11l9-7 9 7v9H3z"/>'],['practice','Øv','<path d="M14.7 6.3a4 4 0 0 0-5.4 5.4L3 18l3 3 6.3-6.3a4 4 0 0 0 5.4-5.4l-2.5 2.5-2.4-.6-.6-2.4z"/>'],['badges','Præstationer','<path d="M7 4h10v5a5 5 0 0 1-10 0z"/><path d="M12 14v4M8 21h8"/>'],['profile','Profil','<circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/>']];
@@ -1396,33 +1433,35 @@ function dailyCase(){ const d=new Date(); const n=Math.floor(new Date(d.getFullY
 function home(){
   const [mood,msg]=galvoMood(); const lv=level(); const tx=todayXP();
   let units='';
+  const shade=(hex,f)=>{ const n=parseInt(hex.slice(1),16); const c=[n>>16,(n>>8)&255,n&255].map(v=>Math.round(v*f)); return `rgb(${c.join(',')})`; };
+  let curPlaced=false;
   UNITS.forEach((u,i)=>{
     const us=unitState(u.id), open=unlocked(i);
-    const pill = us.boss?'Mestret':open?`${Math.min(us.done,LESSONS_PER_UNIT)}/${LESSONS_PER_UNIT}`:'Låst';
-    let steps='';
-    if(open && LEARN[u.id]){
-      const rd=!!(S.learned||{})[u.id]; const cur=!rd && us.done===0;
-      steps+=`<button class="step" data-learn="${i}" aria-label="Viden-kort: ${esc(u.title)}"><div class="dot ${rd?'d':cur?'c':'l'}" style="${rd||cur?'':'background:var(--acc2);box-shadow:none'}"></div><div class="card ${cur?'c':''}"><b>Viden-kort · ${LEARN[u.id].length} kort</b><span>${rd?'Læst – læs igen':'Lær det vigtigste først · +5 XP'}</span></div></button>`;
+    const col=u.color||'#FF7A1A';
+    const hasLearn=!!LEARN[u.id];
+    units+=`<div class="ban ${open?'':'lk'}" style="background:${col}"><div><small>ENHED ${i+1}${us.boss?' · MESTRET':''}</small><h3>${esc(u.title)}</h3></div>${open&&hasLearn?`<button class="gd" data-learn="${i}" aria-label="Viden-kort: ${esc(u.title)}">${IC.book(open?'#0F1020':'#5A5C80')}</button>`:open?'':`<div class="gd" aria-hidden="true">${IC.lock('#5A5C80')}</div>`}</div>`;
+    let nodes='';
+    for(let j=0;j<=LESSONS_PER_UNIT;j++){
+      const boss = j===LESSONS_PER_UNIT;
+      const done = open && (boss?us.boss:us.done>j);
+      const cur = open && !done && (boss? us.done>=LESSONS_PER_UNIT : us.done===j);
+      const avail = done||cur;
+      const x = Math.round(Math.sin((j+i*2)*1.15)*62);
+      const title = boss?`Boss-udkald: ${u.title}`:`Lektion ${j+1}`;
+      const sub = done?'fuldført – spil igen':cur?'start':'låst';
+      const bg = avail?col:'#2C2E4D', sh = avail?shade(col,.62):'#1B1C33';
+      const icon = !avail?IC.lock('#5A5C80'):boss?IC.crown(done?'#FFF3D6':'#0F1020'):done?IC.check('#0F1020'):IC.star('#0F1020');
+      const isCur = cur && !curPlaced; if(isCur) curPlaced=true;
+      nodes+=`<div style="transform:translateX(${x}px);position:relative">${isCur?`<div class="tip">${boss?'BOSS!':j===0&&!us.done?'START':'FORTSÆT'}</div>`:''}<button class="nd ${avail?(cur?'c':'d'):'l'} ${boss?'boss':''}" data-start="${i}" data-j="${j}" data-boss="${boss?1:0}" ${avail?'':'disabled'} aria-label="${esc(title)}, ${sub}" style="background:${bg};box-shadow:0 7px 0 ${sh}">${cur?`<span class="ring" style="border-color:${col}55"></span>`:''}${icon}</button></div>`;
     }
-    if(open){
-      for(let j=0;j<=LESSONS_PER_UNIT;j++){
-        const boss = j===LESSONS_PER_UNIT;
-        const done = boss?us.boss:us.done>j;
-        const cur = !done && (boss? us.done>=LESSONS_PER_UNIT : us.done===j);
-        const avail = done||cur;
-        const st = done?'d':cur?'c':'l';
-        const title = boss?`Boss-udkald: ${u.title}`:`Lektion ${j+1}`;
-        const sub = done?(boss?'Mestret – spil igen':'Fuldført – spil igen'):cur?(boss?'7 svære spørgsmål':'Næste lektion · 5 spørgsmål'):'Låst';
-        steps+=`<button class="step" data-start="${i}" data-j="${j}" data-boss="${boss?1:0}" ${avail?'':'disabled'} aria-label="${esc(title)}, ${esc(sub)}"><div class="dot ${st}"></div><div class="card ${st==='c'?'c':''}"><b>${esc(title)}</b><span>${esc(sub)}</span></div></button>`;
-      }
-    }
-    units+=`<section class="unit" style="${open?'':'opacity:.55'}"><div class="uh"><div><h3 style="color:${open?'var(--tx)':'var(--sub)'}">${i+1}. ${esc(u.title)}</h3><div class="s">${esc(u.sub)}</div></div><span class="pill" style="${us.boss?'color:var(--acc);':''}">${pill}</span></div>${open?`<div class="steps">${steps}</div>`:''}</section>`;
+    const gx = Math.sin((1.5+i*2)*1.15)>0?-120:120;
+    units+=`<div class="path">${nodes}${open&&!us.boss&&isFinite(gx)?`<div class="pg" style="top:70px;left:calc(50% + ${gx}px - 48px)" aria-hidden="true">${G(us.done?'happy':'party','bob')}</div>`:''}</div>`;
   });
   return `${header()}<div class="main">
   <div class="hero"><button id="galvo" aria-label="Tryk på Galvo" style="border:0;background:transparent;padding:0;width:140px;flex-shrink:0">${G(mood,'bob alive')}</button><div class="msg"><div class="lvl">NIVEAU ${lv.l} · ${TITLES[Math.min(lv.l-1,TITLES.length-1)].toUpperCase()}</div><div class="say">${esc(msg)}</div>
   <div class="bar" role="progressbar" aria-valuenow="${Math.min(tx,S.goal)}" aria-valuemax="${S.goal}" aria-label="Dagens mål"><i style="width:${Math.min(100,tx/S.goal*100)}%"></i></div><div class="small">${Math.min(tx,S.goal)}/${S.goal} XP i dag</div></div></div>
   ${srsCard()}${questsCard()}${dailyCase()}${dyk()}
-  <div class="sec">DIN VEJ</div>${units}
+  ${units}
   <div class="note">Galvo giver generel viden om fejlfinding og service. Følg altid producentens manual og sikkerhedsanvisninger for den konkrete maskine.</div>
   </div>${nav()}`;
 }
@@ -1530,7 +1569,7 @@ function startLesson(mode, unitIdx, lessonIdx){
   next(); view={name:'lesson'}; render(); window.scrollTo(0,0);
 }
 function next(){
-  L.cur=L.queue.shift(); L.state='ask'; L.pick=null; L.order=[]; L.mp={}; L.msel=null;
+  L.cur=L.queue.shift(); L.state='ask'; L.lostHeart=false; L.pick=null; L.order=[]; L.mp={}; L.msel=null;
   if(L.cur && (L.cur.t==='mc'||L.cur.t==='fill')) L.cur._opts=shuffle(L.cur.a.map((a,i)=>({a,ok:i===0})));
   if(L.cur && L.cur.t==='match'){ L.cur._right=shuffle(L.cur.p.map((p,i)=>({r:p[1],i}))); L.msel=0; }
   if(L.cur && L.cur.t==='order') L.cur._pool=shuffle(L.cur.s.map((s,i)=>({s,i})));
@@ -1548,11 +1587,11 @@ function check(){
   const first = !(q.id in L.firstTry);
   if(first){ L.firstTry[q.id]=ok; S.qst=S.qst||{}; const st=S.qst[q.id]||[0,0]; st[ok?0:1]++; S.qst[q.id]=st; S.answered++; if(ok) S.correct++; srsUpdate(q.id, ok); if(ok) dayBump('correct',1); if(L.mode==='srs') dayBump('srsDone',1); }
   if(ok){ L.done++; L.combo++; L.bestCombo=Math.max(L.bestCombo,L.combo); dayBump('maxCombo',L.combo,true); S.wrong=S.wrong.filter(x=>x!==q.id); if(first) L.earned+=2; }
-  else { L.combo=0; if(!S.wrong.includes(q.id)) S.wrong.push(q.id); if(L.mode!=='exam' && !L.retry.has(q.id)){ L.retry.add(q.id); L.queue.push(q); } else { L.done++; } }
+  else { L.combo=0; if(first && (L.mode==='unit'||L.mode==='boss')){ loseHeart(); L.lostHeart=true; } if(!S.wrong.includes(q.id)) S.wrong.push(q.id); if(L.mode!=='exam' && !L.retry.has(q.id)){ L.retry.add(q.id); L.queue.push(q); } else { L.done++; } }
   say(ok?'Rigtigt':'Forkert'); sfx(ok?'ok':'bad');
   save(); render();
 }
-function cont(){ if(L.queue.length){ next(); render(); } else finish(); }
+function cont(){ if((L.mode==='unit'||L.mode==='boss') && hearts()<=0){ save(); view={name:'nohearts',fromLesson:true}; render(); window.scrollTo(0,0); return; } if(L.queue.length){ next(); render(); } else finish(); }
 function correctText(q){
   if(q.t==='mc'||q.t==='fill') return q.a[0];
   if(q.t==='match') return q.p.map(p=>`${p[0]} → ${p[1]}`).join(' · ');
@@ -1602,7 +1641,7 @@ function lessonView(){
     ${!ok&&L.retry.has(q.id)&&L.queue.includes(q)?'<div class="src">Spørgsmålet kommer igen sidst i lektionen.</div>':''}
     <button class="btn ${ok?'ok':'bad'}" id="cont">Fortsæt</button></div>`;
   }
-  return `<div class="lt"><button class="x" id="quit" aria-label="Afslut lektion">×</button><div class="prog" role="progressbar" aria-valuenow="${pct}" aria-valuemax="100"><i style="width:${pct}%"></i></div><div class="combo">${L.combo>=2?IC.bolt('#FFB347')+'x'+L.combo:''}</div></div>
+  return `<div class="lt"><button class="x" id="quit" aria-label="Afslut lektion">×</button><div class="prog" role="progressbar" aria-valuenow="${pct}" aria-valuemax="100"><i style="width:${pct}%"></i></div><div class="combo">${L.combo>=2?IC.bolt('#FFB347')+'x'+L.combo:''}${(L.mode==='unit'||L.mode==='boss')?`<span class="lh ${L.state==='wrong'&&L.lostHeart?'hit':''}" aria-label="${hearts()} hjerter">${IC.heart('#FF7DB8')}${hearts()}</span>`:''}</div></div>
   <div class="qwrap"><div class="qhead">${G(mood, L.state==='wrong'?'shake':L.state==='right'?'pop':'')}<div><div class="qtag">${esc(tag.toUpperCase())}</div><div class="qtext">${esc(q.t==='fill'?'Udfyld hullet':q.q)}</div></div></div>${q.ctx?`<div class="ctx"><b>KUNDEN RINGER</b>${esc(q.ctx)}</div>`:''}${body}</div>${foot}`;
 }
 function finish(){
@@ -1611,13 +1650,15 @@ function finish(){
   let xp = L.earned + (L.mode==='boss'?20:10) + (perfect?5:0);
   let exam=null;
   if(L.mode==='exam'){ exam={d:Date.now(),acc,pass:acc>=EXAM_PASS,n:firsts.length}; S.exams=S.exams||[]; S.exams.push(exam); S.exams=S.exams.slice(-20); if(exam.pass) xp+=20; }
+  let gems = L.mode==='boss'?30:L.mode==='exam'?(exam&&exam.pass?40:10):10; if(perfect) gems+=5; addGems(gems);
+  let heartBack=false; if(['review','weak','srs','mix'].includes(L.mode) && hearts()<HMAX){ gainHeart(1); heartBack=true; }
   const aw=awardXP(xp); const before=aw.before;
   S.lessons++; if(perfect) S.perfect++; dayBump('lessons',1); if(perfect) dayBump('perfect',1);
   if(L.mode==='unit'){ const us=unitState(UNITS[L.unitIdx].id); if(L.lessonIdx===us.done) us.done=Math.min(LESSONS_PER_UNIT, us.done+1); }
   let newCert=null;
   if(L.mode==='boss'){ const us=unitState(UNITS[L.unitIdx].id); if(!us.boss){ newCert=UNITS[L.unitIdx]; us.bossDate=Date.now(); } us.boss = true; }
   const nb=checkBadges(); save();
-  view={name:'result',xp,acc,streak:S.streak,streakUp:S.streak>before,nb,goalHit:aw.goalHit,lvl:aw.lvlUp,cert:newCert,exam};
+  view={name:'result',xp:boostOn()?xp*2:xp,acc,streak:S.streak,streakUp:S.streak>before,nb,goalHit:aw.goalHit,lvl:aw.lvlUp,cert:newCert,exam,gems,heartBack};
   setTimeout(()=>sfx(aw.lvlUp?'level':'party'),150);
   render(); confetti(); window.scrollTo(0,0);
 }
@@ -1626,6 +1667,7 @@ function result(){
   const title = L.mode==='exam'?(v.exam&&v.exam.pass?'Eksamen bestået!':'Ikke bestået – denne gang'):L.mode==='single'?(v.acc===100?'Dagens spørgsmål klaret!':'Godt forsøgt!'):L.mode==='boss'?'Boss besejret!':v.acc===100?'Perfekt lektion!':'Lektion fuldført!';
   return `<div class="res"><div class="glow"></div>${G('party','pop')}<h2>${title}</h2><div style="color:var(--sub);font-weight:600">${v.goalHit?'Dagens mål er nået – Galvo er stolt af dig!':v.streakUp?`Din streak er nu ${v.streak} ${v.streak===1?"dag":"dage"}!`:'Galvo er stolt af dig'}</div>
   <div class="rstats"><div class="rs" style="border-color:var(--acc)"><small>XP</small><b style="color:var(--acc)">+${v.xp}</b></div><div class="rs" style="border-color:var(--ok)"><small>RIGTIGE</small><b style="color:var(--ok)">${v.acc}%</b></div><div class="rs" style="border-color:var(--flame)"><small>STREAK</small><b style="color:var(--flame)">${v.streak}</b></div></div>
+  <div class="rew">${IC.gem('#4CC9F0')} +${v.gems} ædelsten${v.heartBack?` · ${IC.heart('#FF7DB8')} +1 hjerte`:''}</div>
   ${v.exam?examHtml(v.exam):''}${lvlUpHtml(v.lvl)}${v.cert?`<div style="width:100%;margin-top:14px;text-align:left">${certHtml(v.cert)}</div>`:''}
   ${v.nb.map(b=>`<div class="badge-new"><div class="ic" style="width:44px;height:44px;border-radius:12px;background:rgba(255,122,26,.18);display:flex;align-items:center;justify-content:center">${IC[b.ic]('#FF7A1A')}</div><div><b>Nyt badge: ${esc(b.n)}</b><div style="font-size:13px;color:var(--sub)">${esc(b.d)}</div></div></div>`).join('')}
   </div><div class="foot"><button class="btn" data-go="home">Fortsæt</button></div>`;
@@ -1669,7 +1711,7 @@ function caseView(){
 function caseCheck(){ const ok=K.opts[K.pick].ok; if(ok){ K.state='right'; sfx('ok'); say('Rigtigt'); } else { K.state='wrong'; K.bad.push(K.pick); K.miss++; sfx('bad'); say('Forkert'); } render(); }
 function caseNext(){ K.step++; if(K.step<K.c.steps.length){ caseOpts(); render(); window.scrollTo(0,0); return; }
   const stars=K.miss===0?3:K.miss<=2?2:1; S.cases=S.cases||{}; const prev=S.cases[K.c.id]||0; S.cases[K.c.id]=Math.max(prev,stars);
-  const xp=10+stars*5; const aw=awardXP(xp); dayBump('lessons',1); S.lessons++; const nb=checkBadges(); save();
+  const xp=10+stars*5; addGems(stars*5); const aw=awardXP(xp); dayBump('lessons',1); S.lessons++; const nb=checkBadges(); save();
   view={name:'caseres',stars,xp,nb,lvl:aw.lvlUp,goalHit:aw.goalHit}; render(); confetti(); setTimeout(()=>sfx(aw.lvlUp?'level':'party'),150); window.scrollTo(0,0); }
 function caseRes(){ const v=view, c=K.c;
   return `<div class="res"><div class="glow"></div>${G('party','pop')}<h2>Sagen er løst!</h2><div style="font-size:34px;color:var(--flame);letter-spacing:4px" aria-label="${v.stars} af 3 stjerner">${'★'.repeat(v.stars)}${'☆'.repeat(3-v.stars)}</div><div style="color:var(--sub);font-weight:600">${v.stars===3?'Fejlfri diagnose – som en ægte tekniker!':v.stars===2?'Godt løst – med et par omveje.':'Løst! Næste gang går det hurtigere.'}${v.goalHit?' · Dagens mål er nået!':''}</div>
@@ -1690,6 +1732,29 @@ function sourcesView(){
   <div style="padding:0 20px"><p style="color:var(--sub);font-size:14px;line-height:1.5;margin:0 0 12px">Alt i Galvo bygger på disse kilder – mest producenternes egne manualer og supportsider. Tryk for at læse originalen.</p>
   <div class="gl">${keys.map(k=>`<div><b><a href="${esc(SOURCES[k].u)}" target="_blank" rel="noopener" style="color:var(--tx)">${esc(SOURCES[k].n)}</a></b><span>Brugt ${cnt[k]||0} gange · ${esc(SOURCES[k].u.replace(/^https?:\/\//,'').split('/')[0])}</span></div>`).join('')}</div></div><div style="height:100px"></div>${nav()}`;
 }
+function noHeartsView(){
+  return `<div class="res" style="padding-top:40px"><div class="glow"></div>${G('worried','shake')}<h2>Du er løbet tør for hjerter</h2>
+  <p style="color:var(--sub);font-size:16px;line-height:1.5;max-width:340px;margin:8px auto 0">Næste hjerte kommer om ${nextHeartMin()} min. Du kan også øve dine fejl og svage punkter – hver træningslektion giver et hjerte tilbage.</p>
+  <div style="display:flex;gap:6px;justify-content:center;margin-top:14px">${Array.from({length:HMAX},(_,i)=>IC.heart(i<hearts()?'#FF7DB8':'#2C2E4D')).join('')}</div></div>
+  <div class="foot" style="display:flex;flex-direction:column;gap:10px"><button class="btn" data-mode="${S.wrong.length?'review':'weak'}" ${Object.keys(S.qst||{}).length||S.wrong.length?'':'disabled'}>Øv og få et hjerte</button>
+  <button class="btn ghost" data-buy="refill" ${(S.gems||0)>=350?'':'disabled'}>${IC.gem('#4CC9F0')} Fyld hjerter op · 350</button>
+  <button class="btn ghost" data-go="home">Tilbage</button></div>`;
+}
+const SHOP=[
+ {id:'refill',n:'Fyld hjerter op',d:'Alle 5 hjerter med det samme.',p:350,ic:'heart',col:'#FF7DB8',ok:()=>hearts()<HMAX,why:'Du har allerede fulde hjerter.'},
+ {id:'freeze',n:'Streak-frys',d:'Redder din streak, hvis du glemmer en dag. Højst 2.',p:200,ic:'flame',col:'#4CC9F0',ok:()=>(S.freeze||0)<2,why:'Du har allerede 2.'},
+ {id:'boost',n:'Dobbelt XP i 15 min',d:'Al XP tæller dobbelt i et kvarter.',p:100,ic:'bolt',col:'#FFB347',ok:()=>!boostOn(),why:'Dobbelt XP er allerede aktiv.'}
+];
+function shopView(){
+  return `${header()}<div class="main"><div class="sec">BUTIK</div>
+  <div class="list"><div class="row" style="display:flex;align-items:center;gap:12px"><div style="transform:scale(1.6);margin:0 8px">${IC.gem('#4CC9F0')}</div><div><h4>${(S.gems||0).toLocaleString('da-DK')} ædelsten</h4><p>Optjen dem i lektioner (+10, +5 for perfekt), boss-udkald (+30), sager, eksamen og quests.</p></div></div>
+  <div class="row"><h4>${IC.heart('#FF7DB8')} ${hearts()} af ${HMAX} hjerter</h4><p>Du mister et hjerte ved hvert forkert svar i lektioner. ${hearts()<HMAX?`Næste hjerte om ${nextHeartMin()} min.`:'Fuldt op!'} Træningslektioner under Øv giver et hjerte tilbage.</p></div>
+  ${SHOP.map(it=>{const can=(S.gems||0)>=it.p&&it.ok();return `<div class="row" style="display:flex;justify-content:space-between;align-items:center;gap:10px"><div style="display:flex;gap:12px;align-items:center"><div class="shopic" style="background:${it.col}22">${IC[it.ic](it.col)}</div><div><h4>${esc(it.n)}</h4><p>${esc(it.ok()?it.d:it.why)}</p></div></div><button class="btn ${can?'':'ghost'}" style="width:auto;padding:0 14px;height:44px;white-space:nowrap" data-buy="${it.id}" ${can?'':'disabled'}>${IC.gem(can?'#0F1020':'#5A5C80')} ${it.p}</button></div>`;}).join('')}
+  </div></div>${nav()}`;
+}
+function buy(id){ const it=SHOP.find(x=>x.id===id); if(!it||(S.gems||0)<it.p||!it.ok()) return;
+  S.gems-=it.p; if(id==='refill'){ S.hearts=HMAX; S.hTs=Date.now(); } if(id==='freeze') S.freeze=(S.freeze||0)+1; if(id==='boost') S.boostUntil=Date.now()+15*60000;
+  save(); sfx('party'); toast(id==='refill'?'Hjerterne er fyldt op!':id==='freeze'?'Streak-frys købt ❄':'Dobbelt XP i 15 minutter!'); if(view.name==='nohearts') go('home'); else render(); }
 function glossaryView(){
   return `<button class="back" data-go="practice">‹ Tilbage</button><div class="sec" style="padding-top:8px">ORDBOG · ${GLOSSARY.length} ORD</div>
   <div style="padding:0 20px"><label class="sr" for="gq">Søg i ordbogen</label><input id="gq" class="gsearch" type="search" placeholder="Søg fx 'offset' eller 'silvering'" autocomplete="off"><div class="gl" id="gl">${glossList('')}</div></div><div style="height:100px"></div>${nav()}`;
@@ -1786,7 +1851,7 @@ function gcalUrl(time){
 function render(){
   if(S.onb<ONB.length){ $app.innerHTML=onbView(); return; }
   const v=view.name;
-  $app.innerHTML = v==='home'?home():v==='practice'?practice():v==='badges'?badges():v==='profile'?profile():v==='lesson'?lessonView():v==='learn'?learnView():v==='glossary'?glossaryView():v==='blitz'?blitzView():v==='blitzres'?blitzRes():v==='case'?caseView():v==='sources'?sourcesView():v==='caseres'?caseRes():result();
+  $app.innerHTML = v==='home'?home():v==='practice'?practice():v==='badges'?badges():v==='profile'?profile():v==='lesson'?lessonView():v==='learn'?learnView():v==='glossary'?glossaryView():v==='blitz'?blitzView():v==='blitzres'?blitzRes():v==='case'?caseView():v==='shop'?shopView():v==='nohearts'?noHeartsView():v==='sources'?sourcesView():v==='caseres'?caseRes():result();
 }
 $app.addEventListener('click',e=>{
   const t=e.target.closest('button'); if(!t||t.disabled) return;
@@ -1796,6 +1861,7 @@ $app.addEventListener('click',e=>{
   if(t.dataset.share){ const txt=t.dataset.share; if(window.Android&&window.Android.share){ window.Android.share(txt); } else if(navigator.share){ navigator.share({title:'Galvo',text:txt}).catch(()=>{}); } else { (navigator.clipboard?navigator.clipboard.writeText(txt):Promise.reject()).then(()=>toast('Kopieret – sæt det ind, hvor du vil dele det')).catch(()=>toast(txt)); } return; }
   if(t.id==='onbnext'){ S.onb++; save(); render(); window.scrollTo(0,0); return; }
   if(t.id==='onbskip'){ S.onb=ONB.length; save(); render(); return; }
+  if(t.dataset.buy){ buy(t.dataset.buy); return; }
   if(t.dataset.case!==undefined){ startCase(+t.dataset.case); return; }
   if(t.dataset.cpick!==undefined){ K.pick=+t.dataset.cpick; render(); return; }
   if(t.id==='ccheck'){ caseCheck(); return; }
@@ -1806,7 +1872,7 @@ $app.addEventListener('click',e=>{
   if(t.dataset.bz!==undefined){ blitzAnswer(t.dataset.bz); return; }
   if(t.dataset.ml!==undefined){ L.msel=+t.dataset.ml; render(); return; }
   if(t.dataset.mr!==undefined){ if(L.msel===null){ toast('Vælg først et punkt til venstre'); return; } const j=+t.dataset.mr; Object.keys(L.mp).forEach(k=>{ if(L.mp[k]===j) delete L.mp[k]; }); L.mp[L.msel]=j; const nxt=L.cur.p.findIndex((_,i)=>L.mp[i]===undefined); L.msel = nxt>=0?nxt:null; render(); return; }
-  if(t.dataset.start!==undefined){ startLesson(t.dataset.boss==='1'?'boss':'unit', +t.dataset.start, +t.dataset.j); return; }
+  if(t.dataset.start!==undefined){ if(hearts()<=0){ view={name:'nohearts'}; render(); window.scrollTo(0,0); return; } startLesson(t.dataset.boss==='1'?'boss':'unit', +t.dataset.start, +t.dataset.j); return; }
   if(t.dataset.mode){ startLesson(t.dataset.mode); return; }
   if(t.dataset.goal){ S.goal=+t.dataset.goal; save(); render(); toast('Dagligt mål: '+S.goal+' XP'); return; }
   if(t.dataset.pick!==undefined){ L.pick=+t.dataset.pick; render(); return; }
