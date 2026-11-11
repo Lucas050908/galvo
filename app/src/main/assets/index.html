@@ -1415,7 +1415,12 @@ function practice(){
   </div>
   <div class="sec">DIN UGE</div>
   <div class="list"><div class="row"><div class="week" role="img" aria-label="XP de sidste 7 dage">${days.map(d=>{const v=S.xpByDay[dayKey(d)]||0;return `<div><span>${v}</span><i style="height:${Math.round(v/max*80)}px"></i>${wk[d.getDay()]}</div>`;}).join('')}</div>
-  <p style="margin-top:8px">Bedste streak: <b style="color:var(--tx)">${S.best} dage</b> · Lektioner i alt: <b style="color:var(--tx)">${S.lessons}</b></p></div></div>
+  <p style="margin-top:8px">Bedste streak: <b style="color:var(--tx)">${S.best} ${S.best===1?'dag':'dage'}</b> · Lektioner i alt: <b style="color:var(--tx)">${S.lessons}</b></p>
+  ${(()=>{ const vals=days.map(d=>S.xpByDay[dayKey(d)]||0); const tot=vals.reduce((a,b)=>a+b,0); const act=vals.filter(v=>v>0).length;
+    const rated=UNITS.map((u,i)=>({u,i,st:unitStats(u)})).filter(x=>unlocked(x.i)&&x.st.acc!==null).sort((a,b)=>a.st.acc-b.st.acc);
+    const w=rated[0];
+    return `<div style="margin-top:12px;padding-top:12px;border-top:1px solid var(--line)"><p><b style="color:var(--tx)">${tot} XP</b> de sidste 7 dage · <b style="color:var(--tx)">${act} ${act===1?'aktiv dag':'aktive dage'}</b>${act>=5?' – stærkt!':''}</p>${w&&w.st.acc<100?`<p style="margin-top:6px">Fokus i næste uge: <b style="color:var(--tx)">${esc(w.u.title)}</b> (${w.st.acc} %)</p><div style="margin-top:10px"><button class="btn ghost" data-mode="weak">Øv dine svage punkter</button></div>`:''}</div>`; })()}
+  </div></div>
   </div>${nav()}`;
 }
 
@@ -1563,7 +1568,7 @@ function finish(){
 function result(){
   const v=view;
   const title = L.mode==='exam'?(v.exam&&v.exam.pass?'Eksamen bestået!':'Ikke bestået – denne gang'):L.mode==='single'?(v.acc===100?'Dagens spørgsmål klaret!':'Godt forsøgt!'):L.mode==='boss'?'Boss besejret!':v.acc===100?'Perfekt lektion!':'Lektion fuldført!';
-  return `<div class="res"><div class="glow"></div>${G('party','pop')}<h2>${title}</h2><div style="color:var(--sub);font-weight:600">${v.goalHit?'Dagens mål er nået – Galvo er stolt af dig!':v.streakUp?`Din streak er nu ${v.streak} dage!`:'Galvo er stolt af dig'}</div>
+  return `<div class="res"><div class="glow"></div>${G('party','pop')}<h2>${title}</h2><div style="color:var(--sub);font-weight:600">${v.goalHit?'Dagens mål er nået – Galvo er stolt af dig!':v.streakUp?`Din streak er nu ${v.streak} ${v.streak===1?"dag":"dage"}!`:'Galvo er stolt af dig'}</div>
   <div class="rstats"><div class="rs" style="border-color:var(--acc)"><small>XP</small><b style="color:var(--acc)">+${v.xp}</b></div><div class="rs" style="border-color:var(--ok)"><small>RIGTIGE</small><b style="color:var(--ok)">${v.acc}%</b></div><div class="rs" style="border-color:var(--flame)"><small>STREAK</small><b style="color:var(--flame)">${v.streak}</b></div></div>
   ${v.exam?examHtml(v.exam):''}${lvlUpHtml(v.lvl)}${v.cert?`<div style="width:100%;margin-top:14px;text-align:left">${certHtml(v.cert)}</div>`:''}
   ${v.nb.map(b=>`<div class="badge-new"><div class="ic" style="width:44px;height:44px;border-radius:12px;background:rgba(255,122,26,.18);display:flex;align-items:center;justify-content:center">${IC[b.ic]('#FF7A1A')}</div><div><b>Nyt badge: ${esc(b.n)}</b><div style="font-size:13px;color:var(--sub)">${esc(b.d)}</div></div></div>`).join('')}
