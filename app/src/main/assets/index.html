@@ -253,7 +253,7 @@ const UNITS = [
  {id:"lux2",t:"mc",q:"Latex-printet føles fedtet og ridser let. Hvad justerer du?",a:["Hæver hærdningstemperaturen","Sænker hærdningstemperaturen","Skifter kniv","Ændrer luftfugtigheden"],w:"Et fedtet latex-print er typisk ikke hærdet nok. Hæv hærdningstemperaturen eller brug flere gennemløb – inden for mediets grænser."},
  {id:"lux3",t:"mc",q:"Mediet krøller i hærdezonen på en latexprinter. Årsag?",a:["Temperaturen er for høj til mediet","Temperaturen er for lav","Printhovedet er beskidt","Wiperen er slidt"],w:"Varmefølsomme medier kan deformeres. Brug en medieindstilling med lavere temperatur."},
  {id:"lux4",t:"mc",q:"UV-printet er klistret efter print. Mest sandsynlige årsag?",a:["UV-lampen hærder ikke nok","Forkert knivtryk","For lav luftfugtighed","Forkert filformat"],w:"En ældet lampe, for lav lampeeffekt eller for høj hastighed giver blæk, der ikke er hærdet helt."},
- {id:"lux5",t:"mc",q:"Hvidt UV-blæk printer dårligt efter en weekend. Hvorfor?",a:["Det tunge hvide pigment bundfælder sig","Det hvide blæk tørrer ud på 1 dag","Printhovedet bliver koldt","Wifi var slukket"],w:"Hvidt pigment er tungt og bundfælder sig. Derfor skal det cirkuleres eller rystes, som producenten anviser – ellers kan der komme ujævn dækning og tilstoppede dyser.",src:"uvwhite"},
+ {id:"lux5",t:"mc",q:"Hvidt UV-blæk printer dårligt efter en weekend. Hvorfor?",a:["Indholdsstofferne i det hvide blæk bundfælder sig","Det hvide blæk tørrer ud på 1 dag","Printhovedet bliver koldt","Wifi var slukket"],w:"Indholdsstofferne i hvidt blæk bundfælder sig, når blækket står stille. Derfor skal det cirkuleres eller rystes, som producenten anviser – ellers kan der komme ujævn dækning og tilstoppede dyser.",src:"uvwhite"},
  {id:"lux6",t:"mc",q:"Blækket 'spruttes' ud på akrylplader på en UV-printer. Hvad kan hjælpe?",a:["Fjern statisk elektricitet, fx med ionisering","Højere UV-effekt","Mere blæk","Lavere printhøjde end anbefalet"],w:"Statisk elektricitet trækker blækdråberne skævt. Antistatisk behandling eller ionisering hjælper."},
  {id:"lux7",t:"tf",q:"Latex-print er normalt tørre, når de kommer ud af printeren, og kan efterbehandles med det samme.",v:true,w:"Når blækket er hærdet korrekt i printeren, kommer latex-print tørre ud og kan lamineres med det samme – uden afgasning som ved eco-solvent.",src:"hplam"}
 ]},
@@ -292,7 +292,7 @@ const SOURCES = {
  blade:{n:"Arlon – 45° vs 60° blade",u:"https://help.arlon.com/choosing-the-right-blade"},
  diode:{n:"Make: – What cuts what",u:"https://makezine.com/article/digital-fabrication/laser-cutting-digital-fabrication/what-cuts-what-lasering-different-materials"},
  pvc:{n:"Thunder Laser – Can I cut PVC?",u:"https://support.thunderlaserusa.com/portal/en/kb/articles/can-i-cut-vinyl-pvc-in-a-laser"},
- uvwhite:{n:"Mutoh – Why UV inks need agitation",u:"https://support.mutoh.eu/support/solutions/articles/14000160627-why-digital-uv-inks-need-to-be-agitated-shaken-"},
+ uvwhite:{n:"Roland DG – Håndtering af hvidt blæk",u:"https://downloadcenter.rolanddg.com/contents/manuals/XG-640_USE_EN/vak1733907614298.html"},
  hp:{n:"HP – Latex Technology",u:"https://www.hp.com/us-en/printers/large-format/latex-printing-technology.html"},
  arlon:{n:"Arlon – Overlaminate silvering",u:"https://help.arlon.com/overlaminate-silvering"},
  "3m":{n:"3M – Production lamination bulletin",u:"https://multimedia.3m.com/mws/media/2419560O/instruction-bulletin-production-lamination-ra-pdf.pdf"}
@@ -408,7 +408,7 @@ const LEARN = {
   {t:"Latex",b:"HP Latex-blæk er vandbaseret (op til 65 % vand), og HP's latex-printere bruger termiske hoveder. Varme og luft hærder blækket i printeren.",k:"Hærdet korrekt kan HP Latex-print lamineres med det samme.",src:["hpwater","hpthermal","hplam"]},
   {t:"Hærdning",b:"Er latex-printet fedtet og ridser let, er det typisk ikke hærdet nok – hæv temperaturen eller brug flere gennemløb. Krøller mediet i hærdezonen, er varmen for høj til netop det medie.",k:"Fedtet = typisk for lidt hærdning. Krøllet = for meget varme."},
   {t:"UV-printeren",b:"UV-blæk hærdes med UV-lys, lige efter det er printet. Uhærdet UV-blæk kan skade huden, så brug handsker. Capping beskytter hovederne mod løst UV-lys.",k:"Klistret print? Tjek UV-lampen.",src:"fespacap"},
-  {t:"Hvidt UV-blæk",b:"Det hvide pigment er tungt og synker til bunds. Derfor skal hvidt blæk cirkuleres eller rystes, som producenten anviser.",k:"Ujævn hvid efter en pause = bundfældning.",src:"uvwhite"}
+  {t:"Hvidt UV-blæk",b:"Indholdsstofferne i hvidt blæk bundfælder sig, når blækket står stille. Derfor skal hvidt blæk cirkuleres eller rystes, som producenten anviser.",k:"Ujævn hvid efter en pause = bundfældning.",src:"uvwhite"}
  ],
  ska:[
   {t:"Slæbekniven",b:"Kniven slæbes efter skaftets midte. Afstanden fra spids til midte hedder offset. Maskinen kører lidt forbi hvert hjørne, så spidsen rammer rigtigt.",k:"Forkert offset = dårlige hjørner.",src:"offset",img:"offset"},
@@ -485,7 +485,7 @@ Object.assign(SOURCES, {
 });
 const V3_QS = {
  sik:[
-  {id:"sik14",t:"tf",q:"Køres et klasse 1-lasersystem i servicetilstand med lågen åben, er du udsat for den indbyggede laser – fx klasse 4.",v:true,w:"Klasse 1 gælder kun, når laseren er lukket inde. I servicetilstand er der adgang til den indbyggede laser. Så gælder alle krav til klasse 4 – også laserbriller.",src:"thunder"},
+  {id:"sik14",t:"tf",q:"Køres et klasse 1-lasersystem i servicetilstand med lågen åben, er du udsat for den indbyggede laser – fx klasse 4.",v:true,w:"Klasse 1 gælder kun, når laseren er lukket inde. I servicetilstand er der adgang til den indbyggede klasse 4-laser, og maskinen er så et klasse 4-produkt. Følg sikkerhedsreglerne for klasse 4, fx med passende laserbriller.",src:"thunder"},
   {id:"sik15",t:"mc",q:"Hvor meget laserlys slipper igennem en brille med OD 5 ved den angivne bølgelængde?",a:["0,001 %","5 %","0,5 %","1 %"],w:"Hvert OD-trin dæmper 10 gange mere: OD 1 = 10 %, OD 3 = 0,1 %, OD 5 = 0,001 %.",src:"od"},
   {id:"sik16",t:"tf",q:"Mærker du et statisk stød, har afladningen typisk været på ca. 3.000 volt eller mere.",v:true,w:"Mennesker mærker først afladninger omkring 3.000 volt. Alt under det kan skade elektronik, uden at du opdager det.",src:"esd"}
  ],
@@ -501,7 +501,7 @@ const V3_QS = {
   {id:"sto18",t:"mc",q:"Hvad kan ifølge Roland ændre, hvor langt mediet fremføres?",a:["Mediets tykkelse og frontvarmerens temperatur","Farven i filen","Hvilken RIP-version du har","Rummets belysning"],w:"Små ændringer i fremføringen afhænger af mediets tykkelse og varmerens temperatur. Derfor skal fremføringen passe til netop det medie.",src:"roland2"}
  ],
  lux:[
-  {id:"lux12",t:"mc",q:"Hvad kan der ske, hvis UV-blæk ikke omrystes eller cirkuleres?",a:["Ujævne farver, tilstopning og dårlig hærdning","Blækket bliver hurtigere tørt","Printet bliver mere ridsefast","Ingenting"],w:"Bundfældet pigment giver forkert blanding: ujævne farver, klumper der kan tilstoppe og uens hærdning.",src:"uvwhite"},
+  {id:"lux12",t:"mc",q:"Hvad kan der ske, hvis UV-blæk ikke omrystes eller cirkuleres?",a:["Tilstopning og et hvidt, der dækker dårligt eller ujævnt","Blækket bliver hurtigere tørt","Printet bliver mere ridsefast","Ingenting"],w:"Pigmentet bundfælder sig. Det kan tilstoppe printhovedet og give et gråligt, dårligt dækkende hvidt.",src:"gpwhite"},
   {id:"lux13",t:"tf",q:"Mange UV-printere har et automatisk system, der cirkulerer det hvide blæk med faste mellemrum.",v:true,w:"Automatisk cirkulation holder pigmentet svævende, så det hvide er klar til print – også efter pauser.",src:"gpwhite"},
   {id:"lux14",t:"mc",q:"Hvad sker der i tørrefasen i en HP Latex-printer?",a:["Varme og luftstrøm fordamper det meste af vandet","UV-lys hærder blækket","Opløsningsmidler fordamper i 24 timer","Kniven skærer printet ud"],w:"Først fordamper vandet, så danner latex-partiklerne en beskyttende film i hærdefasen.",src:"hp"}
  ],
@@ -516,7 +516,7 @@ const V3_QS = {
   {id:"lam13",t:"tf",q:"Hvis laminatoren kører hurtigere, skal spændingen typisk også øges for at holde laminatet fladt.",v:true,w:"Hastighed og spænding hænger sammen: mere fart kræver typisk mere spænding.",src:"signmedia"}
  ],
  kun:[
-  {id:"kun12",t:"tf",q:"Det kan blive dyrt at spare på en ny capping-station.",v:true,w:"En slidt eller deform cap lukker ikke tæt, så dyserne tørrer ud. Det kan koste et printhoved for at spare en billig del.",src:"capping"},
+  {id:"kun12",t:"tf",q:"Det kan blive dyrt at spare på en ny capping-station.",v:true,w:"En deform cap lukker ikke tæt, så luft kan tørre dyserne ud og give store printproblemer. Besparelsen er lille i forhold til skaden.",src:"capping"},
   {id:"kun13",t:"mc",q:"Kunden har skiftet til en ny medieleverandør, og farverne er forkerte. Hvad er det første, du tjekker?",a:["At der bruges en ICC-profil, der passer til det nye medie","At printhovedet er nyt","At kniven er skarp","At laminatoren er varm"],w:"ICC-profilen er lavet til en bestemt kombination af printer, blæk og medie. Ændres en af dem, kan profilen skulle opdateres.",src:"icc"},
   {id:"kun14",t:"tf",q:"En printer med perfekt mekanik kan stadig give forkerte farver, hvis der er valgt en forkert ICC-profil.",v:true,w:"Profilen styrer farveomregningen. Forkert profil = forkerte farver, også på en perfekt maskine.",src:"icc"}
  ]
@@ -547,23 +547,23 @@ UNITS.push({ id:"ved", title:"Forebyggende vedligehold", sub:"Pleje der forhindr
  {id:"ved3",t:"tf",q:"Du må gerne gnide hårdt på selve dyseoverfladen for at få den ren.",v:false,w:"Roland: gnid aldrig på printhovedets dyseoverflade. Rens omkring den.",src:"rolandmc"},
  {id:"ved4",t:"mc",q:"Hvorfor skal manuel rens laves hurtigt – fx inden for 10 minutter på nogle printere?",a:["Ellers kan printhovedet tørre ud","Ellers bliver rensevæsken for varm","Ellers nulstiller printeren alle indstillinger","Det er kun for at spare tid"],w:"Mens hovedet står uden for capping-stationen, kan dyserne tørre ud. Tidsgrænsen varierer med modellen – følg manualen.",src:"epsonS"},
  {id:"ved5",t:"tf",q:"Epson fraråder sprit og andre organiske opløsningsmidler til at rense caps.",v:true,w:"Ifølge Epson kan det skade printhovedet. Brug det renseudstyr, producenten anviser.",src:"epsoncap"},
- {id:"ved6",t:"match",q:"Sæt delen sammen med dens opgave:",p:[["Capping","Forsegler dyserne, så de ikke tørrer ud"],["Wiper","Tørrer dyseoverfladen af"],["Wiper cleaner","Renser wiperen"],["Flushing-svamp","Opsuger blæk fra rensning"]],w:"Alle fire er sliddele, der skal holdes rene og skiftes, når maskinen beder om det.",src:"rolandda"},
+ {id:"ved6",t:"match",q:"Sæt delen sammen med dens opgave:",p:[["Capping","Forsegler dyserne, så de ikke tørrer ud"],["Wiper","Tørrer dyseoverfladen af"],["Wiper cleaner","Renser wiperen"],["Flushing-svamp","Opsuger blæk fra flushing"]],w:"Alle fire skal holdes rene. Snavs her kan give dårligt print og tilstoppede dyser.",src:"rolandda"},
  {id:"ved7",t:"mc",q:"Mediet glider på skæreplotterens slibevalser. Hvad gør du?",a:["Renser slibevalserne med en børste","Smører valserne med olie","Øger knivtrykket","Skifter til 60° kniv"],w:"Papirstøv kan sætte sig i slibevalsernes ru overflade, så mediet glider. Mimaki anbefaler en børste, fx en tandbørste.",src:"mimakicut"},
  {id:"ved8",t:"tf",q:"Ifølge Roland må skæreplotterens mekanik smøres med olie, så den kører lettere.",v:false,w:"Rolands manual siger det modsat: smør aldrig mekanikken, og rens ikke med opløsningsmidler.",src:"rolandcx"},
  {id:"ved9",t:"mc",q:"Snittet er bølget, og kniven 'hopper'. Hvilken sliddel tjekker du?",a:["Skærestrimlen under kniven","Displayet","Strømkablet","Rullestativet"],w:"Roland: er skærestrimlen ridset, kan kniven ryge ned i rillen, så den hopper og skærer bølget.",src:"rolandkit"},
  {id:"ved10",t:"tf",q:"Snavs, der er brændt fast på en laserlinse, kan være umuligt at fjerne, så linsen må skiftes.",v:true,w:"Derfor anbefaler Trotec at rense linsen, så snart man ser snavs.",src:"troteclens"},
  {id:"ved11",t:"mc",q:"Hvor tit anbefaler Trotec, at du ser på linsen og spejlet i laserhovedet?",a:["Hver dag","Én gang om året","Kun når den går i stykker","Hvert 5. år"],w:"Trotec: tjek linse og hovedspejl dagligt, sidespejlene én gang om måneden. Det tager under 2 minutter.",src:"troteclens"},
  {id:"ved12",t:"tf",q:"Krummebakken under laserens skærebord skal tømmes, fordi rester kan give flammer.",v:true,w:"Epilog nævner det i deres vedligeholdelsesplan: fjern rester for at forhindre opblussen.",src:"epilogpm"},
- {id:"ved13",t:"mc",q:"Hvordan fjerner du hærdet klæber fra laminatorens valser?",a:["Med det, producenten anviser – aldrig skarpe eller spidse genstande","Med en hobbykniv","Med en metalskuresvamp","Med acetone"],w:"Skarpe ting og metalsvampe ridser valserne permanent. Hvad der må bruges, står i manualen.",src:"gbcclean"},
+ {id:"ved13",t:"mc",q:"Hvordan fjerner du hærdet klæber fra laminatorens valser?",a:["Med det, producenten anviser – aldrig skarpe eller spidse genstande","Med en hobbykniv","Med en metalskuresvamp","Med acetone"],w:"GBC: rens aldrig valserne med skarpe eller spidse genstande, brug aldrig metalskuresvampe, og kom aldrig rensevæske eller opløsningsmidler på valserne – de kan bryde i brand på varme valser.",src:"gbcclean"},
  {id:"ved14",t:"order",q:"Sæt trinene i rækkefølge for en manuel rens af en inkjetprinter:",s:["Start manuel rens i menuen","Rens med nye rensepinde omkring hoved, wiper og caps","Afslut manuel rens","Lav et dysetjek"],w:"Start funktionen i menuen, så hovedet flyttes til rengøringsposition. Tjek bagefter resultatet med et dysetjek.",src:"rolandmc"}
 ]});
 
 Object.assign(LEARN, { ved:[
  {t:"Rens med de rigtige ting",b:"Brug kun producentens rensepinde og rensevæske. Vatpinde kan efterlade fnug, der skader hovedet. Tag en ny pind hver gang, og dyp aldrig en brugt pind i væsken.",k:"Gnid aldrig på selve dyseoverfladen.",src:"rolandmc"},
- {t:"Hvornår og hvor hurtigt",b:"Hvor tit der skal laves manuel rens, afhænger af model og brug – nogle skal hver dag, andre mindst én gang om måneden. Arbejdet skal gøres hurtigt, så hovedet ikke tørrer ud.",k:"Følg manualen og maskinens beskeder.",src:["rolandlef","epsonS"]},
+ {t:"Hvornår og hvor hurtigt",b:"Hvor tit der skal laves manuel rens, afhænger af model og brug. Roland anbefaler fx mindst én gang om ugen og hver dag ved hyppig brug. Epson anbefaler at rense wiper og caps mindst én gang om dagen. Arbejdet skal gøres hurtigt, så hovedet ikke tørrer ud.",k:"Følg manualen for netop den model.",src:["rolandlef","epsonS"]},
  {t:"Skæreplotteren",b:"Rens slibevalserne med en børste, så mediet ikke glider. Brug aldrig metalbørste på klemrullerne. Sliddele som kniv, knivholder, klemruller og skærestrimmel skal skiftes, når de er slidte.",k:"Bølget snit og hoppende kniv? Tjek skærestrimlen.",src:["mimakicut","rolandgr","rolandkit"]},
  {t:"Laseren",b:"Snavs på linse og spejle tager effekt og kan ødelægge linsen. Trotec anbefaler at se på linse og hovedspejl dagligt. Tøm også krummebakken – rester kan give flammer.",k:"Brug den rensevæske, producenten anviser.",src:["troteclens","epilogoptics","epilogpm"]},
- {t:"Laminatoren",b:"Hærdet klæber kan skade valserne. Brug aldrig skarpe eller spidse genstande eller metalsvampe – det ridser valserne for altid.",k:"Rens valserne langsomt med det, manualen anviser.",src:"gbcclean"}
+ {t:"Laminatoren",b:"Hærdet klæber kan skade valserne. Brug aldrig skarpe eller spidse genstande, metalsvampe eller opløsningsmidler – de kan beskadige valserne eller bryde i brand på varme valser.",k:"Rens valserne med det, manualen anviser.",src:"gbcclean"}
 ]});
 
 const CASES = {
@@ -572,15 +572,15 @@ const CASES = {
   {id:"sik18",t:"mc",ctx:"Kunden vil have dig til at skifte et printkort, mens printeren står tændt – 'for at spare tid'.",q:"Hvad gør du?",a:["Slukker, tager stikket ud og bruger ESD-armbånd","Skifter det hurtigt med strømmen på","Bruger gummihandsker i stedet","Rører ved printkortet først for at aflade det"],w:"Strøm og statisk elektricitet kan både skade dig og elektronikken – også uden at du mærker noget.",src:"esd"}
  ],
  las:[
-  {id:"las20",t:"mc",ctx:"Kunden: \"Min nye blå diodelaser kan slet ikke gravere i klar akryl – den må være defekt!\"",q:"Hvad svarer du?",a:["At klar akryl ikke optager blåt lys – det kræver fx en CO₂-laser","At effekten skal skrues helt op","At linsen skal skiftes","At akrylen skal varmes op først"],w:"Laseren er ikke defekt. Strålen går lige igennem klar akryl ved ca. 455 nm.",src:"diode"},
+  {id:"las20",t:"mc",ctx:"Kunden: \"Min nye blå diodelaser kan slet ikke gravere i klar akryl – den må være defekt!\"",q:"Hvad svarer du?",a:["At klar akryl ikke optager blåt lys – det kræver fx en CO₂-laser","At effekten skal skrues helt op","At linsen skal skiftes","At akrylen skal varmes op først"],w:"Laseren er ikke defekt. Blåt lys ved ca. 450 nm går lige igennem klar akryl, så den kan hverken skære eller gravere i det. Det kan en CO₂-laser.",src:["diode","xtoolx1"]},
   {id:"las21",t:"mc",ctx:"Kunden: \"Laseren er blevet svagere og svagere, selv om indstillingerne er de samme.\"",q:"Hvad tjekker du først?",a:["Om linse og spejle er beskidte","Om filen er i farver","Om knivvinklen er rigtig","Om der er papir i printeren"],w:"Røg og harpiks på optikken tager effekt fra strålen og kan skade linsen.",src:"epilogoptics"}
  ],
  sto:[
-  {id:"sto19",t:"mc",ctx:"Kunden: \"Der falder blækdråber ned på printet – også efter en almindelig rens.\"",q:"Hvad gør du?",a:["Laver manuel rens omkring printhovedet og overvejer at skifte wiperen","Skifter ICC-profil","Skruer tørreren helt op","Skifter til papir"],w:"Roland: blæk samler sig i snavs omkring hovedet og drypper. Manuel rens – og evt. ny wiper – hjælper.",src:"rolandap"},
+  {id:"sto19",t:"mc",ctx:"Kunden: \"Der falder blækdråber ned på printet – også efter en almindelig rens.\"",q:"Hvad gør du?",a:["Laver manuel rens omkring printhovedet","Skifter ICC-profil","Skruer tørreren helt op","Skifter til papir"],w:"Roland: blæk samler sig i støv og snavs på printhovederne og drypper ned på mediet. Løsningen er manuel rens omkring printhovederne.",src:"rolandap"},
   {id:"sto20",t:"mc",ctx:"Kunden er skiftet til en tykkere vinyl og har nu striber med helt ens afstand. Dysetjekket er perfekt.",q:"Hvad er mest sandsynligt?",a:["Fremføringen skal kalibreres til det nye medie","Printhovedet er defekt","Blækket er for gammelt","Wiperen sidder forkert"],w:"Mediets tykkelse påvirker fremføringen, så den skal kalibreres til netop det medie.",src:"roland2"}
  ],
  lux:[
-  {id:"lux15",t:"mc",ctx:"UV-printeren har stået i to uger, og nu dækker det hvide ujævnt.",q:"Hvad er den mest sandsynlige årsag?",a:["Hvidt pigment er bundfældet – ryst eller cirkulér som anvist","For meget UV-lys","Forkert knivtryk","For høj luftfugtighed"],w:"Hvidt pigment er tungt og synker til bunds, når blækket står stille.",src:"uvwhite"},
+  {id:"lux15",t:"mc",ctx:"UV-printeren har stået i to uger, og nu dækker det hvide ujævnt.",q:"Hvad er den mest sandsynlige årsag?",a:["Det hvide blæk er bundfældet – ryst eller cirkulér som anvist","For meget UV-lys","Forkert knivtryk","For høj luftfugtighed"],w:"Indholdsstofferne i hvidt blæk bundfælder sig, når blækket står stille. Ryst patronen, og kør blækcirkulation, hvis det ikke hjælper.",src:"uvwhite"},
   {id:"lux16",t:"mc",ctx:"Kunden laminerer HP Latex-print lige når de kommer ud af printeren og spørger, om det er forkert.",q:"Hvad svarer du?",a:["Det er normalt fint, når printet er hærdet korrekt i printeren","Latex skal altid afgasse i 24 timer","Latex må aldrig lamineres","Kun med varm laminering"],w:"HP Latex-print tørrer i printeren og kan lamineres med det samme – afgasning gælder eco-solvent.",src:"hplam"}
  ],
  ska:[
@@ -588,12 +588,12 @@ const CASES = {
   {id:"ska18",t:"mc",ctx:"Kunden: \"Hjørnerne på små bogstaver bliver runde.\"",q:"Hvad gør du?",a:["Laver et testsnit og øger knivoffset, hvis hjørnerne er runde","Sænker hastigheden til minimum","Skifter til 30° kniv","Skruer trykket helt op"],w:"Runde hjørner i testsnittet = for lidt offset. Juster og test igen.",src:"rolandtest"}
  ],
  lam:[
-  {id:"lam14",t:"mc",ctx:"Kunden har folder i laminatet og har lige løsnet bremsen helt.",q:"Hvad er problemet?",a:["For lidt bremse – stram den, til laminatet kommer fladt ud","For meget bremse – løsn den mere","Der skal bruges varm laminering","Printet har for høj opløsning"],w:"For løs bremse giver folder. Find den mindste spænding, der giver fladt output.",src:"gbc"},
-  {id:"lam15",t:"mc",ctx:"Kunden vil skrabe hærdet klæber af valserne med en hobbykniv.",q:"Hvad svarer du?",a:["Aldrig skarpe genstande – brug det, producenten anviser","Fint, bare man er forsigtig","Brug hellere en metalsvamp","Brug acetone"],w:"Ridser i valsen kan ikke repareres og ses på hvert print bagefter.",src:"gbcclean"}
+  {id:"lam14",t:"mc",ctx:"Kunden har folder i laminatet og har lige løsnet bremsen helt.",q:"Hvad er problemet?",a:["For lidt bremse – stram den, til laminatet kommer fladt ud","For meget bremse – løsn den mere","Der skal bruges varm laminering","Printet har for høj opløsning"],w:"En helt løs bremse kan give folder. GBC: brug den mindste bremsespænding, der giver fladt output.",src:"gbc"},
+  {id:"lam15",t:"mc",ctx:"Kunden vil skrabe hærdet klæber af valserne med en hobbykniv.",q:"Hvad svarer du?",a:["Aldrig skarpe genstande – brug det, producenten anviser","Fint, bare man er forsigtig","Brug hellere en metalsvamp","Brug acetone"],w:"Skarpe genstande kan beskadige valserne. GBC siger: aldrig skarpe eller spidse genstande, aldrig metalsvampe og aldrig opløsningsmidler.",src:"gbcclean"}
  ],
  kun:[
   {id:"kun15",t:"mc",ctx:"Kunden har renset omkring printhovedet med almindelige vatpinde, og nu mangler der flere dyser.",q:"Hvad forklarer du?",a:["At fnug fra vatpinde kan skade hovedet – brug kun producentens rensepinde","At vatpinde er det bedste","At det skyldes ICC-profilen","At der er for lidt blæk"],w:"Lær kunden den rigtige metode – så undgår I næste udkald.",src:"rolandmc"},
-  {id:"kun16",t:"mc",ctx:"Kunden spørger: \"Hvor tit skal vi lave manuel rens?\"",q:"Hvad svarer du?",a:["Det afhænger af model og brug – følg manualen og maskinens beskeder","Én gang om året","Aldrig – det sker automatisk","Hver time"],w:"Roland skriver selv, at hyppigheden afhænger af brugen. Mange maskiner giver besked, når det er tid.",src:"rolandlef"}
+  {id:"kun16",t:"mc",ctx:"Kunden spørger: \"Hvor tit skal vi lave manuel rens?\"",q:"Hvad svarer du?",a:["Det afhænger af model og brug – følg manualen","Én gang om året","Aldrig – det sker automatisk","Hver time"],w:"Roland skriver selv, at hyppigheden afhænger af brugen – fx mindst én gang om ugen og hver dag ved hyppig brug.",src:"rolandlef"}
  ]
 };
 UNITS.forEach(u => { (CASES[u.id]||[]).forEach(q => u.qs.push(q)); });
