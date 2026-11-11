@@ -3,6 +3,9 @@ package dk.galvo.app
 import android.Manifest
 import android.annotation.SuppressLint
 import android.app.Activity
+import android.content.ClipData
+import android.content.ClipboardManager
+import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Color
@@ -25,6 +28,7 @@ class MainActivity : Activity() {
     private var pendingQuestion: String? = null
     private var tts: TextToSpeech? = null
     private var ttsReady = false
+    private var ttsDanish = false
 
     @SuppressLint("SetJavaScriptEnabled")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -56,7 +60,8 @@ class MainActivity : Activity() {
             if (status == TextToSpeech.SUCCESS) {
                 val t = tts ?: return@TextToSpeech
                 val res = t.setLanguage(Locale("da", "DK"))
-                if (res == TextToSpeech.LANG_MISSING_DATA || res == TextToSpeech.LANG_NOT_SUPPORTED) t.language = Locale.getDefault()
+                ttsDanish = res != TextToSpeech.LANG_MISSING_DATA && res != TextToSpeech.LANG_NOT_SUPPORTED
+                if (!ttsDanish) t.language = Locale.getDefault()
                 ttsReady = true
                 t.setOnUtteranceProgressListener(object : UtteranceProgressListener() {
                     override fun onStart(id: String?) {}
@@ -121,12 +126,25 @@ class MainActivity : Activity() {
             }
         }
 
+        /** Returns false when the phone's text-to-speech engine is not ready, so the page can tell the user. */
         @JavascriptInterface
-        fun speak(text: String, rate: Double) {
-            val t = tts ?: return
-            if (!ttsReady) return
+        fun speak(text: String, rate: Double): Boolean {
+            val t = tts ?: return false
+            if (!ttsReady) return false
             t.setSpeechRate(rate.toFloat())
-            t.speak(text, TextToSpeech.QUEUE_FLUSH, null, "galvo")
+            return t.speak(text, TextToSpeech.QUEUE_FLUSH, null, "galvo") == TextToSpeech.SUCCESS
+        }
+
+        /** "da" when a Danish voice is in use, "other" when the phone lacks one, "" while the engine is starting. */
+        @JavascriptInterface
+        fun ttsLang(): String = if (!ttsReady) "" else if (ttsDanish) "da" else "other"
+
+        @JavascriptInterface
+        fun copy(text: String) {
+            runOnUiThread {
+                val cm = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+                cm.setPrimaryClip(ClipData.newPlainText("Galvo", text))
+            }
         }
 
         @JavascriptInterface

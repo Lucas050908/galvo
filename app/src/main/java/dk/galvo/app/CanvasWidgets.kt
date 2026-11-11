@@ -81,6 +81,18 @@ object Art {
         c.drawPath(p, paint(col))
     }
 
+    /** Greedy word wrap for canvas text. */
+    fun wrap(text: String, p: Paint, maxW: Float): List<String> {
+        val out = mutableListOf<String>()
+        var line = ""
+        for (wd in text.split(" ")) {
+            val t = if (line.isEmpty()) wd else "$line $wd"
+            if (p.measureText(t) > maxW && line.isNotEmpty()) { out.add(line); line = wd } else line = t
+        }
+        if (line.isNotEmpty()) out.add(line)
+        return out
+    }
+
     fun push(ctx: Context, mgr: AppWidgetManager, id: Int, bmp: Bitmap, click: android.app.PendingIntent) {
         val v = RemoteViews(ctx.packageName, R.layout.widget_canvas)
         v.setImageViewBitmap(R.id.w_canvas, bmp)
@@ -197,7 +209,7 @@ class CaseWidget : CanvasWidget() {
         val dc = GalvoStore.dailyCase(ctx)
         Art.background(c, w, h, Art.CYAN, 0.88f, 0.75f)
         val pad = h * 0.12f
-        Art.galvo(ctx, c, if (dc != null && dc.stars == 3) "party" else "happy", w - h * 0.42f, h * 0.55f, h * 0.7f)
+        Art.galvo(ctx, c, if (dc == null) "wink" else if (dc.stars == 3) "cool" else if (dc.stars > 0) "wink" else "think", w - h * 0.42f, h * 0.55f, h * 0.7f)
         val maxW = w - h * 0.8f - pad
         c.drawText("DAGENS SAG${if (dc != null) " · ${dc.machine.uppercase()}" else ""}", pad, pad + h * 0.08f, Art.paint(Art.CYAN, h * 0.085f, true))
         val title = dc?.title ?: "Åbn Galvo, så kommer dagens sag her"
@@ -216,5 +228,53 @@ class CaseWidget : CanvasWidget() {
             c.drawRoundRect(RectF(pad, by, pad + bw, by + h * 0.14f), h * 0.07f, h * 0.07f, bp)
             c.drawText(label, pad + h * 0.1f, by + h * 0.103f, bt)
         }
+    }
+}
+
+/** 4x2: Galvo himself with a speech bubble – his mood and what he says follow your day. */
+class BuddyWidget : CanvasWidget() {
+    override val defW = 260; override val defH = 130
+    override fun click(ctx: Context) = openAppIntent(ctx, 45)
+    override fun draw(ctx: Context, c: Canvas, w: Int, h: Int) {
+        val s = GalvoStore.summary(ctx)
+        val glow = when (s.mood) {
+            "party", "love", "cool" -> Art.GREEN
+            "worried", "sad" -> Art.ORANGE
+            "sleepy" -> Color.parseColor("#B794F6")
+            else -> Art.CYAN
+        }
+        Art.background(c, w, h, glow, 0.18f, 0.55f)
+        val bx = h * 0.98f; val by = h * 0.12f; val bw = w - bx - h * 0.1f; val bh = h * 0.56f
+        if (bw < h * 0.7f) {
+            // Too narrow for a bubble: just Galvo and his streak.
+            Art.galvo(ctx, c, s.mood, w / 2f, h * 0.46f, min(w, h) * 0.82f)
+            c.drawText("${s.streak} ${if (s.streak == 1) "dag" else "dage"}", w / 2f, h * 0.93f, Art.paint(Art.FLAME, h * 0.1f, true).apply { textAlign = Paint.Align.CENTER })
+            return
+        }
+        Art.galvo(ctx, c, s.mood, h * 0.5f, h * 0.52f, h * 0.86f)
+        val bubble = Art.paint(Art.TX)
+        val r = h * 0.1f
+        c.drawRoundRect(RectF(bx, by, bx + bw, by + bh), r, r, bubble)
+        val tail = Path().apply { moveTo(bx + 1f, by + bh * 0.42f); lineTo(bx - h * 0.09f, by + bh * 0.56f); lineTo(bx + 1f, by + bh * 0.7f); close() }
+        c.drawPath(tail, bubble)
+        val pad = h * 0.07f
+        val ink = Color.parseColor("#14152A")
+        val text = GalvoStore.chatter(ctx)
+        var size = h * 0.118f
+        var lines = Art.wrap(text, Art.paint(ink, size, true), bw - pad * 2)
+        if (lines.size > 3) { size = h * 0.098f; lines = Art.wrap(text, Art.paint(ink, size, true), bw - pad * 2) }
+        val tp = Art.paint(ink, size, true)
+        val lh = size * 1.22f
+        val shown = lines.take(4)
+        val y0 = by + (bh - lh * shown.size) / 2 + size * 0.92f
+        shown.forEachIndexed { i, l -> c.drawText(l, bx + pad, y0 + i * lh, tp) }
+        // streak and today's goal under the bubble
+        val fy = h * 0.87f
+        Art.flame(c, bx + h * 0.06f, fy - h * 0.035f, h * 0.06f, if (s.streak > 0) Art.FLAME else Art.LINE)
+        c.drawText("${s.streak}", bx + h * 0.15f, fy, Art.paint(Art.FLAME, h * 0.1f, true))
+        val gx = bx + h * 0.4f; val gw = bx + bw - gx; val gh = h * 0.045f; val gy = fy - h * 0.06f
+        c.drawRoundRect(RectF(gx, gy, gx + gw, gy + gh), gh, gh, Art.paint(Art.LINE))
+        val f = (s.todayXp.toFloat() / s.goal).coerceIn(0f, 1f)
+        if (f > 0f) c.drawRoundRect(RectF(gx, gy, gx + max(gh, gw * f), gy + gh), gh, gh, Art.paint(if (f >= 1f) Art.GREEN else Art.ORANGE))
     }
 }

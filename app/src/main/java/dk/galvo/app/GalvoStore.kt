@@ -90,7 +90,7 @@ object GalvoStore {
         val todayXp: Int,
         val goal: Int,
         val totalXp: Int,
-        val mood: String,      // happy | worried | party
+        val mood: String,      // happy | worried | party | think | cool | sleepy | wink | sad | love
         val message: String,
         val doneToday: Boolean
     )
@@ -98,7 +98,7 @@ object GalvoStore {
     fun summary(ctx: Context): Summary {
         val raw = state(ctx)
         if (raw.isBlank()) {
-            return Summary(0, 0, 20, 0, "happy", "Klar til dit første kundeudkald?", false)
+            return Summary(0, 0, 20, 0, "wink", "Hej, jeg er Galvo! Klar til dit første kundeudkald?", false)
         }
         return try {
             val s = JSONObject(raw)
@@ -116,16 +116,78 @@ object GalvoStore {
             val liveStreak = if (gap <= 1L + freeze) storedStreak else 0
             val atRisk = gap >= 1L && gap <= 1L + freeze && storedStreak > 0
             val doneToday = gap == 0L
+            val hour = java.time.LocalTime.now().hour
+            val best = s.optInt("best", 0)
+            val left = (goal - todayXp).coerceAtLeast(0)
+            val fresh = s.optInt("lessons", 0) == 0 && s.optInt("xp", 0) == 0
             val (mood, msg) = when {
-                todayXp >= goal -> "party" to "Dagens mål er nået. Du er skarp!"
-                atRisk -> "worried" to "Din streak på $storedStreak dage er i fare!"
-                doneToday -> "happy" to "${goal - todayXp} XP mere til dagens mål."
-                else -> "happy" to "Én lektion på 3 min – klar?"
+                fresh -> "wink" to "Hej, jeg er Galvo! Klar til dit første kundeudkald?"
+                todayXp >= goal && liveStreak >= 7 -> "cool" to pick(listOf(
+                    "Mål nået og $liveStreak dage i træk. Fuld effekt!",
+                    "$liveStreak dage i træk. Jeg tager solbrillerne på.",
+                    "Du kører som en velsmurt printer. $liveStreak dage!"))
+                todayXp >= goal -> pick(listOf("party", "love", "party", "cool")) to pick(listOf(
+                    "Dagens mål er nået. Du er skarp!",
+                    "Fyraften! Du har gjort dit i dag.",
+                    "Mål nået – resten af dagen er bonus.",
+                    "Flot arbejde i dag. Jeg er stolt!"))
+                hour >= 23 || hour < 5 -> "sleepy" to
+                    (if (atRisk) "Zzz… din streak på $storedStreak dage venter på dig." else "Zzz… jeg lader op til i morgen.")
+                atRisk && hour >= 20 -> "sad" to pick(listOf(
+                    "Flammen på $storedStreak dage er ved at gå ud! 3 minutter?",
+                    "Sidste chance i dag – red din streak på $storedStreak dage.",
+                    "Jeg vil nødig slukke flammen. Kommer du?"))
+                atRisk && hour >= 16 -> "worried" to pick(listOf(
+                    "Din streak på $storedStreak dage er i fare!",
+                    "Psst… $storedStreak dage i træk står på spil.",
+                    "Én lektion, så er streaken reddet."))
+                atRisk -> "wink" to pick(listOf(
+                    "$storedStreak dage i træk – skal vi gøre det til ${storedStreak + 1}?",
+                    "${greet(hour)} Én lektion holder flammen i live.",
+                    "Kaffe og et hurtigt kundeudkald?"))
+                doneToday -> "happy" to pick(listOf(
+                    "$left XP mere, så er dagens mål nået.",
+                    "Godt i gang! $left XP til målet.",
+                    "Næsten der – $left XP tilbage."))
+                best >= 3 -> pick(listOf("sad", "think", "sad")) to pick(listOf(
+                    "Jeg savner dig. Skal vi starte en ny streak?",
+                    "Værktøjskassen samler støv. Én lektion?",
+                    "Din rekord er $best dage. Den kan du slå!"))
+                else -> "wink" to pick(listOf(
+                    "${greet(hour)} Én lektion på 3 min – klar?",
+                    "Jeg har en ny sag til dig.",
+                    "Skal vi lære noget nyt i dag?"))
             }
             Summary(liveStreak, todayXp, goal, s.optInt("xp", 0), mood, msg, doneToday)
         } catch (e: Exception) {
             Summary(0, 0, 20, 0, "happy", "Klar til dagens lektion?", false)
         }
+    }
+
+    private fun greet(hour: Int) = if (hour < 10) "Godmorgen!" else if (hour < 18) "Hej!" else "Godaften!"
+
+    /** Picks from a pool so the choice changes every half hour – alive, but never flickering between redraws. */
+    fun <T> pick(pool: List<T>, salt: Int = 0): T {
+        val now = java.time.LocalDateTime.now()
+        val slot = now.toLocalDate().toEpochDay() * 48 + now.hour * 2 + now.minute / 30 + salt
+        return pool[Math.floorMod(slot, pool.size.toLong()).toInt()]
+    }
+
+    private val QUIPS = listOf(
+        "PVC? Aldrig i min laser!",
+        "Husk: dysetjek før du renser.",
+        "Testsnit før store jobs. Altid.",
+        "Fokus er alt – også for mig.",
+        "Laserbriller passer til bølgelængden – ikke til outfittet.",
+        "Wiper ren, caps rene – dyserne glade!",
+        "Tre rigtige i træk? Så tænder jeg for strålen!")
+
+    /** What Galvo says in his own widget: his current mood line, mixed with one of his sayings once the day's goal is done. */
+    fun chatter(ctx: Context): String {
+        val s = summary(ctx)
+        val now = java.time.LocalDateTime.now()
+        val oddSlot = (now.hour * 2 + now.minute / 30) % 2 == 1
+        return if (s.todayXp >= s.goal && oddSlot) pick(QUIPS, 3) else s.message
     }
 
     /** Question of the day: the same question all day, a new one tomorrow. */
@@ -144,12 +206,18 @@ object GalvoStore {
     fun moodDrawable(mood: String): Int = when (mood) {
         "party" -> R.drawable.galvo_party
         "worried" -> R.drawable.galvo_worried
+        "think" -> R.drawable.galvo_think
+        "cool" -> R.drawable.galvo_cool
+        "sleepy" -> R.drawable.galvo_sleepy
+        "wink" -> R.drawable.galvo_wink
+        "sad" -> R.drawable.galvo_sad
+        "love" -> R.drawable.galvo_love
         else -> R.drawable.galvo_happy
     }
 
     fun refreshWidgets(ctx: Context) {
         val mgr = AppWidgetManager.getInstance(ctx)
-        listOf(StreakWidget::class.java, QuestionWidget::class.java, MiniWidget::class.java, GoalRingWidget::class.java, WeekWidget::class.java, StatsWidget::class.java, CaseWidget::class.java).forEach { cls ->
+        listOf(StreakWidget::class.java, QuestionWidget::class.java, MiniWidget::class.java, GoalRingWidget::class.java, WeekWidget::class.java, StatsWidget::class.java, CaseWidget::class.java, BuddyWidget::class.java).forEach { cls ->
             val ids = mgr.getAppWidgetIds(ComponentName(ctx, cls))
             if (ids.isNotEmpty()) {
                 val i = Intent(ctx, cls).apply {

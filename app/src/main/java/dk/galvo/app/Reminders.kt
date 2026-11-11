@@ -59,10 +59,19 @@ object ReminderScheduler {
         val s = GalvoStore.summary(ctx)
         if (s.doneToday && s.todayXp >= s.goal) return   // already done for today
         ensureChannel(ctx)
+        val atRisk = s.streak > 0 && !s.doneToday
         val (title, text) = when {
-            s.streak > 0 && !s.doneToday -> "Din streak på ${s.streak} dage er i fare!" to "Én lektion på 3 minutter redder den. Galvo venter."
-            s.doneToday -> "Næsten i mål!" to "${s.goal - s.todayXp} XP mere, så er dagens mål nået."
-            else -> "Galvo venter på dig" to "Tag dagens lektion – det tager kun 3 minutter."
+            atRisk -> GalvoStore.pick(listOf(
+                "Din streak på ${s.streak} dage er i fare!" to "Én lektion på 3 minutter redder den. Galvo venter.",
+                "Psst… ${s.streak} dage i træk står på spil" to "Jeg har varmet strålen op. Kommer du?",
+                "Galvo holder flammen i live" to "Men kun hvis du tager én lektion i dag. ${s.streak} dage – bliv ved!"))
+            s.doneToday -> GalvoStore.pick(listOf(
+                "Næsten i mål!" to "${s.goal - s.todayXp} XP mere, så er dagens mål nået.",
+                "Galvo hepper på dig" to "Kun ${s.goal - s.todayXp} XP fra dagens mål. Én hurtig lektion?"))
+            else -> GalvoStore.pick(listOf(
+                "Galvo venter på dig" to "Tag dagens lektion – det tager kun 3 minutter.",
+                "Nyt kundeudkald!" to "Jeg har en sag klar til dig. Skal vi løse den?",
+                "Bzzzt! Tid til dagens lektion" to "Tre minutter nu sparer en returtur senere."))
         }
         val open = PendingIntent.getActivity(
             ctx, 101, Intent(ctx, MainActivity::class.java).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK),
@@ -70,7 +79,7 @@ object ReminderScheduler {
         )
         val n = Notification.Builder(ctx, CHANNEL)
             .setSmallIcon(R.drawable.ic_notify)
-            .setLargeIcon(BitmapFactory.decodeResource(ctx.resources, GalvoStore.moodDrawable(if (s.streak > 0 && !s.doneToday) "worried" else "happy")))
+            .setLargeIcon(BitmapFactory.decodeResource(ctx.resources, GalvoStore.moodDrawable(if (atRisk) "worried" else "wink")))
             .setContentTitle(title)
             .setContentText(text)
             .setContentIntent(open)

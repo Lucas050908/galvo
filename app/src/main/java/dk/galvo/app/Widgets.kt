@@ -45,7 +45,7 @@ class QuestionWidget : AppWidgetProvider() {
         val s = GalvoStore.summary(ctx)
         ids.forEach { id ->
             val v = RemoteViews(ctx.packageName, R.layout.widget_question)
-            v.setImageViewResource(R.id.w_galvo, GalvoStore.moodDrawable(if (s.mood == "worried") "worried" else "happy"))
+            v.setImageViewResource(R.id.w_galvo, GalvoStore.moodDrawable(if (s.mood == "worried" || s.mood == "sad") "worried" else "think"))
             if (q != null) {
                 v.setTextViewText(R.id.w_unit, "DAGENS SPØRGSMÅL · ${q.third.uppercase()}")
                 v.setTextViewText(R.id.w_question, q.second)

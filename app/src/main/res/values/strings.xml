@@ -14,4 +14,6 @@
     <string name="w_stats_desc">Streak, ædelsten, hjerter og niveau – tryk for butikken</string>
     <string name="w_case">Galvo · Dagens sag</string>
     <string name="w_case_desc">En ny fejlfindingssag hver dag – tryk for at starte</string>
+    <string name="w_buddy">Galvo · Makkeren</string>
+    <string name="w_buddy_desc">Galvo med taleboble – hans humør og replikker følger din dag</string>
 </resources>
