@@ -80,6 +80,14 @@ class MainActivity : Activity() {
 
     inner class Bridge {
         @JavascriptInterface
+        fun share(text: String) {
+            runOnUiThread {
+                val send = Intent(Intent.ACTION_SEND).apply { type = "text/plain"; putExtra(Intent.EXTRA_TEXT, text) }
+                startActivity(Intent.createChooser(send, "Del"))
+            }
+        }
+
+        @JavascriptInterface
         fun saveState(json: String) = GalvoStore.saveState(this@MainActivity, json)
 
         @JavascriptInterface

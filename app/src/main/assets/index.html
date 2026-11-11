@@ -209,6 +209,7 @@ label{font-size:14px;color:var(--sub)}
 .sw[aria-checked=true]{background:var(--acc)}.sw[aria-checked=true]::after{left:28px}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 .tp{margin-bottom:12px}.tph{display:flex;justify-content:space-between;gap:10px;font-size:14px}.tph span{font-weight:700;white-space:nowrap}.tpb{height:8px;border-radius:5px;background:rgba(255,255,255,.08);margin:6px 0 3px;overflow:hidden}.tpb i{display:block;height:100%;border-radius:5px}.tp small{color:var(--sub);font-size:12px}
+.sharebtn{margin-top:10px;border:1px solid #C77A2A;background:transparent;color:#7A4A1A;border-radius:10px;padding:6px 14px;font-weight:700;font-size:13px;font-family:inherit;cursor:pointer}
 </style>
 </head>
 <body>
@@ -1277,10 +1278,10 @@ function srsCard(){
 
 function lvlUpHtml(u){ return u?`<div class="lvlup"><small>NIVEAU OP!</small><b>Niveau ${u.l} · ${esc(u.title)}</b><div style="font-size:13px;color:var(--sub);margin-top:2px">Du bliver skarpere for hver dag.</div></div>`:''; }
 function examHtml(e){ const d=new Date(e.d).toLocaleDateString('da-DK',{day:'numeric',month:'long',year:'numeric'});
-  return e.pass?`<div style="width:100%;margin-top:14px;text-align:left"><div class="cert"><small>GALVO-CERTIFIKAT</small><h4>Service-eksamen bestået</h4><p>${e.acc} % rigtige på ${e.n} spørgsmål fra ${(n=>n===1?'1 enhed':n+' enheder')(UNITS.filter((u,i)=>unlocked(i)).length)} den ${d}.</p><div class="seal">GALVO<br>✓</div></div></div>`
+  return e.pass?`<div style="width:100%;margin-top:14px;text-align:left"><div class="cert"><small>GALVO-CERTIFIKAT</small><h4>Service-eksamen bestået</h4><p>${e.acc} % rigtige på ${e.n} spørgsmål fra ${(n=>n===1?'1 enhed':n+' enheder')(UNITS.filter((u,i)=>unlocked(i)).length)} den ${d}.</p><div class="seal">GALVO<br>✓</div></div><button class="btn ghost" style="margin-top:10px" data-share="${esc(`Jeg har bestået Galvo-service-eksamen med ${e.acc} % rigtige! 🔥`)}">Del certifikatet</button></div>`
    :`<div class="row" style="width:100%;margin-top:14px;text-align:left"><p>Du fik ${e.acc} %. Der skal ${EXAM_PASS} % til. Øv dine svage punkter, og prøv igen.</p></div>`; }
 function certHtml(u){ const st=unitState(u.id); const d=st.bossDate?new Date(st.bossDate).toLocaleDateString('da-DK',{day:'numeric',month:'long',year:'numeric'}):'';
-  return `<div class="cert"><small>MESTERBREV</small><h4>${esc(u.title)}</h4><p>Galvo bekræfter, at du har klaret boss-udkaldet i ${esc(u.title.toLowerCase())}${d?` den ${d}`:''}.</p><div class="seal">GALVO<br>✓</div></div>`; }
+  return `<div class="cert"><small>MESTERBREV</small><h4>${esc(u.title)}</h4><p>Galvo bekræfter, at du har klaret boss-udkaldet i ${esc(u.title.toLowerCase())}${d?` den ${d}`:''}.</p><div class="seal">GALVO<br>✓</div><button class="sharebtn" data-share="${esc(`Jeg har fået Galvo-mesterbrevet i ${u.title}! 🔥`)}" aria-label="Del mesterbrevet">Del</button></div>`; }
 function learnPool(){ const out=[]; UNITS.forEach((u,i)=>{ if(unlocked(i)) (LEARN[u.id]||[]).forEach((c,j)=>out.push({u:i,j,c})); }); return out; }
 
 // ---------- views ----------
@@ -1707,6 +1708,7 @@ $app.addEventListener('click',e=>{
   if(t.dataset.go){ if(view.name==='blitz'){ clearInterval(bTimer); } go(t.dataset.go); return; }
   if(t.dataset.learn!==undefined){ view={name:'learn',u:+t.dataset.learn,i:+(t.dataset.card||0)}; render(); window.scrollTo(0,0); return; }
   if(t.dataset.lnav!==undefined){ learnNav(+t.dataset.lnav); return; }
+  if(t.dataset.share){ const txt=t.dataset.share; if(window.Android&&window.Android.share){ window.Android.share(txt); } else if(navigator.share){ navigator.share({title:'Galvo',text:txt}).catch(()=>{}); } else { (navigator.clipboard?navigator.clipboard.writeText(txt):Promise.reject()).then(()=>toast('Kopieret – sæt det ind, hvor du vil dele det')).catch(()=>toast(txt)); } return; }
   if(t.id==='onbnext'){ S.onb++; save(); render(); window.scrollTo(0,0); return; }
   if(t.id==='onbskip'){ S.onb=ONB.length; save(); render(); return; }
   if(t.dataset.case!==undefined){ startCase(+t.dataset.case); return; }
