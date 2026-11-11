@@ -9,6 +9,9 @@ import android.graphics.Color
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.speech.tts.TextToSpeech
+import android.speech.tts.UtteranceProgressListener
+import java.util.Locale
 import android.webkit.JavascriptInterface
 import android.webkit.WebResourceRequest
 import android.webkit.WebView
@@ -20,6 +23,8 @@ class MainActivity : Activity() {
     private lateinit var web: WebView
     private var pageReady = false
     private var pendingQuestion: String? = null
+    private var tts: TextToSpeech? = null
+    private var ttsReady = false
 
     @SuppressLint("SetJavaScriptEnabled")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -47,6 +52,20 @@ class MainActivity : Activity() {
             }
         }
         setContentView(web)
+        tts = TextToSpeech(this) { status ->
+            if (status == TextToSpeech.SUCCESS) {
+                val t = tts ?: return@TextToSpeech
+                val res = t.setLanguage(Locale("da", "DK"))
+                if (res == TextToSpeech.LANG_MISSING_DATA || res == TextToSpeech.LANG_NOT_SUPPORTED) t.language = Locale.getDefault()
+                ttsReady = true
+                t.setOnUtteranceProgressListener(object : UtteranceProgressListener() {
+                    override fun onStart(id: String?) {}
+                    override fun onDone(id: String?) { done() }
+                    @Deprecated("Deprecated in Java")
+                    override fun onError(id: String?) { done() }
+                })
+            }
+        }
         handleIntent(intent)
         web.loadUrl("file:///android_asset/index.html")
     }
@@ -54,6 +73,21 @@ class MainActivity : Activity() {
     override fun onNewIntent(intent: Intent) {
         super.onNewIntent(intent)
         handleIntent(intent)
+    }
+
+    private fun done() {
+        runOnUiThread { web.evaluateJavascript("window.galvoSpeakDone && window.galvoSpeakDone()", null) }
+    }
+
+    override fun onPause() {
+        super.onPause()
+        tts?.stop()
+    }
+
+    override fun onDestroy() {
+        tts?.shutdown()
+        tts = null
+        super.onDestroy()
     }
 
     override fun onResume() {
@@ -86,6 +120,17 @@ class MainActivity : Activity() {
                 startActivity(Intent.createChooser(send, "Del"))
             }
         }
+
+        @JavascriptInterface
+        fun speak(text: String, rate: Double) {
+            val t = tts ?: return
+            if (!ttsReady) return
+            t.setSpeechRate(rate.toFloat())
+            t.speak(text, TextToSpeech.QUEUE_FLUSH, null, "galvo")
+        }
+
+        @JavascriptInterface
+        fun stopSpeak() { tts?.stop() }
 
         @JavascriptInterface
         fun saveState(json: String) = GalvoStore.saveState(this@MainActivity, json)

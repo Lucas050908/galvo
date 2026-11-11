@@ -65,6 +65,10 @@ a{color:var(--acc2)}
 .combo{font-weight:700;color:var(--flame);min-width:40px;text-align:right}
 .qwrap{flex:1;display:flex;flex-direction:column;padding:18px 20px 0}
 .qhead{display:flex;gap:10px;align-items:flex-start}
+.spk{margin-left:auto;flex:0 0 auto;width:42px;height:42px;border-radius:14px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);display:flex;align-items:center;justify-content:center;cursor:pointer;padding:0}
+.spk.on{background:rgba(76,201,240,.22);border-color:#4CC9F0;animation:spkp 1s ease-in-out infinite}
+@keyframes spkp{50%{transform:scale(1.08)}}
+.rates{display:flex;gap:6px;margin-top:8px}.rates button{flex:1;padding:8px 0;border-radius:10px;border:1px solid rgba(255,255,255,.14);background:transparent;color:var(--sub);font-weight:700;font-family:inherit}.rates button.on{background:rgba(76,201,240,.18);color:#fff;border-color:#4CC9F0}
 .qhead .g{width:84px;flex-shrink:0}
 .qtag{font-size:12px;font-weight:700;color:var(--acc2);letter-spacing:.08em}
 .qtext{font-size:20px;font-weight:700;line-height:1.3;margin-top:4px}
@@ -1345,8 +1349,7 @@ GLOSSARY.push(
  ["Mersalg","At tilbyde kunden noget ekstra, der hænger sammen med det, de allerede køber eller har brug for."],
  ["Sublimation","Blæk printes på transferpapir og fordamper ind i polyester under varme og tryk."],
  ["Fotoinitiator","Stof i UV-blæk, der får blækket til at hærde, når det rammes af UV-lys."],
- ["VOC","Flygtige organiske forbindelser – fx fra solventblæk. Giver lugt og kræver ventilation."],
- ["MOPA","Fiberlaser med justerbar pulsbredde – kan fx lave farvegravering på rustfrit stål."]
+ ["VOC","Flygtige organiske forbindelser – fx fra solventblæk. Giver lugt og kræver ventilation."]
 );
 GLOSSARY.sort((a,b)=>a[0].localeCompare(b[0],'da'));
 
@@ -1358,6 +1361,81 @@ ILLU.lasergrid = (()=>{ const cols=["CO₂","Fiber","Diode","UV"], rows=[["Træ"
   r.slice(1).forEach((v,i)=>{ const [col,t]=sym[v]; s+=`<circle cx="${130+i*44}" cy="${y+13}" r="9" fill="${col}33"/><text x="${130+i*44}" y="${y+17}" fill="${col}" font-size="12" font-weight="700" text-anchor="middle">${t}</text>`; }); });
  s+=`<text x="150" y="162" fill="#A9A6C8" font-size="9.5" text-anchor="middle">~ = kun med belægning eller på visse materialer</text></svg>`; return s; })();
 LEARN.lzr[0].img="lasergrid";
+
+// ===== Version 14: Netværk & RIP · Installation =====
+Object.assign(SOURCES, {
+ rolandnet:{n:"Roland BN2-20 – Changing the network settings",u:"https://downloadcenter.rolanddg.com/contents/manuals/BN2-20_USE_EN/saa1713415696664.html"},
+ rolandethbul:{n:"Roland – Service bulletin: Ethernet guide",u:"https://uksignboards.com/wp-content/uploads/attachments/Roland%20Ethernet%20Device%20Guide-4.pdf"},
+ rolandvwlan:{n:"Roland VersaWorks 6 – LAN connection",u:"https://downloadcenter.rolanddg.com/contents/manuals/VW6_INS_EN_R4/lyj1634629920275.html"},
+ rolandvwreg:{n:"Roland BD-8 – Configuring VersaWorks settings",u:"https://downloadcenter.rolanddg.com/contents/manuals/BD-8_INS2_EN/sli1763538048500.html"},
+ fesparip:{n:"FESPA – What to look for in a large format RIP",u:"https://www.fespa.com/en/?p=39061"},
+ sotrip:{n:"Signs of the Times – Tech review: raster image processors",u:"https://signsofthetimes.com/tech-review-raster-image-processors/amp/"},
+ xgsite:{n:"Roland XG-640 – Deciding on an installation site",u:"https://downloadcenter.rolanddg.com/contents/manuals/XG-640_INS_EN/rxl1742515207014.html"},
+ appower:{n:"Roland AP-640 – Power supply",u:"https://downloadcenter.rolanddg.com/contents/manuals/AP-640_INS_EN/chr1653527417357.html"},
+ aptemp:{n:"Roland AP-640 – Temperature and humidity",u:"https://downloadcenter.rolanddg.com/contents/manuals/AP-640_INS_EN/nth1607498911671.html"},
+ apinst:{n:"Roland AP-640 – About placement and installation work",u:"https://downloadcenter.rolanddg.com/contents/manuals/AP-640_INS_EN/npx1607498911151.html"},
+ sf8inst:{n:"Roland SF-8 – Emplacement and installation",u:"https://downloadcenter.rolanddg.com/contents/manuals/SF-8_INS_EN/dnh1764553653518.html"},
+ mg640inst:{n:"Roland MG-640 – Deciding on an installation site",u:"https://downloadcenter.rolanddg.com/contents/manuals/MG-640_INS_EN/gnr1655082358958.html"}
+});
+
+UNITS.push({ id:"net", title:"Netværk & RIP", sub:"IP-adresser, forbindelse og printkø", color:"#4CC9F0", qs:[
+ {id:"net1",t:"mc",q:"Hvad skal du fastlægge for at forbinde en Roland-printer og computeren på et netværk?",a:["IP-adresser, subnetmaske og standard-gateway","Kun printerens navn","Kun Wi-Fi-koden","Kun MAC-adressen"],w:"Roland: kontakt kundens netværksadministrator for detaljerne.",src:"rolandnet"},
+ {id:"net2",t:"mc",q:"I Rolands eksempel er computeren 192.168.0.XXX og printeren 192.168.0.YYY. Hvad skal gælde for XXX og YYY?",a:["Tal fra 1 til 254, som ikke bruges af andet udstyr på netværket","De skal være ens","De skal være 0","De skal være over 300"],w:"To enheder med samme IP-adresse giver konflikt.",src:"rolandnet"},
+ {id:"net3",t:"tf",q:"Rolands opsætningsvejledning passer til alle netværk, så du kan bare bruge eksempeltallene.",v:false,w:"Roland: procedure og indstillinger passer ikke til alle miljøer – spørg netværksadministratoren.",src:"rolandnet"},
+ {id:"net6",t:"mc",q:"Hvad skal ske på printeren, før VersaWorks forbindes over LAN?",a:["IP-adressen og de øvrige netværksindstillinger skal sættes på printeren","Printeren skal nulstilles til fabriksindstillinger","Printhovedet skal skiftes","Ingenting"],w:"Se printerens egen manual for, hvordan IP-adressen sættes.",src:"rolandvwlan"},
+ {id:"net7",t:"mc",q:"VersaWorks kan ikke finde printeren automatisk. Hvad siger Roland?",a:["Tjek LAN-kablet – og registrér printeren manuelt med dens IP-adresse","Køb en ny printer","Geninstallér Windows","Brug USB i stedet altid"],w:"Manuel registrering: indtast IP-adressen og klik Verify.",src:"rolandvwreg"},
+ {id:"net8",t:"fill",s:"RIP står for Raster Image ___.",a:["Processor","Printer","Profil","Program"],w:"RIP'en omsætter filen til de præcise prikker, printeren kan lægge.",src:"fesparip"},
+ {id:"net9",t:"mc",q:"Hvad gør en RIP ifølge FESPA?",a:["Oversætter filen til de præcise prikker, netop den printer kan lave","Renser printhovedet","Styrer laminatoren","Måler blækniveauet"],w:"Alle digitale printere har brug for en RIP.",src:"fesparip"},
+ {id:"net10",t:"mc",q:"Hvorfor bruger man en RIP i stedet for en almindelig printerdriver til storformat?",a:["Drivere er ikke optimeret til de store datamængder, et storformatprint kræver","Drivere er dyrere","RIP'en gør printeren hurtigere mekanisk","Drivere kan ikke printe farver"],w:"Signs of the Times: en RIP er et must til storformat.",src:"sotrip"},
+ {id:"net11",t:"mc",q:"Hvad er 'nesting' i en RIP?",a:["At placere flere print tæt på samme medie for at spare materiale","At printe samme job to gange","At skære mediet over","At slette jobs"],w:"Det sparer medie – især ved mange små print.",src:"sotrip"},
+ {id:"net12",t:"mc",q:"Hvorfor er det vigtigt, at RIP'en kan RIP'pe ét job, mens den printer et andet?",a:["Så printeren ikke står og venter på næste fil","Så filerne bliver mindre","Så farverne bliver bedre","Det er ikke vigtigt"],w:"FESPA: det holder printeren i gang og produktiviteten oppe.",src:"fesparip"},
+ {id:"net13",t:"mc",q:"Hvad kan man bruge prioritering i printkøen til?",a:["At få et hastejob igennem først – eller holde et skærebord forsynet med arbejde","At slette alle jobs","At ændre IP-adressen","At skifte blæk"],w:"FESPA nævner netop hastejob og jævn tilførsel til efterbehandling.",src:"fesparip"},
+ {id:"net14",t:"tf",q:"Mange RIP'er kan gemme en færdig printfil, så du kan lave præcis det samme genoptryk uden at behandle filen igen.",v:true,w:"Signs of the Times nævner det som en fordel.",src:"sotrip"},
+ {id:"net15",t:"mc",ctx:"Efter du har sat printeren på kundens netværk, mister to kontor-pc'er forbindelsen til internettet.",q:"Hvad er den mest sandsynlige årsag?",a:["Printeren har fået en IP-adresse, som allerede bruges på netværket","Printeren bruger for meget strøm","Blækket er forkert","VersaWorks er gammel"],w:"Brug altid adresser fra kundens netværksadministrator.",src:["rolandnet","rolandethbul"]},
+ {id:"net16",t:"mc",ctx:"Kunden siger, at printeren står stille i lange perioder, mens RIP'en behandler store filer.",q:"Hvad kan du foreslå?",a:["Lad RIP'en behandle det næste job, mens der printes – og brug printkøen","Køb flere printere","Print i lavere opløsning altid","Sluk RIP'en"],w:"Det er netop en af de vigtigste funktioner i en moderne storformat-RIP.",src:"fesparip"}
+]});
+
+UNITS.push({ id:"ins", title:"Installation af maskiner", sub:"Placering, strøm og klima", color:"#FFB547", qs:[
+ {id:"ins1",t:"mc",q:"Hvem må stå for placering og installation af en Roland AP-640 ifølge manualen?",a:["Kvalificerede, uddannede folk med det rigtige udstyr","Hvem som helst","Kun kunden","Kun to tilfældige medarbejdere"],w:"Roland: opgaver, der kræver urimelig anstrengelse, kan føre til en alvorlig ulykke.",src:"apinst"},
+ {id:"ins2",t:"mc",q:"Hvad skal gulvet kunne ifølge Roland?",a:["Være plant, stabilt og kunne bære maskinens vægt","Være af træ","Have gulvvarme","Være vådt"],w:"En XG-640 kan veje 200 kg eller mere – den kan vælte eller falde ned.",src:"xgsite"},
+ {id:"ins3",t:"mc",q:"Hvor tung kan en Roland MG-640 (64\") blive ifølge manualen?",a:["207 kg eller mere","20 kg","50 kg","1.000 kg"],w:"30\"-modellen: 154 kg eller mere.",src:"mg640inst"},
+ {id:"ins4",t:"mc",q:"Hvor skal strømstikket sidde ifølge Roland?",a:["Inden for umiddelbar rækkevidde – så det kan trækkes ud hurtigt i en nødsituation","Bag maskinen, hvor ingen kan nå det","I et andet rum","Det er ligegyldigt"],w:"Placér maskinen ved stikkontakten, og hold pladsen foran den fri.",src:"xgsite"},
+ {id:"ins5",t:"mc",q:"Hvilken netspænding kræver en Roland AP-640?",a:["200-240 V","12 V","110 V kun","400 V"],w:"Strømkravet afhænger af model – tjek altid manualen før levering.",src:"appower"},
+ {id:"ins6",t:"mc",q:"AP-640 har tre strømkabler (printer og to tørrere). Hvordan skal de tilsluttes?",a:["Til hver sin gruppe/sikringsafbryder","Alle i samme stikdåse","I en forlængerledning","Kun ét kabel behøver strøm"],w:"Samlet strømforbrug: 23 A (printer 3 A + 10 A pr. tørrer).",src:"appower"},
+ {id:"ins7",t:"mc",q:"Hvad er driftstemperaturen for en Roland AP-640?",a:["20-30 °C","0-10 °C","35-45 °C","Alle temperaturer"],w:"20-80 % RF uden kondens. Bedste printkvalitet: 20-25 °C og 40-60 % RF.",src:"aptemp"},
+ {id:"ins8",t:"tf",q:"Temperatur og luftfugtighed skal holdes inden for grænserne – også når maskinen ikke bruges.",v:true,w:"Roland AP-640: ellers kan maskinen få fejl. Uden for drift: 5-40 °C.",src:"aptemp"},
+ {id:"ins9",t:"mc",q:"Hvilket af disse steder er ifølge Roland uegnet til en printer?",a:["Lige ved siden af en aircondition","Et lyst, rent og ventileret lokale med plant gulv","Et lokale med stabil temperatur","Ved en fri stikkontakt"],w:"Roland lister også: store temperatur- og fugtudsving, vibrationer, skrå gulve, støv, direkte sol, træk og vand.",src:"xgsite"},
+ {id:"ins10",t:"tf",q:"Roland: Maskinen må aldrig stå udendørs eller hvor den kan blive udsat for vand eller høj luftfugtighed.",v:true,w:"Krybestrøm kan give elektrisk stød eller brand.",src:"xgsite"},
+ {id:"ins11",t:"mc",q:"Hvorfor kræver Roland god ventilation i lokalet?",a:["Blækdampe kan give sundhedsfare eller brandfare","For at køle printhovedet","For at mediet tørrer hurtigere","Det kræver de ikke"],w:"Sørg for ventilation, før printeren sættes i drift.",src:"xgsite"},
+ {id:"ins12",t:"mc",q:"Hvad må maskinen ikke stå i nærheden af ifølge Roland?",a:["Brandbare genstande eller gasfyldte områder","Et vindue med gardiner trukket for","En computer","En anden printer"],w:"Der kan opstå antændelse eller eksplosion.",src:"xgsite"},
+ {id:"ins13",t:"mc",q:"Hvor mange personer skal der mindst til at løfte og placere en Roland SF-8?",a:["2","1","5","10"],w:"For stor anstrengelse kan give skader – og maskinen kan blive tabt.",src:"sf8inst"},
+ {id:"ins14",t:"tf",q:"Elektrisk eller magnetisk støj tæt på maskinen er ifølge Roland et uegnet installationssted.",v:true,w:"Det gælder også andre former for elektromagnetisk energi.",src:"xgsite"},
+ {id:"ins15",t:"mc",ctx:"Kunden vil have den nye printer stående i en kold lagerhal ved porten, hvor det trækker.",q:"Hvad forklarer du?",a:["Store temperaturudsving og bevægende luft er uegnet – find et sted med stabil temperatur og luftfugtighed","Det er fint, bare der er strøm","Printeren har brug for træk","Det er kun et problem om sommeren"],w:"Rolands liste over uegnede steder rammer netop denne placering.",src:["xgsite","aptemp"]},
+ {id:"ins16",t:"mc",ctx:"Før levering af en AP-640 opdager du, at kunden kun har én almindelig stikkontakt.",q:"Hvad gør du?",a:["Får kunden til at sørge for den strømforsyning, manualen kræver, før installationen","Bruger en forlængerledning med tre stik","Kører kun printeren uden tørrere","Installerer alligevel"],w:"AP-640 kræver 200-240 V og tre kabler på hver sin gruppe.",src:"appower"}
+]});
+
+Object.assign(LEARN, {
+ net:[
+  {t:"IP-adresser",b:"Printer og computer skal have hver sin IP-adresse på samme netværk, plus subnetmaske og gateway. Rolands eksempel: 192.168.0.XXX og 192.168.0.YYY, hvor tallene er 1-254 og ikke bruges af andet udstyr.",k:"Få adresserne af kundens netværksadministrator.",src:["rolandnet","rolandethbul"]},
+  {t:"Forbind til VersaWorks",b:"Sæt IP-adressen på printeren først. Lad VersaWorks søge efter printeren (VersaWorks åbnes fra Roland DG Connect Hub) – eller registrér den manuelt med IP-adressen. Kan den ikke findes: tjek LAN-kablet.",k:"Brug kun IP-adresser, kunden har givet dig.",src:["rolandvwlan","rolandvwreg"]},
+  {t:"Hvad er en RIP?",b:"Raster Image Processor: oversætter filen til de prikker, printeren kan lave. Almindelige drivere er ikke bygget til storformatets store datamængder. VersaWorks og RasterLink er eksempler på RIP'er.",k:"Storformat = RIP.",src:["fesparip","sotrip"]},
+  {t:"Printkø og produktivitet",b:"En god RIP behandler næste job, mens den printer, og kan prioritere hastejobs i køen. Nesting placerer flere print tæt for at spare medie, og gemte printfiler giver nemme genoptryk.",k:"Printeren skal ikke stå og vente.",src:["fesparip","sotrip"]}
+ ],
+ ins:[
+  {t:"Før levering",b:"Tjek strøm, plads og klima hos kunden, før maskinen kommer. En AP-640 kræver 200-240 V og tre kabler på hver sin gruppe. Placering og installation skal laves af kvalificerede folk med det rigtige udstyr.",k:"Ingen genveje med strømmen.",src:["appower","apinst"]},
+  {t:"Placering",b:"Plant, stabilt gulv, der kan bære vægten (fx 200 kg+). Strømstikket skal kunne nås med det samme. Ikke ved brandbare ting, gas, vand eller udendørs. God ventilation for blækdampe.",k:"Stikket skal kunne trækkes ud i en nødsituation.",src:["xgsite","mg640inst"]},
+  {t:"Klima",b:"AP-640: drift ved 20-30 °C og 20-80 % RF uden kondens – bedste kvalitet ved 20-25 °C og 40-60 % RF. Klimaet skal også holdes, når maskinen ikke kører: 5-40 °C og 20-80 % RF uden kondens.",k:"Stabilt klima = stabil kvalitet.",src:"aptemp"},
+  {t:"Uegnede steder",b:"Store temperatur- og fugtudsving, vibrationer, skrå gulve, støv, direkte sol, nær aircondition/varme, træk og vand samt elektrisk eller magnetisk støj.",k:"Ved porten i lagerhallen = nej.",src:"xgsite"}
+ ]
+});
+
+GLOSSARY.push(
+ ["IP-adresse","Enhedens adresse på netværket, fx 192.168.0.10. To enheder må ikke have samme adresse."],
+ ["Subnetmaske","Angiver, hvilken del af IP-adressen der er netværket – fx 255.255.255.0."],
+ ["Gateway","Den adresse (typisk routeren), trafikken sendes til for at komme ud af det lokale netværk."],
+ ["Nesting","At placere flere print tæt på samme medie i RIP'en for at spare materiale."]
+);
+GLOSSARY.sort((a,b)=>a[0].localeCompare(b[0],'da'));
 
 const GALVO = {"happy": "<svg viewBox=\"0 0 200 200\" aria-hidden=\"true\"><rect x=\"22\" y=\"176\" width=\"156\" height=\"14\" rx=\"5\" fill=\"#1A1B2E\"/><rect x=\"34\" y=\"168\" width=\"132\" height=\"10\" rx=\"3\" fill=\"#C8B6A6\"/>\n<path d=\"M66 34V20a10 10 0 0 1 10-10h48a10 10 0 0 1 10 10v14\" stroke=\"#1A1B2E\" stroke-width=\"9\" fill=\"none\" stroke-linecap=\"round\"/>\n<rect x=\"34\" y=\"34\" width=\"132\" height=\"110\" rx=\"22\" fill=\"#2B2D42\"/>\n<rect x=\"34\" y=\"34\" width=\"132\" height=\"24\" rx=\"12\" fill=\"#1A1B2E\"/><circle cx=\"100\" cy=\"50\" r=\"7\" fill=\"#111111\" stroke=\"#1A1B2E\" stroke-width=\"3\"/><circle cx=\"102\" cy=\"48\" r=\"2\" fill=\"#FFFFFF\"/>\n<rect x=\"46\" y=\"66\" width=\"108\" height=\"56\" rx=\"18\" fill=\"#E85D04\" opacity=\".95\"/>\n<path d=\"M56 74q14-6 30-4\" stroke=\"#FFFFFF\" stroke-width=\"4\" opacity=\".35\" fill=\"none\" stroke-linecap=\"round\"/>\n<rect x=\"69.0\" y=\"85.5\" width=\"22\" height=\"13\" rx=\"6.5\" fill=\"#FFD6A5\"/><rect x=\"73.0\" y=\"88.5\" width=\"7\" height=\"4\" rx=\"2\" fill=\"#FFFFFF\" opacity=\".7\"/><rect x=\"109.0\" y=\"85.5\" width=\"22\" height=\"13\" rx=\"6.5\" fill=\"#FFD6A5\"/><rect x=\"113.0\" y=\"88.5\" width=\"7\" height=\"4\" rx=\"2\" fill=\"#FFFFFF\" opacity=\".7\"/><path d=\"M92 110Q100 117.2 108 110\" stroke=\"#FFD6A5\" stroke-width=\"4.0\" fill=\"none\" stroke-linecap=\"round\"/>\n<rect x=\"150\" y=\"128\" width=\"10\" height=\"10\" rx=\"3\" fill=\"#FFB703\"/>\n<path d=\"M40 144h120v18H40z\" fill=\"#1A1B2E\" opacity=\".35\"/>\n<rect x=\"88\" y=\"140\" width=\"24\" height=\"10\" rx=\"3\" fill=\"#1A1B2E\"/>\n<g opacity=\"1\"><path d=\"M100.0 148L74.0 182M100.0 148L100.0 182M100.0 148L126.0 182\" stroke=\"#4CC9F0\" stroke-width=\"2.5\" opacity=\".55\"/><path d=\"M100.0 148L110.0 182\" stroke=\"#4CC9F0\" stroke-width=\"4\" stroke-linecap=\"round\"/><circle cx=\"110\" cy=\"182\" r=\"5\" fill=\"#FFF3B0\"/></g></svg>", "worried": "<svg viewBox=\"0 0 200 200\" aria-hidden=\"true\"><path d=\"M172 40q8 12 0 18q-8-6 0-18z\" fill=\"#4DABF7\"/><rect x=\"22\" y=\"176\" width=\"156\" height=\"14\" rx=\"5\" fill=\"#1A1B2E\"/><rect x=\"34\" y=\"168\" width=\"132\" height=\"10\" rx=\"3\" fill=\"#C8B6A6\"/>\n<path d=\"M66 34V20a10 10 0 0 1 10-10h48a10 10 0 0 1 10 10v14\" stroke=\"#1A1B2E\" stroke-width=\"9\" fill=\"none\" stroke-linecap=\"round\"/>\n<rect x=\"34\" y=\"34\" width=\"132\" height=\"110\" rx=\"22\" fill=\"#2B2D42\"/>\n<rect x=\"34\" y=\"34\" width=\"132\" height=\"24\" rx=\"12\" fill=\"#1A1B2E\"/><circle cx=\"100\" cy=\"50\" r=\"7\" fill=\"#111111\" stroke=\"#1A1B2E\" stroke-width=\"3\"/><circle cx=\"102\" cy=\"48\" r=\"2\" fill=\"#FFFFFF\"/>\n<rect x=\"46\" y=\"66\" width=\"108\" height=\"56\" rx=\"18\" fill=\"#E85D04\" opacity=\".95\"/>\n<path d=\"M56 74q14-6 30-4\" stroke=\"#FFFFFF\" stroke-width=\"4\" opacity=\".35\" fill=\"none\" stroke-linecap=\"round\"/>\n<rect x=\"69.0\" y=\"85.5\" width=\"22\" height=\"13\" rx=\"6.5\" fill=\"#FFD6A5\"/><rect x=\"73.0\" y=\"88.5\" width=\"7\" height=\"4\" rx=\"2\" fill=\"#FFFFFF\" opacity=\".7\"/><rect x=\"109.0\" y=\"85.5\" width=\"22\" height=\"13\" rx=\"6.5\" fill=\"#FFD6A5\"/><rect x=\"113.0\" y=\"88.5\" width=\"7\" height=\"4\" rx=\"2\" fill=\"#FFFFFF\" opacity=\".7\"/><path d=\"M67.0 77.5l22 -6M133.0 77.5l-22 -6\" stroke=\"#FFD6A5\" stroke-width=\"5\" stroke-linecap=\"round\"/><path d=\"M92 113.2q4.0 -3.6 8 0t8 0\" stroke=\"#FFD6A5\" stroke-width=\"3.5\" fill=\"none\" stroke-linecap=\"round\"/>\n<rect x=\"150\" y=\"128\" width=\"10\" height=\"10\" rx=\"3\" fill=\"#FFB703\"/>\n<path d=\"M40 144h120v18H40z\" fill=\"#1A1B2E\" opacity=\".35\"/>\n<rect x=\"88\" y=\"140\" width=\"24\" height=\"10\" rx=\"3\" fill=\"#1A1B2E\"/>\n<g opacity=\".3\"><path d=\"M100.0 148L74.0 182M100.0 148L100.0 182M100.0 148L126.0 182\" stroke=\"#4CC9F0\" stroke-width=\"2.5\" opacity=\".55\"/><path d=\"M100.0 148L110.0 182\" stroke=\"#4CC9F0\" stroke-width=\"4\" stroke-linecap=\"round\"/><circle cx=\"110\" cy=\"182\" r=\"5\" fill=\"#FFF3B0\"/></g></svg>", "party": "<svg viewBox=\"0 0 200 200\" aria-hidden=\"true\"><rect x=\"20\" y=\"30\" width=\"9\" height=\"15\" rx=\"2\" fill=\"#00AEEF\" transform=\"rotate(20 20 30)\"/><rect x=\"180\" y=\"25\" width=\"9\" height=\"15\" rx=\"2\" fill=\"#EC008C\" transform=\"rotate(-30 180 25)\"/><rect x=\"30\" y=\"120\" width=\"9\" height=\"15\" rx=\"2\" fill=\"#FFD400\" transform=\"rotate(45 30 120)\"/><rect x=\"178\" y=\"110\" width=\"9\" height=\"15\" rx=\"2\" fill=\"#40C057\" transform=\"rotate(10 178 110)\"/><rect x=\"60\" y=\"12\" width=\"9\" height=\"15\" rx=\"2\" fill=\"#FF922B\" transform=\"rotate(-15 60 12)\"/><rect x=\"150\" y=\"8\" width=\"9\" height=\"15\" rx=\"2\" fill=\"#00AEEF\" transform=\"rotate(35 150 8)\"/><rect x=\"12\" y=\"75\" width=\"9\" height=\"15\" rx=\"2\" fill=\"#EC008C\" transform=\"rotate(60 12 75)\"/><rect x=\"190\" y=\"70\" width=\"9\" height=\"15\" rx=\"2\" fill=\"#FFD400\" transform=\"rotate(-50 190 70)\"/><rect x=\"22\" y=\"176\" width=\"156\" height=\"14\" rx=\"5\" fill=\"#1A1B2E\"/><rect x=\"34\" y=\"168\" width=\"132\" height=\"10\" rx=\"3\" fill=\"#C8B6A6\"/>\n<path d=\"M66 22V20a10 10 0 0 1 10-10h48a10 10 0 0 1 10 10v26\" stroke=\"#1A1B2E\" stroke-width=\"9\" fill=\"none\" stroke-linecap=\"round\"/>\n<rect x=\"34\" y=\"34\" width=\"132\" height=\"110\" rx=\"22\" fill=\"#2B2D42\"/>\n<rect x=\"34\" y=\"34\" width=\"132\" height=\"24\" rx=\"12\" fill=\"#1A1B2E\"/><circle cx=\"100\" cy=\"50\" r=\"7\" fill=\"#111111\" stroke=\"#1A1B2E\" stroke-width=\"3\"/><circle cx=\"102\" cy=\"48\" r=\"2\" fill=\"#FFFFFF\"/>\n<rect x=\"46\" y=\"66\" width=\"108\" height=\"56\" rx=\"18\" fill=\"#E85D04\" opacity=\".95\"/>\n<path d=\"M56 74q14-6 30-4\" stroke=\"#FFFFFF\" stroke-width=\"4\" opacity=\".35\" fill=\"none\" stroke-linecap=\"round\"/>\n<path d=\"M69.0 95q11.0 -14 22 0\" stroke=\"#FFD6A5\" stroke-width=\"6\" fill=\"none\" stroke-linecap=\"round\"/><path d=\"M109.0 95q11.0 -14 22 0\" stroke=\"#FFD6A5\" stroke-width=\"6\" fill=\"none\" stroke-linecap=\"round\"/><path d=\"M92 110Q100 122.8 108 110Z\" fill=\"#FFD6A5\"/><ellipse cx=\"100\" cy=\"116.0\" rx=\"3.6\" ry=\"2.0\" fill=\"#FF6B8B\"/>\n<rect x=\"150\" y=\"128\" width=\"10\" height=\"10\" rx=\"3\" fill=\"#FFB703\"/>\n<path d=\"M40 144h120v18H40z\" fill=\"#1A1B2E\" opacity=\".35\"/>\n<rect x=\"88\" y=\"140\" width=\"24\" height=\"10\" rx=\"3\" fill=\"#1A1B2E\"/>\n<g opacity=\"1\"><path d=\"M100.0 148L74.0 182M100.0 148L100.0 182M100.0 148L126.0 182\" stroke=\"#4CC9F0\" stroke-width=\"2.5\" opacity=\".55\"/><path d=\"M100.0 148L110.0 182\" stroke=\"#4CC9F0\" stroke-width=\"4\" stroke-linecap=\"round\"/><circle cx=\"110\" cy=\"182\" r=\"5\" fill=\"#FFF3B0\"/></g></svg>"};
 
@@ -1489,6 +1567,48 @@ function awardXP(xp){
   return {before, goalHit: todayXP()>=S.goal && todayXP()-xp<S.goal, lvlUp: checkLevel()};
 }
 function srcLinks(src){ if(!src) return ''; const arr=(Array.isArray(src)?src:[src]).map(k=>SOURCES[k]).filter(Boolean); if(!arr.length) return ''; return (arr.length>1?'Kilder: ':'Kilde: ')+arr.map(x=>`<a href="${x.u}" target="_blank" rel="noopener">${esc(x.n)}</a>`).join(' · '); }
+// ---------- read aloud ----------
+let ttsKey=null, ttsOn=false, ttsVoice=null;
+function ttsAvail(){ return !!((window.Android&&window.Android.speak) || ('speechSynthesis' in window)); }
+function ttsClean(t){ return String(t).replace(/___/g,' blank ').replace(/→/g,', ').replace(/ – /g,', ').replace(/\s+/g,' ').trim(); }
+function pickVoice(){ try{ const vs=speechSynthesis.getVoices(); ttsVoice=vs.find(v=>/^da/i.test(v.lang))||null; }catch(e){} }
+if('speechSynthesis' in window){ pickVoice(); try{ speechSynthesis.onvoiceschanged=pickVoice; }catch(e){} }
+function speak(text){
+  text=ttsClean(text); if(!text) return; const rate=S.ttsRate||1;
+  if(window.Android&&window.Android.speak){ try{ window.Android.speak(text,rate); ttsOn=true; spkMark(); }catch(e){} return; }
+  if(!('speechSynthesis' in window)) return;
+  try{ speechSynthesis.cancel(); const u=new SpeechSynthesisUtterance(text); u.lang='da-DK'; if(ttsVoice) u.voice=ttsVoice; u.rate=rate;
+    u.onend=u.onerror=()=>{ ttsOn=false; spkMark(); }; ttsOn=true; speechSynthesis.speak(u); spkMark(); }catch(e){}
+}
+function stopSpeak(){ ttsOn=false; try{ if(window.Android&&window.Android.stopSpeak) window.Android.stopSpeak(); else if('speechSynthesis' in window) speechSynthesis.cancel(); }catch(e){} spkMark(); }
+window.galvoSpeakDone=()=>{ ttsOn=false; spkMark(); };
+function spkMark(){ document.querySelectorAll('.spk').forEach(b=>{ b.classList.toggle('on',ttsOn); b.setAttribute('aria-label',ttsOn?'Stop oplæsning':'Læs op'); }); }
+function spkBtn(){ if(!ttsAvail()) return ''; return `<button class="spk ${ttsOn?'on':''}" data-spk="1" aria-label="${ttsOn?'Stop oplæsning':'Læs op'}"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#4CC9F0" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9v6h4l5 4V5L8 9H4z" fill="#4CC9F0" fill-opacity=".25"/><path d="M16.5 8.5a5 5 0 0 1 0 7"/><path d="M19 6a8.5 8.5 0 0 1 0 12"/></svg></button>`; }
+function optsSpeech(arr){ return arr.map((a,i)=>`${'ABCD'[i]||(i+1)}: ${a}.`).join(' '); }
+function screenSpeech(){
+  const v=view.name;
+  if(v==='lesson'&&L&&L.cur){ const q=L.cur;
+    if(L.state!=='ask'){ const ok=L.state==='right'; return {k:'L'+q.id+L.done+L.state, t:(ok?'Rigtigt! ':'Ikke helt. Rigtigt svar: '+correctText(q)+'. ')+q.w}; }
+    let t=q.ctx?'Kunden ringer: '+q.ctx+' ':'';
+    if(q.t==='mc') t+=q.q+' '+optsSpeech(q._opts.map(o=>o.a));
+    else if(q.t==='tf') t+='Sandt eller falsk? '+q.q;
+    else if(q.t==='fill') t+='Udfyld hullet: '+q.s+' Mulige svar: '+q._opts.map(o=>o.a).join(', ')+'.';
+    else if(q.t==='match') t+=q.q+' Par sammen. Venstre: '+q.p.map(p=>p[0]).join(', ')+'. Højre: '+q._right.map(x=>x.r).join(', ')+'.';
+    else t+=q.q+' Sæt i rækkefølge: '+q._pool.map(p=>p.s).join(', ')+'.';
+    return {k:'L'+q.id+L.done+'ask', t}; }
+  if(v==='learn'){ const u=UNITS[view.u], c=LEARN[u.id][view.i]; return {k:'C'+u.id+view.i, t:c.t+'. '+c.b+' Husk: '+c.k}; }
+  if(v==='case'&&K){ const st=K.c.steps[K.step];
+    if(K.state==='right') return {k:'K'+K.c.id+K.step+'r', t:'Godt tænkt! '+st.w};
+    if(K.state==='wrong') return {k:'K'+K.c.id+K.step+'w'+K.bad.length, t:K.bad.length>=2?'Hint: '+st.w:'Det løser ikke sagen. Prøv igen.'};
+    return {k:'K'+K.c.id+K.step+'a'+K.bad.length, t:(K.step===0?'Kunden ringer: '+K.c.intro+' ':'')+'På stedet: '+st.sit+' '+st.q+' '+optsSpeech(K.opts.map(o=>o.a))}; }
+  return null;
+}
+function ttsAfterRender(){
+  const sp=screenSpeech();
+  if(!sp){ if(ttsKey){ ttsKey=null; if(ttsOn) stopSpeak(); } return; }
+  if(sp.k===ttsKey) return; ttsKey=sp.k;
+  if(S.ttsAuto) speak(sp.t); else if(ttsOn) stopSpeak();
+}
 // ---------- sound ----------
 let AC=null;
 function sfx(kind){
@@ -1704,7 +1824,7 @@ function profile(){
   return `${header()}<div class="main"><div class="sec">DAGLIGT MÅL</div>
   <div class="list"><div class="row"><div class="seg">${goals.map(([g,l])=>`<button class="${S.goal===g?'on':''}" data-goal="${g}" aria-pressed="${S.goal===g}">${g} XP<br><span style="font-size:11px;color:var(--sub)">${l}</span></button>`).join('')}</div></div></div>
   <div class="sec">LYD</div>
-  <div class="list"><div class="row toggle"><div><h4>Lydeffekter</h4><p>Små lyde ved rigtige og forkerte svar og når du fejrer.</p></div><button class="sw" id="snd" role="switch" aria-checked="${S.sound!==false}" aria-label="Lydeffekter"></button></div></div>
+  <div class="list"><div class="row toggle"><div><h4>Lydeffekter</h4><p>Små lyde ved rigtige og forkerte svar og når du fejrer.</p></div><button class="sw" id="snd" role="switch" aria-checked="${S.sound!==false}" aria-label="Lydeffekter"></button></div>${ttsAvail()?`<div class="row toggle"><div><h4>Læs op automatisk</h4><p>Galvo læser spørgsmål, svarmuligheder, forklaringer og viden-kort højt. Du kan også trykke på højttaleren ved hvert spørgsmål.</p></div><button class="sw" id="tts" role="switch" aria-checked="${!!S.ttsAuto}" aria-label="Læs op automatisk"></button></div><div class="row"><div style="flex:1"><h4>Taletempo</h4><div class="rates">${[[0.8,'Roligt'],[1,'Normalt'],[1.25,'Hurtigt']].map(([r,n])=>`<button data-rate="${r}" class="${(S.ttsRate||1)===r?'on':''}">${n}</button>`).join('')}</div></div></div>`:''}</div>
   <div class="sec">DAGLIG PÅMINDELSE</div>
   <div class="list"><div class="row">${NATIVE?nativeReminder():`<p>Læg en daglig påmindelse i din kalender – så giver telefonen dig besked hver dag.</p>
    <div style="display:flex;gap:10px;align-items:center;margin-top:12px"><label for="rt">Tidspunkt</label><input id="rt" type="time" value="${S.remind}"></div>
@@ -1807,7 +1927,7 @@ function lessonView(){
     <button class="btn ${ok?'ok':'bad'}" id="cont">Fortsæt</button></div>`;
   }
   return `<div class="lt"><button class="x" id="quit" aria-label="Afslut lektion">×</button><div class="prog" role="progressbar" aria-valuenow="${pct}" aria-valuemax="100"><i style="width:${pct}%"></i></div><div class="combo">${L.combo>=2?IC.bolt('#FFB347')+'x'+L.combo:''}${(L.mode==='unit'||L.mode==='boss')?`<span class="lh ${L.state==='wrong'&&L.lostHeart?'hit':''}" aria-label="${hearts()} hjerter">${IC.heart('#FF7DB8')}${hearts()}</span>`:''}</div></div>
-  <div class="qwrap"><div class="qhead">${G(mood, L.state==='wrong'?'shake':L.state==='right'?'pop':'')}<div><div class="qtag">${esc(tag.toUpperCase())}</div><div class="qtext">${esc(q.t==='fill'?'Udfyld hullet':q.q)}</div></div></div>${q.ctx?`<div class="ctx"><b>KUNDEN RINGER</b>${esc(q.ctx)}</div>`:''}${body}</div>${foot}`;
+  <div class="qwrap"><div class="qhead">${G(mood, L.state==='wrong'?'shake':L.state==='right'?'pop':'')}<div><div class="qtag">${esc(tag.toUpperCase())}</div><div class="qtext">${esc(q.t==='fill'?'Udfyld hullet':q.q)}</div></div>${spkBtn()}</div>${q.ctx?`<div class="ctx"><b>KUNDEN RINGER</b>${esc(q.ctx)}</div>`:''}${body}</div>${foot}`;
 }
 function finish(){
   const firsts=Object.values(L.firstTry); const right=firsts.filter(Boolean).length; const acc=firsts.length?Math.round(right/firsts.length*100):0;
@@ -1842,7 +1962,7 @@ function result(){
 function learnView(){
   const u=UNITS[view.u]; const cards=LEARN[u.id]; const i=view.i; const c=cards[i]; const last=i===cards.length-1; const s=srcLinks(c.src);
   return `<div class="lt"><button class="x" data-go="home" aria-label="Luk">×</button><div class="prog"><i style="width:${Math.round((i+1)/cards.length*100)}%"></i></div><div class="combo" style="color:var(--sub);font-size:13px">${i+1}/${cards.length}</div></div>
-  <div class="qwrap" style="padding-top:12px;flex:0 0 auto"><div class="qhead">${G(i===0?'happy':last?'party':'happy','pop')}<div><div class="qtag">VIDEN-KORT · ${esc(u.title.toUpperCase())}</div><div class="qtext" style="font-size:16px;color:var(--sub);font-weight:600">${['Lad os starte med det vigtigste.','Godt – videre!','Det her kommer igen i quizzen.','Næsten færdig!','Sidste kort – så er du klar.'][Math.min(i,4)]}</div></div></div></div>
+  <div class="qwrap" style="padding-top:12px;flex:0 0 auto"><div class="qhead">${G(i===0?'happy':last?'party':'happy','pop')}<div><div class="qtag">VIDEN-KORT · ${esc(u.title.toUpperCase())}</div><div class="qtext" style="font-size:16px;color:var(--sub);font-weight:600">${['Lad os starte med det vigtigste.','Godt – videre!','Det her kommer igen i quizzen.','Næsten færdig!','Sidste kort – så er du klar.'][Math.min(i,4)]}</div></div>${spkBtn()}</div></div>
   <div class="lcard" style="margin-top:0"><h2>${esc(c.t)}</h2>${c.img&&ILLU[c.img]?`<div class="illu">${ILLU[c.img]}</div>`:''}<p>${esc(c.b)}</p><div class="key"><small>HUSK</small>${esc(c.k)}</div>${s?`<div class="src" style="font-size:12px;color:var(--sub)">${s}</div>`:''}</div>
   <div class="dots" aria-hidden="true">${cards.map((_,k)=>`<i class="${k===i?'on':''}"></i>`).join('')}</div>
   <div class="foot" style="display:flex;gap:10px;margin-top:auto">${i>0?`<button class="btn ghost" data-lnav="-1" style="flex:1">Tilbage</button>`:''}<button class="btn" data-lnav="1" style="flex:2">${last?((S.learned||{})[u.id]?'Færdig':'Færdig · +5 XP'):'Næste'}</button></div>`;
@@ -1870,7 +1990,7 @@ function caseView(){
   else if(K.state==='wrong') foot=`<div class="sheet bad" role="status"><h4>${IC.cross('#FF6B6B')}Det løser ikke sagen</h4><p>${K.bad.length>=2?'Hint: '+esc(st.w):'Det var ikke det rigtige næste skridt. Tænk over, hvad der er mest sandsynligt – og prøv igen.'}</p><button class="btn bad" id="cretry">Prøv igen</button></div>`;
   else { const s=srcLinks(st.src); foot=`<div class="sheet ok" role="status"><h4>${IC.check('#3DDC97')}Godt tænkt!</h4><p>${esc(st.w)}</p>${s?`<div class="src">${s}</div>`:''}<button class="btn ok" id="cnext">${K.step+1<c.steps.length?'Næste trin':'Luk sagen'}</button></div>`; }
   return `<div class="lt"><button class="x" id="quit" aria-label="Afslut sag">×</button><div class="prog" role="progressbar" aria-valuenow="${pct}" aria-valuemax="100"><i style="width:${pct}%"></i></div><div class="combo">${K.step+1}/${c.steps.length}</div></div>
-  <div class="qwrap"><div class="qhead">${G(K.state==='wrong'?'worried':'happy', K.state==='wrong'?'shake':K.state==='right'?'pop':'')}<div><div class="qtag">FEJLFINDINGSSAG · ${esc(c.t.toUpperCase())}</div><div class="qtext">${esc(st.q)}</div></div></div>
+  <div class="qwrap"><div class="qhead">${G(K.state==='wrong'?'worried':'happy', K.state==='wrong'?'shake':K.state==='right'?'pop':'')}<div><div class="qtag">FEJLFINDINGSSAG · ${esc(c.t.toUpperCase())}</div><div class="qtext">${esc(st.q)}</div></div>${spkBtn()}</div>
   ${K.step===0?`<div class="ctx"><b>KUNDEN RINGER</b>${esc(c.intro)}</div>`:''}<div class="ctx" style="border-color:var(--acc2)"><b>PÅ STEDET</b>${esc(st.sit)}</div><div class="opts">${opts}</div></div>${foot}`;
 }
 function caseCheck(){ const ok=K.opts[K.pick].ok; if(ok){ K.state='right'; sfx('ok'); say('Rigtigt'); } else { K.state='wrong'; K.bad.push(K.pick); K.miss++; sfx('bad'); say('Forkert'); } render(); }
@@ -2017,6 +2137,7 @@ function render(){
   if(S.onb<ONB.length){ $app.innerHTML=onbView(); return; }
   const v=view.name;
   $app.innerHTML = v==='home'?home():v==='practice'?practice():v==='badges'?badges():v==='profile'?profile():v==='lesson'?lessonView():v==='learn'?learnView():v==='glossary'?glossaryView():v==='blitz'?blitzView():v==='blitzres'?blitzRes():v==='case'?caseView():v==='shop'?shopView():v==='nohearts'?noHeartsView():v==='sources'?sourcesView():v==='caseres'?caseRes():result();
+  ttsAfterRender();
 }
 $app.addEventListener('click',e=>{
   const t=e.target.closest('button'); if(!t||t.disabled) return;
@@ -2046,6 +2167,9 @@ $app.addEventListener('click',e=>{
   if(t.dataset.order!==undefined){ L.order.push(+t.dataset.order); render(); return; }
   if(t.dataset.unorder!==undefined){ L.order.splice(+t.dataset.unorder,1); render(); return; }
   if(t.id==='galvo'){ gLine=(gLine+1+Math.floor(Math.random()*(GALVO_LINES.length-1)))%GALVO_LINES.length; const say_=document.querySelector('.hero .say'); if(say_) say_.textContent=GALVO_LINES[gLine]; const g=t.querySelector('.g'); if(g){ g.classList.remove('jump'); void g.offsetWidth; g.classList.add('jump'); } sfx('tap'); return; }
+  if(t.dataset.spk){ if(ttsOn){ stopSpeak(); return; } const sp=screenSpeech(); if(sp){ ttsKey=sp.k; speak(sp.t); } return; }
+  if(t.id==='tts'){ S.ttsAuto=!S.ttsAuto; save(); render(); if(S.ttsAuto) speak('Oplæsning er slået til.'); return; }
+  if(t.dataset.rate){ S.ttsRate=+t.dataset.rate; save(); render(); speak('Sådan lyder det nu.'); return; }
   if(t.id==='snd'){ S.sound = S.sound===false; save(); render(); if(S.sound) sfx('ok'); return; }
   if(t.id==='check'){ check(); return; }
   if(t.id==='cont'){ cont(); return; }
