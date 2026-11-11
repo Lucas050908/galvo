@@ -1094,8 +1094,8 @@ if(NATIVE){ try{ const n=NATIVE.getState(); if(n){ const ns=JSON.parse(n); if((n
 const today = () => dayKey(new Date());
 function dayKey(d){ return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'); }
 function daysBetween(a,b){ const pa=a.split('-').map(Number), pb=b.split('-').map(Number); return Math.round((Date.UTC(pb[0],pb[1]-1,pb[2])-Date.UTC(pa[0],pa[1]-1,pa[2]))/864e5); }
-function liveStreak(){ if(!S.lastDay) return 0; const d=daysBetween(S.lastDay,today()); return d<=1 ? S.streak : 0; }
-function streakAtRisk(){ return S.lastDay && daysBetween(S.lastDay,today())===1 && S.streak>0; }
+function liveStreak(){ if(!S.lastDay) return 0; const d=daysBetween(S.lastDay,today()); return d<=1+(S.freeze||0) ? S.streak : 0; }
+function streakAtRisk(){ if(!S.lastDay||S.streak<=0) return false; const d=daysBetween(S.lastDay,today()); return d>=1 && d<=1+(S.freeze||0); }
 function todayXP(){ return S.xpByDay[today()]||0; }
 function unitState(id){ return S.unit[id] || (S.unit[id]={done:0,boss:false}); }
 function unlocked(i){ return i===0 || unitState(UNITS[i-1].id).boss; }
@@ -1179,8 +1179,15 @@ function awardXP(xp){
   dayBump('xp',xp);
   S.xp+=xp; const t=today(); S.xpByDay[t]=(S.xpByDay[t]||0)+xp;
   const before=liveStreak();
-  if(S.lastDay!==t){ S.streak = (S.lastDay && daysBetween(S.lastDay,t)===1) ? S.streak+1 : 1; S.lastDay=t; }
+  if(S.lastDay!==t){ const gap=S.lastDay?daysBetween(S.lastDay,t):99; const fz=S.freeze||0;
+    if(gap===1) S.streak++;
+    else if(gap>1 && gap-1<=fz && S.streak>0){ S.freeze=fz-(gap-1); S.streak++; S.frozeMsg=gap-1; }
+    else S.streak=1;
+    S.lastDay=t;
+    if(S.streak>0 && S.streak%7===0 && (S.freeze||0)<2 && S.fzAt!==S.streak){ S.freeze=(S.freeze||0)+1; S.fzAt=S.streak; S.fzNew=true; } }
   S.best=Math.max(S.best,S.streak);
+  if(S.frozeMsg){ const n=S.frozeMsg; delete S.frozeMsg; setTimeout(()=>toast(`❄ Streak-frys brugt – din streak er reddet!`),900); }
+  if(S.fzNew){ delete S.fzNew; setTimeout(()=>toast(`❄ Du har optjent en streak-frys!`),1500); }
   const keys=Object.keys(S.xpByDay).sort(); while(keys.length>60){ delete S.xpByDay[keys.shift()]; }
   return {before, goalHit: todayXP()>=S.goal && todayXP()-xp<S.goal, lvlUp: checkLevel()};
 }
@@ -1375,6 +1382,8 @@ function badges(){
   <div class="list">${UNITS.some(u=>unitState(u.id).boss)?UNITS.filter(u=>unitState(u.id).boss).map(certHtml).join(''):'<div class="row"><p>Klar et boss-udkald for at få dit første mesterbrev.</p></div>'}</div>
   <div class="sec">DINE EMNER</div>
   ${topicsHtml()}
+  <div class="sec">STREAK-FRYS</div>
+  <div class="list"><div class="row"><h4>❄ ${S.freeze||0} af 2</h4><p>Du får en streak-frys for hver 7 dage i træk (højst 2 ad gangen). Glemmer du en dag, bruges den automatisk, så din streak overlever.</p></div></div>
   <div class="sec">STATISTIK</div>
   <div class="list"><div class="row"><p>Rigtige svar: <b style="color:var(--tx)">${S.correct}</b> af ${S.answered} (${S.answered?Math.round(S.correct/S.answered*100):0}%)<br>Perfekte lektioner: <b style="color:var(--tx)">${S.perfect}</b><br>Enheder mestret: <b style="color:var(--tx)">${UNITS.filter(u=>unitState(u.id).boss).length}/${UNITS.length}</b></p></div></div>
   </div>${nav()}`;
@@ -1600,7 +1609,7 @@ function onbView(){ const i=S.onb, o=ONB[i];
   <div style="display:flex;gap:8px;justify-content:center;margin-top:22px" aria-hidden="true">${ONB.map((_,j)=>`<i style="width:${j===i?22:8}px;height:8px;border-radius:4px;background:${j===i?'var(--acc)':'var(--line)'};display:block"></i>`).join('')}</div></div>
   <div class="foot" style="display:flex;gap:10px">${i<ONB.length-1?`<button class="btn ghost" id="onbskip" style="flex:1">Spring over</button>`:''}<button class="btn" id="onbnext" style="flex:2">${i<ONB.length-1?'Næste':'Kom i gang'}</button></div>`; }
 let B=null, bTimer=null;
-window.__g={startCase:i=>startCase(i),get K(){return K},dayState:()=>dayState(),srsDue:()=>srsDue(),get S(){return S},get L(){return L},get B(){return B},startLesson:(...x)=>startLesson(...x),render:()=>render()};
+window.__g={startCase:i=>startCase(i),awardXP:x=>awardXP(x),liveStreak:()=>liveStreak(),get K(){return K},dayState:()=>dayState(),srsDue:()=>srsDue(),get S(){return S},get L(){return L},get B(){return B},startLesson:(...x)=>startLesson(...x),render:()=>render()};
 const BLITZ_SECS=60;
 function blitzPool(){ const out=[]; UNITS.forEach((u,i)=>{ if(unlocked(i)) u.qs.forEach(q=>{ if(q.t==='mc'||q.t==='tf'||q.t==='fill') out.push(allQ[q.id]); }); }); return shuffle(out); }
 function startBlitz(){

@@ -60,8 +60,9 @@ object GalvoStore {
             val gap = if (lastDay.isNotBlank() && lastDay != "null") {
                 try { ChronoUnit.DAYS.between(LocalDate.parse(lastDay), today) } catch (e: Exception) { 99L }
             } else 99L
-            val liveStreak = if (gap <= 1) storedStreak else 0
-            val atRisk = gap == 1L && storedStreak > 0
+            val freeze = s.optInt("freeze", 0).coerceIn(0, 2)
+            val liveStreak = if (gap <= 1L + freeze) storedStreak else 0
+            val atRisk = gap >= 1L && gap <= 1L + freeze && storedStreak > 0
             val doneToday = gap == 0L
             val (mood, msg) = when {
                 todayXp >= goal -> "party" to "Dagens mål er nået. Du er skarp!"
