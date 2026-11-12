@@ -9,8 +9,8 @@ android {
         applicationId = "dk.galvo.app"
         minSdk = 26
         targetSdk = 34
-        versionCode = 17
-        versionName = "6.4.1"
+        versionCode = 18
+        versionName = "6.5"
     }
     // One fixed debug key for every build, so a new APK installs on top of the old one and keeps the user's progress.
     signingConfigs {
